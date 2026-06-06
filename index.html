@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sarah Thornton — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F5EFE3;
+      --blue: #5A4FD6;
+      --blue-bg: #4B52DF;
+      --blue-bg-dark: #3D43C8;
+      --pink: #E8929E;
+      --coral: #E88878;
+      --orange: #E8A85A;
+      --purple: #C870C8;
+      --light-purple: #C8B8F0;
+      --soft-purple: #D4C8F5;
+      --dark: #18181E;
+      --mid: #484860;
+      --nav-height: 90px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =====================
+       NAVIGATION
+    ===================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: var(--nav-height);
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s, backdrop-filter 0.3s;
+    }
+
+    nav.cream-bg {
+      background: rgba(245, 239, 227, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    nav.transparent-bg {
+      background: transparent;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    nav.cream-bg .nav-logo { color: var(--blue); }
+    nav.transparent-bg .nav-logo { color: white; }
+
+    .nav-links {
+      display: flex;
+      gap: 44px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 1.85rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    nav .nav-links a { color: var(--dark); }
+    nav .nav-links a:hover { color: var(--blue); }
+    nav .nav-links a.active { color: var(--blue); }
+    nav .nav-logo { color: var(--blue); }
+
+    /* =====================
+       PAGE SYSTEM
+    ===================== */
+    .page {
+      display: none;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+    }
+    .page.active {
+      display: block;
+      animation: pageIn 0.35s ease forwards;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* =====================
+       BLOB HELPERS
+    ===================== */
+    .blob-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      will-change: transform;
+    }
+
+    @keyframes float1 {
+      0%,100% { transform: translate(0,0); }
+      50% { transform: translate(8px,-14px); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translate(0,0); }
+      50% { transform: translate(-10px,12px); }
+    }
+    @keyframes float3 {
+      0%,100% { transform: translate(0,0); }
+      50% { transform: translate(6px,-10px); }
+    }
+
+    /* =====================
+       HOME PAGE
+    ===================== */
+    #page-home {
+      background: var(--cream);
+      min-height: 100vh;
+    }
+
+    .home-blob-1 {
+      width: 520px; height: 520px;
+      background: #E09090;
+      top: -120px; right: 20px;
+      border-radius: 56% 44% 60% 40% / 48% 58% 42% 52%;
+      opacity: 0.78;
+      animation: float1 9s ease-in-out infinite;
+    }
+
+    .home-blob-2 {
+      width: 420px; height: 420px;
+      background: #CF70CC;
+      bottom: -80px; right: 140px;
+      border-radius: 44% 56% 38% 62% / 55% 42% 58% 45%;
+      opacity: 0.72;
+      animation: float2 11s ease-in-out infinite 1.5s;
+    }
+
+    .home-blob-3 {
+      width: 220px; height: 220px;
+      background: #F0B060;
+      top: 240px; right: 360px;
+      border-radius: 52% 48% 44% 56% / 60% 38% 62% 40%;
+      opacity: 0.48;
+      animation: float3 7s ease-in-out infinite 0.5s;
+    }
+
+    .home-blob-4 {
+      width: 180px; height: 180px;
+      background: #E09090;
+      bottom: 120px; left: -60px;
+      border-radius: 50% 50% 60% 40%;
+      opacity: 0.35;
+      animation: float2 10s ease-in-out infinite 3s;
+    }
+
+    .home-blob-5 {
+      width: 140px; height: 140px;
+      background: #CF70CC;
+      top: 160px; left: 120px;
+      border-radius: 60% 40% 50% 50%;
+      opacity: 0.3;
+      animation: float1 8s ease-in-out infinite 2s;
+    }
+
+    .home-body {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 64px 80px;
+    }
+
+    .home-text {
+      max-width: 700px;
+    }
+
+    .home-tagline {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+
+    .home-name {
+      font-size: clamp(5rem, 10vw, 9rem);
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 0.92;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .home-role {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1.55;
+    }
+
+    .home-photo-wrap {
+      flex-shrink: 0;
+      z-index: 2;
+    }
+
+    .avatar {
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid white;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      background: linear-gradient(135deg, var(--light-purple), var(--coral));
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .avatar-placeholder {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.78rem;
+      text-align: center;
+      padding: 12px;
+      line-height: 1.4;
+    }
+
+    /* =====================
+       PROJECTS PAGE
+    ===================== */
+    #page-projects {
+      background: var(--cream);
+      padding-top: var(--nav-height);
+      padding-bottom: 100px;
+    }
+
+    .proj-blob-1 {
+      width: 480px; height: 480px;
+      background: #E8A850;
+      top: 120px; right: -120px;
+      border-radius: 58% 42% 54% 46% / 46% 60% 40% 54%;
+      opacity: 0.55;
+      animation: float1 10s ease-in-out infinite;
+    }
+
+    .proj-blob-2 {
+      width: 280px; height: 280px;
+      background: #E890A8;
+      bottom: 300px; right: 60px;
+      border-radius: 44% 56% 60% 40% / 54% 44% 56% 46%;
+      opacity: 0.45;
+      animation: float2 12s ease-in-out infinite 2s;
+    }
+
+    .proj-blob-3 {
+      width: 200px; height: 200px;
+      background: #CF70CC;
+      bottom: 80px; right: 260px;
+      border-radius: 50%;
+      opacity: 0.35;
+      animation: float3 8s ease-in-out infinite 1s;
+    }
+
+    .proj-blob-4 {
+      width: 300px; height: 300px;
+      background: #E09090;
+      top: 600px; left: -80px;
+      border-radius: 50% 50% 58% 42%;
+      opacity: 0.38;
+      animation: float2 9s ease-in-out infinite 0.5s;
+    }
+
+    .proj-blob-5 {
+      width: 180px; height: 180px;
+      background: #F0B060;
+      top: 1100px; right: 80px;
+      border-radius: 44% 56% 50% 50%;
+      opacity: 0.4;
+      animation: float1 11s ease-in-out infinite 2.5s;
+    }
+
+    .proj-blob-6 {
+      width: 240px; height: 240px;
+      background: #CF70CC;
+      top: 1600px; left: 60px;
+      border-radius: 56% 44% 46% 54%;
+      opacity: 0.3;
+      animation: float3 10s ease-in-out infinite 1s;
+    }
+
+    .section-wrap {
+      position: relative; z-index: 1;
+      padding: 60px 64px 0;
+    }
+
+    .section-label {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--mid);
+      line-height: 1.6;
+      max-width: 380px;
+      margin-bottom: 40px;
+    }
+
+    .section-desc strong { color: var(--dark); font-weight: 600; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 28px 32px;
+    }
+
+    .proj-card {
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .proj-card:hover { transform: translateY(-6px); }
+
+    .thumb {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(165,140,240,0.4);
+      background: #C8B8F0;
+      margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thumb-placeholder {
+      color: rgba(90,79,214,0.5);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .proj-label {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--dark);
+      text-decoration: underline;
+      text-decoration-color: rgba(90,79,214,0.3);
+      text-underline-offset: 4px;
+    }
+
+    .proj-card:hover .proj-label {
+      text-decoration-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .proj-desc {
+      font-size: 1rem;
+      color: var(--mid);
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    .sketches-section {
+      margin-top: 60px;
+    }
+
+    /* =====================
+       ABOUT PAGE
+    ===================== */
+    #page-about {
+      background: var(--blue-bg);
+      min-height: 100vh;
+      padding-top: var(--nav-height);
+    }
+
+    .about-blob-1 {
+      width: 420px; height: 420px;
+      background: #E09090;
+      top: -80px; right: -60px;
+      border-radius: 46% 54% 60% 40% / 52% 46% 54% 48%;
+      opacity: 0.6;
+      animation: float1 9s ease-in-out infinite;
+    }
+
+    .about-blob-2 {
+      width: 300px; height: 300px;
+      background: #CF70CC;
+      bottom: 40px; right: 80px;
+      border-radius: 54% 46% 40% 60% / 44% 58% 42% 56%;
+      opacity: 0.5;
+      animation: float2 11s ease-in-out infinite 2s;
+    }
+
+    .about-blob-3 {
+      width: 220px; height: 220px;
+      background: #F0B060;
+      top: 300px; left: -50px;
+      border-radius: 50% 50% 44% 56%;
+      opacity: 0.4;
+      animation: float3 8s ease-in-out infinite 1s;
+    }
+
+    .about-blob-4 {
+      width: 160px; height: 160px;
+      background: #E890A8;
+      bottom: 200px; left: 200px;
+      border-radius: 56% 44% 50% 50%;
+      opacity: 0.35;
+      animation: float1 10s ease-in-out infinite 3s;
+    }
+
+    .about-body {
+      position: relative; z-index: 1;
+      padding: 200px 80px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      color: white;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      margin-bottom: 26px;
+      font-weight: 400;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { font-weight: 700; }
+
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      padding-top: 10px;
+    }
+
+    .about-location {
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    .about-avatar {
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid white;
+      box-shadow: 0 14px 50px rgba(0,0,0,0.22);
+      background: linear-gradient(135deg, #7080E8, #8060D0);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .about-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+
+    .contact-card {
+      width: 100%;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 14px;
+      padding: 18px 22px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+
+    .contact-card .psst-row {
+      color: #F5D060;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      display: flex; align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .contact-card .psst-arrow {
+      width: 0; height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 9px solid #F5D060;
+      display: inline-block;
+    }
+
+    .contact-card .reach-text {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .contact-card .email-text {
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    .contact-card .asap-text {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.82rem;
+      margin-top: 4px;
+    }
+
+    /* =====================
+       FUN PAGE
+    ===================== */
+    #page-fun {
+      background: linear-gradient(160deg, #5750E8 0%, #7858D8 45%, #C868C0 100%);
+      min-height: 100vh;
+      padding-top: var(--nav-height);
+    }
+
+    .fun-blob-1 {
+      width: 400px; height: 400px;
+      background: #E09090;
+      top: 50px; right: -80px;
+      border-radius: 46% 54% 58% 42% / 50% 54% 46% 50%;
+      opacity: 0.55;
+      animation: float1 8s ease-in-out infinite 1s;
+    }
+
+    .fun-blob-2 {
+      width: 260px; height: 260px;
+      background: #F0B060;
+      bottom: 220px; right: 60px;
+      border-radius: 60% 40% 44% 56%;
+      opacity: 0.45;
+      animation: float2 10s ease-in-out infinite;
+    }
+
+    .fun-blob-3 {
+      width: 220px; height: 220px;
+      background: #CF70CC;
+      bottom: -40px; left: 340px;
+      border-radius: 50% 50% 40% 60%;
+      opacity: 0.5;
+      animation: float3 9s ease-in-out infinite 0.8s;
+    }
+
+    .fun-blob-4 {
+      width: 300px; height: 300px;
+      background: #E890A8;
+      top: 500px; left: -80px;
+      border-radius: 50% 50% 58% 42%;
+      opacity: 0.4;
+      animation: float2 11s ease-in-out infinite 2s;
+    }
+
+    .fun-blob-5 {
+      width: 180px; height: 180px;
+      background: #E8A850;
+      top: 900px; right: 100px;
+      border-radius: 44% 56% 50% 50%;
+      opacity: 0.38;
+      animation: float1 9s ease-in-out infinite 1.5s;
+    }
+
+    .fun-blob-6 {
+      width: 200px; height: 200px;
+      background: #CF70CC;
+      bottom: 400px; left: 180px;
+      border-radius: 56% 44% 46% 54%;
+      opacity: 0.3;
+      animation: float3 12s ease-in-out infinite 0.5s;
+    }
+
+    .fun-body {
+      position: relative; z-index: 1;
+      padding: 60px 64px 80px;
+    }
+
+    .fun-title {
+      font-size: 3rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .fun-intro {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+
+    .fun-section-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 26px;
+      letter-spacing: -0.01em;
+    }
+
+    .fun-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+
+    .fun-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* stacked photos */
+    .photo-stack {
+      position: relative;
+      width: 100%;
+      padding-bottom: 72%;
+    }
+
+    .photo-stack .stack-img {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      transition: opacity 0.35s ease;
+      background: #8870C8;
+    }
+
+    .photo-stack .stack-img:nth-child(1) {
+      transform: rotate(4deg) translate(4px, 3px);
+      opacity: 0.6;
+      z-index: 1;
+    }
+    .photo-stack .stack-img:nth-child(2) {
+      transform: rotate(-2.5deg) translate(-3px, 2px);
+      opacity: 0.75;
+      z-index: 2;
+    }
+    .photo-stack .stack-img:nth-child(3) {
+      transform: rotate(0deg);
+      opacity: 1;
+      z-index: 3;
+    }
+    /* last visible card is always the "active" one — no extra transform */
+    .photo-stack .stack-img.hidden { opacity: 0 !important; z-index: 0; }
+
+    .photo-stack .stack-img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+
+    .stack-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .fun-card-name {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+    }
+
+    .fun-card-desc {
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.72);
+      text-align: center;
+      margin-top: -4px;
+    }
+
+    .dot-row {
+      display: flex;
+      gap: 7px;
+      margin-top: 2px;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .dot.on { background: white; }
+    .dot:hover { transform: scale(1.2); }
+
+    .fun-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.25);
+      margin-bottom: 40px;
+    }
+
+    /* =====================
+       PROJECT DETAIL PAGE
+    ===================== */
+    #page-detail {
+      background: var(--cream);
+      padding-top: var(--nav-height);
+      padding-bottom: 100px;
+      min-height: 100vh;
+    }
+
+    .detail-body {
+      position: relative; z-index: 1;
+      padding: 60px 80px 80px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .detail-body.sketch-layout {
+      max-width: none;
+      padding: 50px 64px;
+    }
+
+    .detail-body.sketch-layout .detail-section {
+      margin-bottom: 60px;
+    }
+
+    .detail-body.sketch-layout img {
+      border-radius: 10px;
+    }
+
+    .detail-body.sketch-layout [style*="grid-template-columns:1fr 1fr"] {
+      gap: 20px !important;
+    }
+
+    .detail-body.sketch-layout {
+      max-width: none;
+      padding: 50px 64px;
+    }
+
+    .detail-body.sketch-layout .detail-section-label {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .detail-body.sketch-layout img {
+      border-radius: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 40px;
+      transition: gap 0.2s;
+      border: none; background: none;
+      letter-spacing: 0.01em;
+    }
+    .back-btn:hover { gap: 12px; }
+    .back-btn svg { flex-shrink: 0; }
+
+    .detail-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 52px;
+      align-items: stretch;
+      margin-bottom: 60px;
+    }
+
+    .detail-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 4px;
+    }
+
+    .detail-title {
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+
+    .detail-desc {
+      font-size: 1.15rem;
+      color: var(--mid);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .detail-meta-label {
+      color: var(--blue);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      letter-spacing: 0.01em;
+    }
+
+    .detail-meta-value {
+      font-size: 1.05rem;
+      color: var(--dark);
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .detail-hero {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid var(--dark);
+      background: var(--soft-purple);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 240px;
+    }
+
+    .detail-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+
+    .detail-hero-placeholder {
+      color: rgba(90,79,214,0.45);
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .detail-section {
+      margin-bottom: 48px;
+    }
+
+    .detail-section-label {
+      color: var(--blue);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+
+    .detail-overview-text {
+      font-size: 1.1rem;
+      color: var(--dark);
+      line-height: 1.85;
+    }
+
+    .detail-links-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: 48px;
+    }
+
+    .detail-link {
+      color: var(--blue);
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .detail-link:hover { opacity: 0.7; }
+
+    .detail-screens-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .detail-screens-grid img,
+    .detail-screen-full img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .detail-screen-full { margin-top: 16px; }
+
+    .detail-screen-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--soft-purple);
+      border-radius: 8px;
+      border: 2px solid rgba(165,140,240,0.3);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .detail-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .detail-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: rgba(90,79,214,0.2);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .detail-dot.on { background: var(--blue); }
+
+    .detail-video {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .detail-video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 12px;
+    }
+
+    /* =====================
+       RESPONSIVE
+    ===================== */
+    @media (max-width: 820px) {
+      nav { padding: 0 28px; }
+      .nav-links { gap: 24px; }
+
+      .home-body { padding: 80px 32px; flex-direction: column; justify-content: center; gap: 40px; }
+      .avatar { width: 220px; height: 220px; }
+
+      .section-wrap { padding: 48px 32px 0; }
+      .cards-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+
+      .about-body { grid-template-columns: 1fr; padding: 60px 32px; gap: 40px; }
+      .about-right { flex-direction: column; align-items: center; }
+
+      .fun-body { padding: 50px 32px 60px; }
+      .fun-grid { grid-template-columns: 1fr; gap: 32px; }
+
+      .detail-body { padding: 40px 32px; }
+      .detail-header { grid-template-columns: 1fr; gap: 32px; }
+      .detail-links-row { align-items: flex-start; }
+    }
+
+    @media (max-width: 540px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .home-name { font-size: 3rem; }
+      .home-photo-wrap { right: 20px; bottom: 30px; }
+      .avatar { width: 140px; height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="main-nav" class="cream-bg">
+  <span class="nav-logo" onclick="go('home')">ST</span>
+  <ul class="nav-links">
+    <li><a id="nl-projects" onclick="go('projects')">projects</a></li>
+    <li><a id="nl-about" onclick="go('about')">about</a></li>
+    <li><a id="nl-fun" onclick="go('fun')">fun</a></li>
+  </ul>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     HOME
+══════════════════════════════════════════ -->
+<section id="page-home" class="page active">
+  <div class="blob-layer">
+    <div class="blob home-blob-1"></div>
+    <div class="blob home-blob-2"></div>
+    <div class="blob home-blob-3"></div>
+    <div class="blob home-blob-4"></div>
+    <div class="blob home-blob-5"></div>
+  </div>
+  <div class="home-body">
+    <div class="home-text">
+      <p class="home-tagline">empathy-driven design</p>
+      <h1 class="home-name">sarah thornton</h1>
+      <p class="home-role">psychology + design student<br>@ northwestern university</p>
+    </div>
+    <div class="home-photo-wrap">
+      <div class="avatar">
+        <img src="images/IMG_4734 2.jpg" alt="Sarah Thornton">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PROJECTS
+══════════════════════════════════════════ -->
+<section id="page-projects" class="page">
+  <div class="blob-layer">
+    <div class="blob proj-blob-1"></div>
+    <div class="blob proj-blob-2"></div>
+    <div class="blob proj-blob-3"></div>
+    <div class="blob proj-blob-4"></div>
+    <div class="blob proj-blob-5"></div>
+    <div class="blob proj-blob-6"></div>
+  </div>
+
+  <div class="section-wrap">
+    <h2 class="section-label">PROJECTS</h2>
+    <p class="section-desc">Work spanning <strong>digital experiences</strong>, <strong>physical products</strong>, and the desire to better understand people.</p>
+
+    <div class="cards-grid">
+      <div class="proj-card" onclick="openProject('shopify-mobile')">
+        <div class="thumb"><img src="images/Shopify cover on projects page.jpg" alt="Shopify Mobile"></div>
+        <span class="proj-label">ShopCampus</span>
+        <p class="proj-desc">An AI-powered Shopify experience that helps college students go from idea to first sale with less friction.</p>
+      </div>
+      <div class="proj-card" onclick="openProject('fetchride')">
+        <div class="thumb"><img src="images/Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide" style="object-fit:contain;background:#f5f5f5;"></div>
+        <span class="proj-label">FetchRide</span>
+        <p class="proj-desc">Making animal shelter volunteering easier through a student-friendly transportation experience.</p>
+      </div>
+      <div class="proj-card" onclick="openProject('stow')">
+        <div class="thumb"><img src="images/STOW cover.jpg" alt="Stow"></div>
+        <span class="proj-label">Stow</span>
+        <p class="proj-desc">A modular furniture system designed for college living, balancing affordability and flexibility in small spaces.</p>
+      </div>
+      <div class="proj-card" onclick="openProject('cloudflex')">
+        <div class="thumb"><img src="images/Cloudflx cover photo (1).jpg" alt="CloudFlex Headrest"></div>
+        <span class="proj-label">The CloudFlex Headrest</span>
+        <p class="proj-desc">An adaptable airline seating concept rethinking ergonomic support for long-haul flights.</p>
+      </div>
+      <div class="proj-card" onclick="openProject('trova')">
+        <div class="thumb"><img src="images/Screenshot%202026-06-02%20at%2010.15.50%20AM.jpg" alt="Trova"></div>
+        <span class="proj-label">Trova</span>
+        <p class="proj-desc">A social travel experience combining AI itineraries with recommendations from like-minded explorers.</p>
+      </div>
+    </div>
+
+    <div class="sketches-section">
+      <h2 class="section-label">SKETCHES</h2>
+      <p class="section-desc">A space for ideas, experiments, and <strong>forms in progress</strong>.</p>
+      <div class="cards-grid">
+        <div class="proj-card" onclick="openProject('footwear')">
+          <div class="thumb"><img src="images/Footwear Final pers:side.jpeg" alt="Footwear Design"></div>
+          <span class="proj-label">Footwear</span>
+          <p class="proj-desc">A series of hiking footwear concepts blending outdoor performance with expressive, functional design.</p>
+        </div>
+        <div class="proj-card" onclick="openProject('bus-stop')">
+          <div class="thumb"><img src="images/kellogg steps final - perspective.jpeg" alt="Northwestern Bus Stop"></div>
+          <span class="proj-label">Northwestern Bus Stop</span>
+          <p class="proj-desc">Reimagining the Northwestern bus stop through a community-focused concept inspired by Kellogg Steps.</p>
+        </div>
+        <div class="proj-card" onclick="openProject('furniture')">
+          <div class="thumb"><img src="images/FurnitureNookFinal1.jpeg" alt="Furniture Design"></div>
+          <span class="proj-label">Furniture</span>
+          <p class="proj-desc">Exploring children's furniture through whimsical concepts designed for comfort and creativity.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════ -->
+<section id="page-about" class="page">
+  <div class="blob-layer">
+    <div class="blob about-blob-1"></div>
+    <div class="blob about-blob-2"></div>
+    <div class="blob about-blob-3"></div>
+    <div class="blob about-blob-4"></div>
+  </div>
+  <div class="about-body">
+    <div class="about-text">
+      <p>Hello! My name is Sarah Thornton.</p>
+      <p>I'm a junior at Northwestern University studying <strong>psychology</strong> and <strong>design</strong>, drawn to the intersection of those two interests.</p>
+      <p>My goal is to create <strong>thoughtful, human-centered</strong> designs that make people feel seen, understood, and genuinely comfortable in the spaces they move through.</p>
+      <p>This summer, I'll be working at Andalusia Design, a custom parametric design and architectural fabrication services startup in Austin, TX. I'm excited to add a whimsical touch to the things I create and the people around me.</p>
+      <p>Feel free to click and scroll around! <span style="white-space: nowrap">I'm happy to have you here :)</span></p>
+    </div>
+    <div class="about-right">
+      <p class="about-location">
+        <svg width="14" height="18" viewBox="0 0 14 18" fill="none"><path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 7 4.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>
+        Evanston / Chicago, IL
+      </p>
+      <div class="about-avatar">
+        <img src="images/IMG_4391.jpg" alt="Sarah Thornton">
+      </div>
+      <div class="contact-card">
+        <div class="psst-row">
+          <span class="psst-arrow"></span>
+          Pssst!!&nbsp; <span style="font-weight:400;color:rgba(255,255,255,0.85)">Reach me here:</span>
+        </div>
+        <p class="email-text">sarahthornton2027@u.northwestern.edu</p>
+        <p class="asap-text">I'll get back to you ASAP.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FUN
+══════════════════════════════════════════ -->
+<section id="page-fun" class="page">
+  <div class="blob-layer">
+    <div class="blob fun-blob-1"></div>
+    <div class="blob fun-blob-2"></div>
+    <div class="blob fun-blob-3"></div>
+    <div class="blob fun-blob-4"></div>
+    <div class="blob fun-blob-5"></div>
+    <div class="blob fun-blob-6"></div>
+  </div>
+  <div class="fun-body">
+    <h2 class="fun-title">FUN!</h2>
+    <p class="fun-intro">Things that keep me inspired and make me feel most myself.</p>
+
+    <h3 class="fun-section-title">My campus communities</h3>
+    <div class="fun-grid">
+
+      <!-- QUARK Design Labs — 4 images -->
+      <div class="fun-card">
+        <div class="photo-stack" data-card="quark">
+          <div class="stack-img"><img src="images/IMG_4392.jpg" alt="QUARK Design Labs"></div>
+          <div class="stack-img"><img src="images/IMG_4393.jpg" alt="QUARK Design Labs"></div>
+          <div class="stack-img"><img src="images/IMG_4394.jpg" alt="QUARK Design Labs"></div>
+          <div class="stack-img"><img src="images/IMG_4395.jpg" alt="QUARK Design Labs"></div>
+        </div>
+        <p class="fun-card-name">QUARK Design Labs</p>
+                <div class="dot-row" data-for="quark">
+          <div class="dot on" data-i="0"></div>
+          <div class="dot" data-i="1"></div>
+          <div class="dot" data-i="2"></div>
+          <div class="dot" data-i="3"></div>
+        </div>
+      </div>
+
+      <!-- Rock Climbing Club — 4 images -->
+      <div class="fun-card">
+        <div class="photo-stack" data-card="climb">
+          <div class="stack-img"><img src="images/_R014029.JPEG" alt="Rock Climbing Club"></div>
+          <div class="stack-img"><img src="images/7f6f5203-9b3d-4504-9c7f-57a56da2a5fb.JPG" alt="Rock Climbing Club"></div>
+          <div class="stack-img"><img src="images/IMG_0307.jpg" alt="Rock Climbing Club"></div>
+          <div class="stack-img"><img src="images/rcc-11-14-25-3_Original.jpg" alt="Rock Climbing Club"></div>
+        </div>
+        <p class="fun-card-name">NU's Rock Climbing Club</p>
+        <div class="dot-row" data-for="climb">
+          <div class="dot on" data-i="0"></div>
+          <div class="dot" data-i="1"></div>
+          <div class="dot" data-i="2"></div>
+          <div class="dot" data-i="3"></div>
+        </div>
+      </div>
+
+      <!-- Golf — 4 -->
+      <div class="fun-card">
+        <div class="photo-stack" data-card="golf">
+          <div class="stack-img"><img src="images/IMG_5031.JPG" alt="D1 Golf"></div>
+          <div class="stack-img"><img src="images/IMG_5032.JPG" alt="D1 Golf"></div>
+          <div class="stack-img"><img src="images/IMG_5033.JPG" alt="D1 Golf"></div>
+          <div class="stack-img"><img src="images/IMG_5034.JPG" alt="D1 Golf"></div>
+        </div>
+        <p class="fun-card-name">D1 Golf</p>
+        <div class="dot-row" data-for="golf">
+          <div class="dot on" data-i="0"></div>
+          <div class="dot" data-i="1"></div>
+          <div class="dot" data-i="2"></div>
+          <div class="dot" data-i="3"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fun-divider"></div>
+
+    <h3 class="fun-section-title">Other things I love</h3>
+    <div class="fun-grid">
+
+      <!-- Hiking — 5 -->
+      <div class="fun-card">
+        <div class="photo-stack" data-card="hiking">
+          <div class="stack-img"><img src="images/IMG_2134.jpg" alt="Hiking"></div>
+          <div class="stack-img"><img src="images/IMG_2569.jpg" alt="Hiking"></div>
+          <div class="stack-img"><img src="images/IMG_2600.JPG" alt="Hiking"></div>
+          <div class="stack-img"><img src="images/IMG_3458 2.jpg" alt="Hiking"></div>
+          <div class="stack-img"><img src="images/IMG_3465.jpg" alt="Hiking"></div>
+        </div>
+        <p class="fun-card-name">Hiking</p>
+        <div class="dot-row" data-for="hiking">
+          <div class="dot on" data-i="0"></div>
+          <div class="dot" data-i="1"></div>
+          <div class="dot" data-i="2"></div>
+          <div class="dot" data-i="3"></div>
+          <div class="dot" data-i="4"></div>
+        </div>
+      </div>
+
+      <!-- Food — 4 -->
+      <div class="fun-card">
+        <div class="photo-stack" data-card="food" style="padding-bottom: 100%;">
+          <div class="stack-img"><img src="images/IMG_6636.jpg" alt="Food"></div>
+          <div class="stack-img"><img src="images/IMG_2873.jpg" alt="Food"></div>
+          <div class="stack-img"><img src="images/IMG_7198.jpg" alt="Food"></div>
+          <div class="stack-img"><img src="images/IMG_6988.jpg" alt="Food"></div>
+        </div>
+        <p class="fun-card-name">Making yummy food</p>
+        <div class="dot-row" data-for="food">
+          <div class="dot on" data-i="0"></div>
+          <div class="dot" data-i="1"></div>
+          <div class="dot" data-i="2"></div>
+          <div class="dot" data-i="3"></div>
+        </div>
+      </div>
+
+      <!-- Dogs — 3 -->
+      <div class="fun-card">
+        <div class="photo-stack" data-card="dogs">
+          <div class="stack-img"><img src="images/IMG_4351.jpg" alt="Dogs"></div>
+          <div class="stack-img"><img src="images/IMG_2787.jpg" alt="Dogs"></div>
+          <div class="stack-img"><img src="images/IMG_7237.jpg" alt="Dogs"></div>
+        </div>
+        <p class="fun-card-name">Dogs!!</p>
+        <div class="dot-row" data-for="dogs">
+          <div class="dot on" data-i="0"></div>
+          <div class="dot" data-i="1"></div>
+          <div class="dot" data-i="2"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PROJECT DETAIL
+══════════════════════════════════════════ -->
+<section id="page-detail" class="page">
+  <div class="detail-body">
+    <button class="back-btn" onclick="go('projects')">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M6 11L1 6M1 6L6 1M1 6H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      back to projects
+    </button>
+
+    <h1 class="detail-title" id="d-title" style="margin-bottom: 32px;"></h1>
+
+    <div class="detail-header">
+      <div class="detail-left">
+        <p class="detail-desc" id="d-desc"></p>
+        <p class="detail-meta-label">Role</p>
+        <p class="detail-meta-value" id="d-role"></p>
+        <p class="detail-meta-label">Timeline</p>
+        <p class="detail-meta-value" id="d-timeline"></p>
+      </div>
+      <div class="detail-right">
+        <div class="detail-hero" id="d-hero">
+          <div class="detail-hero-placeholder">Add project image here</div>
+        </div>
+        <div class="detail-dots" id="d-hero-dots"></div>
+      </div>
+    </div>
+
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:52px; margin-bottom:48px;" id="d-overview-takeaway-row">
+      <div>
+        <p class="detail-section-label" id="d-overview-label">Overview</p>
+        <p class="detail-overview-text" id="d-overview"></p>
+      </div>
+      <div id="d-takeaway-col" style="display:none;">
+        <p class="detail-section-label" id="d-takeaway-label">Takeaway</p>
+        <p class="detail-overview-text" id="d-takeaway"></p>
+      </div>
+    </div>
+
+    <div id="d-extra-sections"></div>
+
+    <div class="detail-links-row" id="d-links"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+// ── Project data ──────────────────────────────
+const PROJECTS = {
+  'shopify-mobile': {
+    title: 'ShopCampus',
+    desc: 'An AI-driven Shopify mobile product that reduces friction from idea to first sale, empowering college students to launch and run small businesses.',
+    role: 'User Researcher',
+    timeline: '10 weeks',
+    heroImages: ['images/Shopify cover.jpg'],
+    sections: [
+      {
+        label: 'Selected Screens',
+        images: [
+          'images/Shopify flow 1.jpg',
+          'images/Shopify flow 2.jpg',
+          'images/Shopify flow 3.jpg',
+          'images/ShopCampus Order Fulfillment.jpg'
+        ]
+      }
+    ],
+    overview: 'In Spring 2026, my team worked on a Shopify redesign through Northwestern\'s Digital Product Design program to explore how AI could reduce friction for first-time student entrepreneurs. The project focused on reimagining Shopify\'s mobile onboarding experience by leveraging Shop, Shopify\'s consumer-focused shopping app, to help college students quickly launch and manage small businesses. Through action-oriented design, we aimed to simplify the journey from initial idea to first sale.',
+    takeaway: 'This project taught me not to become attached to a single solution. Midway through the quarter, Shopify released updates that overlapped with our original direction, requiring us to quickly pivot our concept (to what is now ShopCampus!). The experience reinforced the importance of adapting to changing constraints and focusing on the problem and the user rather than a specific design.',
+    videoId: 'Fv6VkSkGpIo',
+    links: [{ label: 'View the white paper', url: 'files/Final Deliverable White Paper - Group One.pdf' }]
+  },
+  'fetchride': {
+    title: 'FetchRide',
+    desc: 'A student-focused shuttle concept that connects Northwestern students with local animal shelters, making volunteering and animal socialization more accessible, consistent, and community-driven.',
+    role: 'Product Manager',
+    timeline: '3 weeks',
+    heroImages: ['images/Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg'],
+    overview: 'In Spring 2025, my team developed FetchRide through a human-centered design project focused on improving connections between Northwestern students and local community. After conducting research with both students and shelter staff, we identified transportation and accessibility as major barriers to volunteering, leading us to design a free shuttle system that made shelter visits, animal socialization, and community engagement more convenient and consistent.',
+    takeaway: 'As Product Manager, I learned that meaningful solutions begin with listening. Research with shelter staff challenged many of our initial assumptions and revealed barriers we hadn\'t considered, reinforcing the importance of understanding stakeholders before jumping into design. For example, one shelter employee shared that a large student volunteer group had unintentionally overwhelmed and stressed the animals, highlighting the need to prioritize animal welfare alongside student engagement. This insight shaped our thinking around a structured shuttle system that could create more consistent, manageable volunteer participation while supporting both the shelter\'s needs and students\' desire to help.',
+    videoId: 'M4TI8PjUa7c',
+    links: [
+      { label: 'Check out the website', url: 'https://emmaluzio2024.wixsite.com/fetchride' }
+    ]
+  },
+  'stow': {
+    title: 'Stow',
+    desc: 'A modular furniture system designed for college students that transforms between multiple functions while prioritizing affordability, portability, and space efficiency for small living environments.',
+    role: 'Market Research, Benchmarking & Product Strategy Lead',
+    timeline: '8 weeks',
+    heroImages: ['images/STOW cover.jpg'],
+    overview: 'In Fall 2024, my team developed a modular furniture concept through Northwestern\'s product design curriculum to explore how adaptable, multifunctional furniture could better support college students living in small and temporary spaces. Through user research, benchmarking, and prototype testing, we explored how affordability, storage limitations, and frequent moves shape furniture needs and designed a modular system focused on flexibility, portability, and ease of use.',
+    takeaway: 'Working on Stow taught me that good design decisions should be thoroughly supported by evidence. By researching existing patents, analyzing competitors, mapping stakeholders, and exploring business viability, I learned how to evaluate opportunities beyond aesthetics and functionality alone. The project strengthened my ability to think strategically about products and identify where genuine market opportunities exist.',
+    sections: [
+      {
+        label: 'Concept',
+        grid: true,
+        images: ['images/STOW concept.jpg', 'images/STOW concept 2.jpg'],
+        smallImages: []
+      }
+    ],
+    links: [{ label: 'View the final report', url: 'files/STOW Final Report.pdf' }]
+  },
+  'cloudflex': {
+    title: 'CloudFlex Headrest',
+    desc: 'A human-centered airline seating concept designed to improve comfort, sleep, and ergonomic support during long-haul flights through adaptable headrest and seating solutions.',
+    role: 'Project Manager & User Research Lead',
+    timeline: '4 weeks',
+    heroImages: ['images/Cloudflx cover photo (1).jpg'],
+    overview: 'In May 2024, my team had a goal to improve the airplane seating experience for frequent flyers and international travelers. Through interviews, journey mapping, and prototype testing, we explored how physical discomfort and lack of ergonomic control impact passengers during long flights, ultimately designing the CloudFlex Headrest system to create a more adaptable and comfortable in-flight experience.',
+    takeaway: 'I learned how important it is to clearly define a problem before trying to solve it. My team began with four very different concepts, but through interviews and testing, we discovered that improving one aspect of the flying experience could create more value than redesigning the entire airplane seat. This project taught me that bigger ideas are not always better. Sometimes, the most effective solutions are the ones that are realistic and easy to implement.',
+    sections: [
+      {
+        label: 'Prototypes & Concepts',
+        grid: true,
+        images: [
+          'images/cloudflex best sketch.jpg',
+          'images/cloudflex front view.jpg',
+          'images/Cloudflex sketch.jpg',
+          'images/Cloudflex mockup.jpg'
+        ],
+        smallImages: [],
+        halfSize: ['images/cloudflex front view.jpg', 'images/Cloudflex mockup.jpg']
+      }
+    ],
+    links: []
+  },
+  'trova': {
+    title: 'Trova',
+    desc: 'An AI-powered social travel concept that helps users discover curated destinations and generate personalized itineraries based on individual travel preferences.',
+    role: 'UI/UX Designer',
+    timeline: '1 week',
+    heroImages: ['images/Screenshot%202026-06-02%20at%2010.15.50%20AM.jpg'],
+    overview: 'In Winter 2025, I developed Trova through Quark, a student-led design club focused on rapid creative experimentation and both industrial and digital product concepts. The project explored how community recommendations and AI personalization could make travel planning feel more emotionally aligned with each user\'s personality and travel style.',
+    takeaway: 'I learned how important it is to quickly identify the core value of a product when working under tight deadlines. With only one week and a two-person team to develop Trova, we had to rapidly prioritize features and focus on what would create the most value for users. This project reinforced the importance of making intentional decisions quickly and avoiding unnecessary complexity.',
+    sections: [
+      {
+        label: 'Selected Screens',
+        images: [
+          'images/Screenshot%202026-06-02%20at%2010.16.04%20AM.jpg',
+          'images/Screenshot%202026-06-02%20at%2010.16.12%20AM.jpg'
+        ]
+      }
+    ],
+    links: []
+  },
+  'tamagotchi': {
+    title: 'Tamagotchi Pill Case',
+    desc: 'Making daily medication management playful and sticky through nostalgic, game-inspired design.',
+    role: 'Designer',
+    timeline: 'Ongoing',
+    overview: 'This project reimagines the pill case as a Tamagotchi-inspired device that turns a chore into a ritual. The device displays a small pet that thrives when you take your medication on time — and gently sulks when you don\'t. By borrowing the emotional hooks of virtual pets, the device creates a positive feedback loop around habit formation.',
+    links: []
+  },
+  'footwear': {
+    title: 'Footwear: Trail Hiking Shoes',
+    desc: '',
+    role: '',
+    timeline: '',
+    overview: '',
+    sketchPage: true,
+    sections: [
+      {
+        label: 'Thumbnails',
+        grid: true,
+        images: ['images/Footwear Thumbnails.jpeg'],
+        smallImages: []
+      },
+      {
+        label: 'Concept Development 1',
+        grid: true,
+        images: [
+          'images/CD1 Footwear (petal keen).jpeg',
+          'images/CD1 Footwear (sponge).jpeg',
+          'images/Cd1 footwear tabi.jpeg',
+          'images/CD1 Footwear (cloud).jpeg'
+        ],
+        smallImages: []
+      },
+      {
+        label: 'Concept Development 2',
+        grid: true,
+        images: [
+          'images/CD2 footwear (sandal).jpeg',
+          'images/CD2 Footwear flower.jpeg',
+          'images/CD2 Footwear sponge.jpeg',
+          'images/CD2 footwear tabi.jpeg',
+          'images/CD2 footwear cloud.jpeg'
+        ],
+        smallImages: []
+      },
+      {
+        label: 'Final Concept: A trail shoe that combines the comfort of a house slipper with the protection and traction needed for outdoor adventures.',
+        grid: true,
+        images: [
+          'images/Footwear Final Top:Bottom.jpeg',
+          'images/Footwear Final pers:side.jpeg'
+        ],
+        smallImages: []
+      }
+    ],
+    links: []
+  },
+  'bus-stop': {
+    title: 'Northwestern Bus Stop',
+    desc: '',
+    role: '',
+    timeline: '',
+    overview: '',
+    sketchPage: true,
+    sections: [
+      {
+        label: 'Attributes',
+        grid: true,
+        images: ['images/Attributes (bus stop).jpeg']
+      },
+      {
+        label: 'Thumbnails',
+        grid: true,
+        images: ['images/Thumbnails - bus stop.jpeg']
+      },
+      {
+        label: 'Concept Development',
+        grid: true,
+        images: [
+          'images/glass waves working drawing.jpeg',
+          'images/kellogg steps working drawing.jpeg',
+          'images/shelter working drawing.jpeg',
+          'images/steel glass dome working drawing.jpeg',
+          'images/swing set working drawing.jpeg'
+        ],
+        smallImages: []
+      },
+      {
+        label: 'Concept Development 2.0',
+        grid: true,
+        images: ['images/Kellog steps working drawing 2.jpeg'],
+        smallImages: []
+      },
+      {
+        label: 'Final Concept: A minimalist take on Northwestern\'s Kellogg Steps.',
+        grid: true,
+        images: [
+          'images/kellogg steps front and side final.jpeg',
+          'images/kellogg steps final - perspective.jpeg'
+        ],
+        smallImages: []
+      }
+    ],
+    links: []
+  },
+  'furniture': {
+    title: 'Furniture Design',
+    desc: '',
+    role: '',
+    timeline: '',
+    overview: '',
+    sketchPage: true,
+    sections: [
+      {
+        label: 'Thumbnails',
+        grid: true,
+        images: ['images/Furniture Thumbnails.jpeg'],
+        smallImages: []
+      },
+      {
+        label: 'Concept Development 1',
+        grid: true,
+        images: [
+          'images/Furniture CD1 (large bunk).jpeg',
+          'images/Furniture CD1 (tp).jpeg',
+          'images/Furniture CD1 (geo bunk).jpeg',
+          'images/Furniture CD1 (bunk).jpeg',
+          'images/Furniture CD1 (shroom).jpeg'
+        ],
+        smallImages: []
+      },
+      {
+        label: 'Concept Development 2',
+        grid: true,
+        images: [
+          'images/Furniture CD2 (shroom).jpeg',
+          'images/Furniture CD2 (bunk).jpeg'
+        ],
+        smallImages: []
+      },
+      {
+        label: 'Final Concept: A modular mushroom nook that transforms from a reading retreat into a collaborative play space.',
+        grid: true,
+        images: [
+          'images/FurnitureNookFinal1.jpeg',
+          'images/Furniture Nook Final Function.jpeg'
+        ],
+        smallImages: []
+      }
+    ],
+    links: []
+  }
+};
+
+// ── Navigation ────────────────────────────────
+let currentPage = 'home';
+
+function go(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+
+  const nl = document.getElementById('nl-' + page);
+  if (nl) nl.classList.add('active');
+  if (page === 'detail') {
+    const nlp = document.getElementById('nl-projects');
+    if (nlp) nlp.classList.add('active');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  currentPage = page;
+}
+
+function openProject(id) {
+  const p = PROJECTS[id];
+  if (!p) return;
+
+  document.getElementById('d-title').textContent = p.title;
+
+  const headerEl = document.querySelector('.detail-header');
+  // Tagline for sketch pages
+  let taglineEl = document.getElementById('d-tagline');
+  if (!taglineEl) {
+    taglineEl = document.createElement('p');
+    taglineEl.id = 'd-tagline';
+    taglineEl.style.cssText = 'font-size:1rem;color:var(--mid);line-height:1.6;margin-bottom:32px;max-width:600px;';
+    document.getElementById('d-title').after(taglineEl);
+  }
+  taglineEl.textContent = p.tagline || '';
+  taglineEl.style.display = p.tagline ? 'block' : 'none';
+
+  const detailBody = document.querySelector('.detail-body');
+  const overviewRow = document.getElementById('d-overview-takeaway-row');
+  if (p.sketchPage) {
+    headerEl.style.display = 'none';
+    if (overviewRow) overviewRow.style.display = 'none';
+    detailBody.classList.add('sketch-layout');
+  } else {
+    detailBody.classList.remove('sketch-layout');
+    headerEl.style.display = '';
+    if (overviewRow) overviewRow.style.display = 'grid';
+    document.getElementById('d-overview').textContent = p.overview;
+    document.getElementById('d-overview').textContent = p.overview || '';
+    document.getElementById('d-takeaway').textContent = p.takeaway || '';
+    const takeawayCol = document.getElementById('d-takeaway-col');
+    if (takeawayCol) takeawayCol.style.display = p.takeaway ? '' : 'none';
+    document.getElementById('d-desc').textContent = p.desc;
+    document.getElementById('d-role').textContent = p.role;
+    document.getElementById('d-timeline').textContent = p.timeline;
+    document.getElementById('d-overview').textContent = p.overview;
+  }
+
+  // Hero image(s)
+  const heroEl = document.getElementById('d-hero');
+  const dotsEl = document.getElementById('d-hero-dots');
+  const images = p.heroImages || (p.heroImage ? [p.heroImage] : []);
+
+  if (images.length > 0) {
+    heroEl.innerHTML = `<img src="${images[0]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+    if (images.length > 1) {
+      let current = 0;
+      dotsEl.innerHTML = images.map((_, i) =>
+        `<div class="detail-dot${i === 0 ? ' on' : ''}" data-i="${i}"></div>`
+      ).join('');
+      dotsEl.querySelectorAll('.detail-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+          current = parseInt(dot.dataset.i);
+          heroEl.innerHTML = `<img src="${images[current]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+          dotsEl.querySelectorAll('.detail-dot').forEach((d, i) => d.classList.toggle('on', i === current));
+        });
+      });
+    } else {
+      dotsEl.innerHTML = '';
+    }
+  } else {
+    heroEl.innerHTML = '<div class="detail-hero-placeholder">Add project image here</div>';
+    dotsEl.innerHTML = '';
+  }
+
+  // Links
+  const linksEl = document.getElementById('d-links');
+  linksEl.innerHTML = (p.links || []).map(l =>
+    `<a class="detail-link" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`
+  ).join('');
+
+  // Extra image sections
+  const extraEl = document.getElementById('d-extra-sections');
+  let extraHTML = '';
+
+  if (p.sections) {
+    p.sections.forEach(sec => {
+      let imgHTML = '';
+      if (sec.grid) {
+        const allImages = [...sec.images, ...(sec.smallImages || [])];
+        const half = sec.halfSize || [];
+        const isSketch = document.querySelector('.detail-body')?.classList.contains('sketch-layout');
+        const gridGap = isSketch ? '20px' : '12px';
+        imgHTML += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:${gridGap};">${allImages.map(img => {
+          const isHalf = half.includes(img);
+          return isHalf
+            ? `<div style="display:flex;align-items:center;justify-content:center;"><img src="${img}" alt="${sec.label}" style="width:50%;border-radius:8px;display:block;"></div>`
+            : `<img src="${img}" alt="${sec.label}" style="width:100%;border-radius:8px;display:block;">`;
+        }).join('')}</div>`;
+      } else {
+        imgHTML = sec.images.map(img => `<img src="${img}" alt="${sec.label}" style="width:100%;border-radius:10px;display:block;margin-bottom:16px;">`).join('');
+      }
+      extraHTML += `<div class="detail-section">
+        ${sec.label ? `<p class="detail-section-label" style="margin-bottom:14px;">${sec.label}</p>` : ''}
+        ${imgHTML}
+      </div>`;
+    });
+  }
+
+  if (p.videoId) {
+    const videoHTML = `
+      <div class="detail-section">
+        <p class="detail-section-label">Demo</p>
+        <a href="https://youtu.be/${p.videoId}" target="_blank" rel="noopener" style="display:block;position:relative;width:100%;padding-bottom:56.25%;border-radius:12px;overflow:hidden;cursor:pointer;text-decoration:none;">
+          <img src="https://img.youtube.com/vi/${p.videoId}/hqdefault.jpg" alt="Demo video" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.4)'" onmouseout="this.style.background='rgba(0,0,0,0.25)'">
+            <div style="width:72px;height:72px;background:rgba(255,255,255,0.95);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M8 5.14v14l11-7-11-7z" fill="#1a1a2e"/></svg>
+            </div>
+          </div>
+        </a>
+      </div>`;
+    extraHTML = videoHTML + extraHTML;
+  }
+
+  extraEl.innerHTML = extraHTML;
+
+  go('detail');
+}
+
+// ── Fun page: dot/stack interaction ──────────────
+document.querySelectorAll('.dot-row').forEach(row => {
+  const cardKey = row.dataset.for;
+  const stack = document.querySelector(`.photo-stack[data-card="${cardKey}"]`);
+  if (!stack) return;
+
+  const imgs = Array.from(stack.querySelectorAll('.stack-img'));
+  const dots = Array.from(row.querySelectorAll('.dot'));
+
+  function showSlide(idx) {
+    const total = imgs.length;
+    imgs.forEach((img, i) => {
+      // Distance behind the active card (0 = active, 1 = one behind, etc.)
+      const behind = (i - idx + total) % total;
+      if (behind === 0) {
+        img.style.zIndex = 10;
+        img.style.opacity = '1';
+        img.style.transform = 'rotate(0deg) translate(0,0)';
+      } else if (behind === total - 1) {
+        img.style.zIndex = 9;
+        img.style.opacity = '0.72';
+        img.style.transform = 'rotate(-2.5deg) translate(-3px, 2px)';
+      } else if (behind === total - 2) {
+        img.style.zIndex = 8;
+        img.style.opacity = '0.5';
+        img.style.transform = 'rotate(4deg) translate(4px, 3px)';
+      } else {
+        img.style.zIndex = '0';
+        img.style.opacity = '0';
+      }
+    });
+    dots.forEach((d, di) => d.classList.toggle('on', di === idx));
+  }
+
+  // Init
+  showSlide(0);
+
+  dots.forEach((dot, di) => {
+    dot.addEventListener('click', () => showSlide(di));
+  });
+});
+</script>
+</body>
+</html>
