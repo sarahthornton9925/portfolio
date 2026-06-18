@@ -1022,13 +1022,13 @@
       .nav-links a { font-size: 0.85rem; }
 
       /* Home */
-      .home-body { flex-direction: row; align-items: flex-end; justify-content: space-between; padding: 80px 20px 44px; gap: 16px; }
-      .home-text { flex: 1; min-width: 0; }
-      .home-name { font-size: clamp(2rem, 9vw, 2.8rem); margin-bottom: 10px; }
-      .home-tagline { font-size: 0.88rem; margin-bottom: 8px; }
+      .home-body { flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 80px 20px 44px; gap: 14px; }
+      .home-photo-wrap { order: -1; }
+      .home-text { order: 1; }
+      .avatar { width: 100px; height: 100px; }
+      .home-name { font-size: clamp(2rem, 9vw, 2.8rem); margin-bottom: 6px; }
+      .home-tagline { font-size: 0.88rem; margin-bottom: 6px; }
       .home-role { font-size: 0.88rem; }
-      .home-photo-wrap { flex-shrink: 0; align-self: center; }
-      .avatar { width: 120px; height: 120px; }
 
       /* Projects */
       .section-wrap { padding: 36px 20px 0; }
