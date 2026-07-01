@@ -975,6 +975,27 @@
     }
 
     /* =====================
+       HAMBURGER (hidden on desktop)
+    ===================== */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px 4px;
+      background: none;
+      border: none;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--dark);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    /* =====================
        RESPONSIVE — Tablet (≤820px)
     ===================== */
     @media (max-width: 820px) {
@@ -1015,14 +1036,35 @@
     @media (max-width: 540px) {
       :root { --nav-height: 64px; }
 
-      /* Nav */
-      nav { padding: 0 16px; }
-      .nav-logo { font-size: 1.35rem; }
-      .nav-links { gap: 14px; }
-      .nav-links a { font-size: 0.85rem; }
+      /* Nav: hamburger */
+      nav { padding: 0 20px; }
+      .nav-logo { font-size: 1.4rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: rgba(245,239,227,0.97);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 0 16px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        z-index: 199;
+        list-style: none;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block;
+        padding: 14px 24px;
+        font-size: 1.15rem;
+        color: var(--dark) !important;
+      }
 
       /* Home */
-      .home-body { flex-direction: column; align-items: flex-start; justify-content: center; padding: var(--nav-height) 28px 44px; gap: 20px; }
+      .home-body { flex-direction: column; align-items: center; justify-content: center; padding: var(--nav-height) 28px 44px; gap: 20px; text-align: center; }
       .home-photo-wrap { order: -1; }
       .home-text { order: 1; }
       .avatar { width: 160px; height: 160px; }
@@ -1082,6 +1124,9 @@
     <li><a id="nl-about" onclick="go('about')">about</a></li>
     <li><a id="nl-fun" onclick="go('fun')">fun</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 
@@ -1796,6 +1841,16 @@ function openProject(id) {
 
   go('detail');
 }
+
+// ── Hamburger nav ─────────────────────────────────
+function toggleNav() {
+  document.getElementById('nav-links').classList.toggle('open');
+}
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('nav-links').classList.remove('open');
+  });
+});
 
 // ── Fun page: dot/stack interaction + swipe ──────
 document.querySelectorAll('.dot-row').forEach(row => {
