@@ -1513,6 +1513,24 @@
       .nav-links a { font-size: 1.35rem; }
       .nav-submenu a { font-size: 1.05rem !important; }
 
+      /* Mobile only: the submenu shows purely from the .open class (JS toggles it).
+         Touch makes :hover/:focus "stick" to the tapped option, which otherwise
+         kept the dropdown open until a second tap elsewhere — neutralize them here
+         so selecting an option closes the menu in the same tap. Desktop (>540px)
+         still opens on hover/focus. Transition on .nav-submenu is preserved, so it
+         still animates closed. */
+      .nav-dropdown:hover .nav-submenu,
+      .nav-dropdown:focus-within .nav-submenu {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(6px);
+      }
+      .nav-dropdown.open .nav-submenu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
       /* Home — mirror the desktop hero: letters scattered across the full
          canvas (bigger + pulled higher), tagline pinned bottom-left */
       .home-body { position: relative; display: block; min-height: 100vh; padding: 0; }
