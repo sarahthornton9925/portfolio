@@ -62,11 +62,12 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      font-family: 'Sniglet', 'DM Sans', sans-serif;
+      font-family: 'DM Sans', sans-serif;   /* match the home hero "sarah thornton" */
       font-weight: 800;
       font-size: 1.9rem;
       line-height: 1;
-      letter-spacing: 0.01em;
+      letter-spacing: 0;
+      text-transform: lowercase;            /* render as lowercase "st" like the hero name */
       transition: color 0.2s, transform 0.2s;
     }
     .nav-logo:hover { transform: rotate(-4deg) scale(1.05); }
@@ -129,6 +130,13 @@
     nav.on-dark .nav-links a.nav-parent:hover {
       background: rgba(255,255,255,0.24);
       border-color: rgba(255,255,255,0.46);
+    }
+
+    /* logo chip only: clear background, black "st", snug width */
+    .nav-logo {
+      padding: 9px 13px;
+      color: var(--dark);
+      font-weight: 400;
     }
 
     /* =====================
@@ -587,7 +595,7 @@
     .section-label {
       font-size: 2.8rem;
       font-weight: 800;
-      color: var(--blue);
+      color: var(--dark);
       letter-spacing: 0.06em;
       text-transform: uppercase;
       margin-bottom: 10px;
@@ -672,8 +680,8 @@
       box-shadow: 0 3px 12px rgba(90,79,214,0.4);
     }
     .stage-tag.tag-case {
-      background: #E5843D; color: #fff; border-color: #E5843D;
-      box-shadow: 0 3px 12px rgba(229,132,61,0.4);
+      background: var(--dark); color: #fff; border-color: var(--dark);
+      box-shadow: 0 3px 12px rgba(24,24,30,0.4);
     }
     .stage-tag.tag-sketch {
       background: #E86FA0; color: #fff; border-color: #E86FA0;
@@ -872,7 +880,7 @@
       }
     }
 
-    /* easter egg: hovering the profile photo makes "Hello!" enlarge + shake */
+    /* easter egg: hovering the profile photo makes "Hi, I'm Sarah." enlarge + shake */
     .hello-egg {
       display: inline-block;
       transform-origin: center center;
@@ -1463,7 +1471,7 @@
       .home-photo-wrap { position: static; top: auto; right: auto; order: 1; }
       /* keep the scattered S-curve on mobile — give the name its own canvas so the
          letters spread across it instead of collapsing into a tight inline row */
-      .home-name { position: relative; inset: auto; left: auto; right: auto; bottom: auto; order: 3; padding: 0; width: 100%; aspect-ratio: 3 / 2; max-height: 42vh; font-size: clamp(3rem, 12vw, 5rem); line-height: 1; }
+      .home-name { position: relative; inset: auto; left: auto; right: auto; bottom: auto; order: 1; padding: 0; width: 100%; aspect-ratio: 3 / 2; max-height: 42vh; font-size: clamp(3rem, 12vw, 5rem); line-height: 1; }
       .home-name .char { position: absolute; }
       .home-role { font-size: 1.15rem; }
       .avatar { width: 200px; height: 200px; }
@@ -1615,12 +1623,11 @@
 <section id="page-about" class="reel-about">
   <div class="about-body">
     <div class="about-text">
-      <p><span class="hello-egg">Hello!</span> My name is Sarah Thornton.</p>
+      <p><span class="hello-egg">Hi, I'm Sarah.</span></p>
       <p>I'm a senior at Northwestern University pursuing a B.A. in Psychology and the Segal Design Certificate, inspired by the intersection of human behavior and design.</p>
       <p>I'm currently working at Andalusia Design, a custom parametric design and architectural fabrication startup in Austin, TX, where I'm learning how thoughtful design shapes the way people experience spaces.</p>
       <p>My goal is to create <strong>human-centered designs</strong> that make people feel understood and genuinely comfortable in the spaces they move through.</p>
-      <p>Feel free to click and scroll around!</p>
-      <p><span style="white-space: nowrap">I'm happy to have you here :)</span></p>
+      <p>Thanks for stopping by! Feel free to explore my recent projects.</p>
     </div>
     <div class="about-right">
       <div class="about-avatar">
@@ -2013,7 +2020,7 @@
   })();
 })();
 
-// ── Easter egg: hover the profile photo → "Hello!" enlarges + shakes ──
+// ── Easter egg: hover the profile photo → "Hi, I'm Sarah." enlarges + shakes ──
 (function helloEgg() {
   const avatar = document.querySelector('.about-avatar');
   const hello = document.querySelector('.hello-egg');
@@ -2339,7 +2346,11 @@ function go(page) {
 
 // Go to the projects page, filtered to a category ('all' | 'uiux' | 'industrial')
 function goProjects(cat) {
-  document.getElementById('nav-projects-drop')?.classList.remove('open');  // close the menu
+  const drop = document.getElementById('nav-projects-drop');
+  drop?.classList.remove('open');       // close the menu
+  // on mobile the tapped link keeps focus inside the dropdown, so :focus-within
+  // would keep the frosted box visible — drop focus so the menu dismisses now
+  document.activeElement?.blur();
   go('projects');
   filterProjects(cat || 'all');
 }
