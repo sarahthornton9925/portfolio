@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sarah Thornton — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Sniglet:wght@800&display=swap" rel="stylesheet">
   <style>
     :root {
       --cream: #F5EFE3;
@@ -50,28 +50,26 @@
       transition: background 0.3s, backdrop-filter 0.3s;
     }
 
-    nav.cream-bg {
-      background: rgba(245, 239, 227, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-    }
-
-    nav.transparent-bg {
+    /* transparent header so it blends seamlessly over the scrollytelling reel;
+       link/logo colours swap per section (see .on-cream / .on-dark) for contrast */
+    nav {
       background: transparent;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+      border-bottom: 1px solid transparent;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .nav-logo {
-      font-weight: 800;
-      font-size: 2rem;
-      letter-spacing: 0.04em;
       cursor: pointer;
-      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      font-family: 'Sniglet', 'DM Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.9rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      transition: color 0.2s, transform 0.2s;
     }
-
-    nav.cream-bg .nav-logo { color: var(--blue); }
-    nav.transparent-bg .nav-logo { color: white; }
+    .nav-logo:hover { transform: rotate(-4deg) scale(1.05); }
 
     .nav-links {
       display: flex;
@@ -88,10 +86,114 @@
       letter-spacing: 0.01em;
     }
 
-    nav .nav-links a { color: var(--dark); }
-    nav .nav-links a:hover { color: var(--blue); }
-    nav .nav-links a.active { color: var(--blue); }
-    nav .nav-logo { color: var(--blue); }
+    /* default (over cream sections: Home, Projects, Detail) — dark labels, blue logo */
+    .nav-logo { color: var(--blue); }
+    .nav-links a { color: var(--dark); }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-links a.active { color: var(--blue); font-weight: 600; }
+    .nav-hamburger span { background: var(--dark); }
+
+    /* over dark sections (About) — swap to light so labels stay legible on the
+       transparent bar; transitions smoothly as the reel scrolls into About */
+    nav.on-dark .nav-logo { color: #fff; }
+    nav.on-dark .nav-links a { color: rgba(255,255,255,0.9); }
+    nav.on-dark .nav-links a:hover { color: #fff; }
+    nav.on-dark .nav-links a.active { color: #fff; }
+    nav.on-dark .nav-hamburger span { background: #fff; }
+
+    /* ── Header items as tappable chips so it's obvious they're clickable ── */
+    .nav-logo,
+    .nav-links a.nav-parent {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 24px;
+      border-radius: 100px;
+      border: 1px solid rgba(24,24,30,0.13);
+      background: rgba(24,24,30,0.05);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: color 0.2s, transform 0.2s, background 0.25s ease, border-color 0.25s ease;
+    }
+    .nav-logo:hover,
+    .nav-links a.nav-parent:hover {
+      background: rgba(24,24,30,0.09);
+      border-color: rgba(24,24,30,0.22);
+    }
+    /* over dark sections (About) — light glass chips */
+    nav.on-dark .nav-logo,
+    nav.on-dark .nav-links a.nav-parent {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.26);
+    }
+    nav.on-dark .nav-logo:hover,
+    nav.on-dark .nav-links a.nav-parent:hover {
+      background: rgba(255,255,255,0.24);
+      border-color: rgba(255,255,255,0.46);
+    }
+
+    /* =====================
+       PROJECTS DROPDOWN
+    ===================== */
+    .nav-dropdown { position: relative; }
+    /* the parent "projects" label stays dark (it's a toggle, not a link) */
+    .nav-links a.nav-parent,
+    .nav-links a.nav-parent:hover,
+    .nav-links a.nav-parent.active { color: var(--dark); font-weight: 400; }
+    .nav-caret {
+      display: inline-block;
+      width: 0; height: 0;
+      margin-left: 6px;
+      vertical-align: middle;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid currentColor;
+      transition: transform 0.2s;
+    }
+    .nav-dropdown:hover .nav-caret,
+    .nav-dropdown.open .nav-caret { transform: rotate(180deg); }
+    .nav-submenu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: auto;
+      min-width: 190px;
+      /* frosted glass — blue-tinted so white text stays legible whether the menu
+         opens over the cream Home or the blue About */
+      background: rgba(58, 50, 140, 0.40);
+      backdrop-filter: blur(18px) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) saturate(1.3);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 14px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.25);
+      padding: 0;                    /* rows go edge-to-edge for full-width dividers */
+      overflow: hidden;              /* clip rows to the rounded corners */
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+      transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+      z-index: 210;
+    }
+    .nav-dropdown:hover .nav-submenu,
+    .nav-dropdown:focus-within .nav-submenu,
+    .nav-dropdown.open .nav-submenu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .nav-submenu a {
+      font-size: 1.15rem !important;
+      color: #fff !important;
+      padding: 12px 18px;
+      border-radius: 0;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    /* hairline divider between each project */
+    .nav-submenu a + a { border-top: 1px solid rgba(255,255,255,0.18); }
+    .nav-submenu a:hover { background: rgba(255,255,255,0.16); color: #fff !important; }
 
     /* =====================
        PAGE SYSTEM
@@ -110,6 +212,36 @@
     @keyframes pageIn {
       from { opacity: 0; }
       to { opacity: 1; }
+    }
+
+    /* home intro animations */
+    @keyframes dropInTop {
+      from { opacity: 0; transform: translateY(-70px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes riseUp {
+      from { opacity: 0; transform: translateY(90px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    #reel.active #page-home .home-tagline {
+      animation: slideInLeft 0.6s ease-out both;
+      animation-delay: 0.2s;
+    }
+    #reel.active #page-home .home-role {
+      animation: slideInLeft 0.65s ease-out both;
+      animation-delay: 0.32s;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    #page-home.active .home-photo-wrap {
+      animation: popIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      animation-delay: 0.7s;
     }
 
     /* =====================
@@ -141,6 +273,50 @@
       50% { transform: translate(6px,-10px); }
     }
 
+    /* livelier drift for the home page blobs */
+    @keyframes homeDrift1 {
+      0%,100% { transform: translate(0,0) rotate(0deg) scale(1); }
+      33%     { transform: translate(34px,-44px) rotate(6deg) scale(1.05); }
+      66%     { transform: translate(-24px,-22px) rotate(-5deg) scale(0.96); }
+    }
+    @keyframes homeDrift2 {
+      0%,100% { transform: translate(0,0) rotate(0deg) scale(1); }
+      33%     { transform: translate(-40px,30px) rotate(-7deg) scale(1.06); }
+      66%     { transform: translate(22px,44px) rotate(5deg) scale(0.95); }
+    }
+    @keyframes homeDrift3 {
+      0%,100% { transform: translate(0,0) rotate(0deg) scale(1); }
+      33%     { transform: translate(30px,-34px) rotate(8deg) scale(1.08); }
+      66%     { transform: translate(-34px,-8px) rotate(-6deg) scale(0.94); }
+    }
+    /* subtle organic shape-shift — each blob starts from its OWN resting shape
+       (no snap) and drifts only a few percent (smooth, never sharp) */
+    @keyframes blobMorph1 {
+      0%,100% { border-radius: 56% 44% 60% 40% / 48% 58% 42% 52%; }
+      33%     { border-radius: 52% 48% 55% 45% / 53% 53% 47% 47%; }
+      66%     { border-radius: 60% 40% 63% 37% / 44% 62% 38% 56%; }
+    }
+    @keyframes blobMorph2 {
+      0%,100% { border-radius: 44% 56% 38% 62% / 55% 42% 58% 45%; }
+      33%     { border-radius: 48% 52% 43% 57% / 50% 47% 53% 50%; }
+      66%     { border-radius: 40% 60% 34% 66% / 59% 38% 62% 41%; }
+    }
+    @keyframes blobMorph3 {
+      0%,100% { border-radius: 52% 48% 44% 56% / 60% 38% 62% 40%; }
+      33%     { border-radius: 48% 52% 49% 51% / 55% 43% 57% 45%; }
+      66%     { border-radius: 56% 44% 40% 60% / 63% 35% 65% 37%; }
+    }
+    @keyframes blobMorph4 {
+      0%,100% { border-radius: 50% 50% 46% 54% / 54% 48% 52% 46%; }
+      33%     { border-radius: 46% 54% 51% 49% / 49% 53% 47% 51%; }
+      66%     { border-radius: 54% 46% 42% 58% / 58% 44% 56% 42%; }
+    }
+    @keyframes blobMorph5 {
+      0%,100% { border-radius: 60% 40% 50% 50%; }
+      33%     { border-radius: 55% 45% 54% 46%; }
+      66%     { border-radius: 64% 36% 46% 54%; }
+    }
+
     /* =====================
        HOME PAGE
     ===================== */
@@ -149,95 +325,175 @@
       min-height: 100vh;
     }
 
+    /* blob sizes/colours/drift (positions set by .reel-blobs rules above) */
     .home-blob-1 {
-      width: 520px; height: 520px;
+      width: 600px; height: 600px;
       background: #E09090;
-      top: -120px; right: 20px;
+      bottom: -13vh; left: -70px;
       border-radius: 56% 44% 60% 40% / 48% 58% 42% 52%;
-      opacity: 0.78;
-      animation: float1 9s ease-in-out infinite;
+      opacity: 0.9;
+      animation: homeDrift1 14s ease-in-out infinite, blobMorph1 18s ease-in-out infinite;
     }
 
     .home-blob-2 {
-      width: 420px; height: 420px;
+      width: 560px; height: 560px;
       background: #CF70CC;
-      bottom: -80px; right: 140px;
+      bottom: -10vh; left: 30%;
       border-radius: 44% 56% 38% 62% / 55% 42% 58% 45%;
-      opacity: 0.72;
-      animation: float2 11s ease-in-out infinite 1.5s;
+      opacity: 0.82;
+      animation: homeDrift2 17s ease-in-out infinite 1s, blobMorph2 21s ease-in-out infinite 1s;
     }
 
     .home-blob-3 {
-      width: 220px; height: 220px;
+      width: 360px; height: 360px;
       background: #F0B060;
-      top: 240px; right: 360px;
+      bottom: 2vh; left: 20%;
       border-radius: 52% 48% 44% 56% / 60% 38% 62% 40%;
-      opacity: 0.48;
-      animation: float3 7s ease-in-out infinite 0.5s;
+      opacity: 0.62;
+      animation: homeDrift3 13s ease-in-out infinite 0.5s, blobMorph3 16s ease-in-out infinite 2s;
     }
 
     .home-blob-4 {
-      width: 180px; height: 180px;
-      background: #E09090;
-      bottom: 120px; left: -60px;
-      border-radius: 50% 50% 60% 40%;
-      opacity: 0.35;
-      animation: float2 10s ease-in-out infinite 3s;
+      width: 540px; height: 540px;
+      background: #E890A8;
+      bottom: 0; left: 55%;
+      border-radius: 50% 50% 46% 54% / 54% 48% 52% 46%;
+      opacity: 0.7;
+      animation: homeDrift2 15.5s ease-in-out infinite 2s, blobMorph4 19s ease-in-out infinite 0.5s;
     }
 
     .home-blob-5 {
-      width: 140px; height: 140px;
+      width: 480px; height: 480px;
       background: #CF70CC;
-      top: 160px; left: 120px;
+      bottom: 8vh; right: 24%;
       border-radius: 60% 40% 50% 50%;
-      opacity: 0.3;
-      animation: float1 8s ease-in-out infinite 2s;
+      opacity: 0.6;
+      animation: homeDrift3 13.5s ease-in-out infinite 1.5s, blobMorph5 17s ease-in-out infinite 1s;
     }
 
     .home-body {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       min-height: 100vh;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 0 64px 80px;
     }
 
+    /* tagline — anchored bottom-left */
     .home-text {
-      max-width: 700px;
+      position: absolute;
+      left: 44px;
+      bottom: 6vh;
+      z-index: 3;
+      text-align: left;
     }
 
     .home-tagline {
-      font-size: 1.5rem;
-      font-weight: 400;
+      font-size: clamp(0.85rem, 1.15vw, 1rem);
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      line-height: 1;
       color: var(--dark);
-      margin-bottom: 16px;
-    }
-
-    .home-name {
-      font-size: clamp(5rem, 10vw, 9rem);
-      font-weight: 800;
-      color: var(--dark);
-      line-height: 0.92;
-      margin-bottom: 24px;
-      letter-spacing: -0.03em;
+      opacity: 0.7;
+      margin-bottom: 1px;
+      margin-left: 0.15em;
     }
 
     .home-role {
-      font-size: 1.5rem;
-      font-weight: 400;
+      font-size: clamp(1.6rem, 2.7vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: 0.005em;
+      line-height: 1.12;
       color: var(--dark);
-      line-height: 1.55;
+    }
+    .role-indent { margin-left: 2.4em; }
+
+    /* name — letters scattered across the hero, flying into place on load */
+    .home-name {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      color: var(--dark);
+      font-weight: 800;
+      font-size: clamp(3.6rem, 9vw, 10.8rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .home-name .char {
+      position: absolute;            /* left/top set per-letter in JS */
+      will-change: transform, opacity;
+      transform: translate(-50%, -50%);
+      animation: scatterIn 1.35s cubic-bezier(0.16, 1, 0.3, 1) var(--inDelay, 0s) both;
+    }
+    @keyframes scatterIn {
+      from {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--fromX, 0px)), calc(-50% + var(--fromY, 0px)))
+                   rotate(var(--fromR, 0deg)) scale(0.85);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+      }
+    }
+    .home-name .char-px {
+      display: inline-block;
+      will-change: transform;
+    }
+    .home-name .char-inner {
+      display: inline-block;
+      animation: charBob var(--dur, 6s) ease-in-out var(--del, 0s) infinite;
+    }
+    @keyframes charBob {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50%      { transform: translate(var(--driftX, 0px), var(--amp, -4px)) rotate(var(--rot, 0deg)); }
+    }
+    /* hover a single letter: it nudges lightly in its own direction + changes colour */
+    .home-name .char-hover {
+      display: inline-block;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+    }
+    /* .lit is added on mobile as a dragging finger passes over each letter */
+    .home-name .char:hover .char-hover,
+    .home-name .char.lit .char-hover {
+      transform: translate(var(--hoverX, 0), var(--hoverY, 0)) rotate(var(--hoverRot, 0deg));
+      color: var(--hoverColor, var(--dark));
     }
 
+    /* wordless scroll arrow — an affordance, not an instruction */
+    .scroll-arrow {
+      position: absolute;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%);
+      z-index: 4;
+      color: var(--dark);
+      pointer-events: none;
+      animation: cueFadeIn 0.8s ease 1.6s both;
+    }
+    .scroll-arrow svg {
+      width: 28.6px; height: 16.5px;
+      display: block;
+      animation: scrollBounce 1.6s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50%      { transform: translateY(7px); opacity: 1; }
+    }
+    @keyframes cueFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+
+    /* photo — top right */
     .home-photo-wrap {
-      flex-shrink: 0;
-      z-index: 2;
+      position: absolute;
+      top: calc(var(--nav-height) + 40px);
+      right: 64px;
+      z-index: 3;
     }
 
     .avatar {
-      width: 420px; height: 420px;
+      width: 300px; height: 300px;
       border-radius: 50%;
       overflow: hidden;
       border: 4px solid white;
@@ -347,6 +603,9 @@
 
     .section-desc strong { color: var(--dark); font-weight: 600; }
 
+    /* extra breathing room under the category heading (desc is hidden when filtered) */
+    #proj-heading { margin-bottom: 48px; }
+
     .cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -360,7 +619,26 @@
 
     .proj-card:hover { transform: translateY(-6px); }
 
+    /* stage sub-sections within a category (Prototyped / Case Studies / Sketches) */
+    .proj-subsection { margin-bottom: 56px; }
+    .proj-subsection:last-child { margin-bottom: 0; }
+    .subsection-label {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: 0.01em;
+      margin-bottom: 6px;
+    }
+    .subsection-desc {
+      font-size: 1rem;
+      color: var(--mid);
+      line-height: 1.5;
+      max-width: 440px;
+      margin-bottom: 24px;
+    }
+
     .thumb {
+      position: relative;
       width: 100%;
       aspect-ratio: 4 / 3;
       border-radius: 10px;
@@ -369,6 +647,41 @@
       background: #C8B8F0;
       margin-bottom: 10px;
       display: flex; align-items: center; justify-content: center;
+    }
+
+    /* fidelity tag shown on a card's thumbnail */
+    .stage-tag {
+      position: absolute;
+      top: 10px; left: 10px;
+      z-index: 2;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(245,239,227,0.92);
+      color: var(--dark);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(24,24,30,0.14);
+    }
+    /* colour-coded by fidelity/type */
+    .stage-tag.tag-proto {
+      background: var(--blue); color: #fff; border-color: var(--blue);
+      box-shadow: 0 3px 12px rgba(90,79,214,0.4);
+    }
+    .stage-tag.tag-case {
+      background: #E5843D; color: #fff; border-color: #E5843D;
+      box-shadow: 0 3px 12px rgba(229,132,61,0.4);
+    }
+    .stage-tag.tag-sketch {
+      background: #E86FA0; color: #fff; border-color: #E86FA0;
+      box-shadow: 0 3px 12px rgba(232,111,160,0.4);
+    }
+    .stage-tag.tag-sprint {
+      background: #fff; color: var(--dark); border-color: rgba(24,24,30,0.18);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.14);
     }
 
     .thumb img {
@@ -411,62 +724,64 @@
     /* =====================
        ABOUT PAGE
     ===================== */
-    #page-about {
-      background: var(--blue-bg);
+    /* ===== scroll reel: Home + About as one continuous native scroll ===== */
+    #reel { display: none; position: relative; background: var(--blue-bg); overflow: clip; }
+    #reel.active { display: block; animation: pageIn 0.35s ease forwards; }
+
+    .reel-hero {
+      position: relative;
+      min-height: 100vh;
+      background: var(--cream);
+      overflow: hidden;
+    }
+    .reel-about {
+      position: relative;
       min-height: 100vh;
       padding-top: var(--nav-height);
+      /* cream -> blue fade across the top hides the seam line */
+      background: linear-gradient(to bottom, var(--cream) 0, var(--blue-bg) 320px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
 
-    .about-blob-1 {
-      width: 420px; height: 420px;
-      background: #E09090;
-      top: -80px; right: -60px;
-      border-radius: 46% 54% 60% 40% / 52% 46% 54% 48%;
-      opacity: 0.6;
-      animation: float1 9s ease-in-out infinite;
+    /* shared blob band straddling the Home/About seam; JS adds parallax translateY */
+    .reel-blobs {
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+      z-index: 1;
+      will-change: transform;
     }
-
-    .about-blob-2 {
-      width: 300px; height: 300px;
-      background: #CF70CC;
-      bottom: 40px; right: 80px;
-      border-radius: 54% 46% 40% 60% / 44% 58% 42% 56%;
-      opacity: 0.5;
-      animation: float2 11s ease-in-out infinite 2s;
-    }
-
-    .about-blob-3 {
-      width: 220px; height: 220px;
-      background: #F0B060;
-      top: 300px; left: -50px;
-      border-radius: 50% 50% 44% 56%;
-      opacity: 0.4;
-      animation: float3 8s ease-in-out infinite 1s;
-    }
-
-    .about-blob-4 {
-      width: 160px; height: 160px;
-      background: #E890A8;
-      bottom: 200px; left: 200px;
-      border-radius: 56% 44% 50% 50%;
-      opacity: 0.35;
-      animation: float1 10s ease-in-out infinite 3s;
-    }
+    .reel-blobs .home-blob-1 { top: calc(100vh - 420px); bottom: auto; left: -8%; }
+    .reel-blobs .home-blob-3 { top: calc(100vh - 240px); bottom: auto; left: 16%; }
+    .reel-blobs .home-blob-2 { top: calc(100vh - 380px); bottom: auto; left: 33%; }
+    .reel-blobs .home-blob-4 { top: calc(100vh - 360px); bottom: auto; left: 55%; }
+    .reel-blobs .home-blob-5 { top: calc(100vh - 260px); bottom: auto; right: -70px; }
 
     .about-body {
-      position: relative; z-index: 1;
-      padding: 200px 80px 80px;
+      position: relative; z-index: 2;
+      /* fill most of the first About screen so its content stays centered,
+         but leave a ~120px gap so "Find me with…" peeks above the fold */
+      min-height: calc(100vh - var(--nav-height) - 120px);
+      padding: 40px 80px 60px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 80px;
-      align-items: start;
+      align-items: center;
       max-width: 1300px;
       margin: 0 auto;
     }
 
+    /* optical centering — nudge the photo column slightly above true center */
+    .about-right { align-self: center; margin-top: -2vh; }
+
     .about-text p {
       color: white;
-      font-size: 1.15rem;
+      font-size: 1.27rem;
       line-height: 1.8;
       margin-bottom: 26px;
       font-weight: 400;
@@ -474,6 +789,106 @@
 
     .about-text p:last-child { margin-bottom: 0; }
     .about-text strong { font-weight: 700; }
+
+    /* "Find me with..." — campus communities shown at the end of About;
+       cards stacked one-on-top-of-the-other and enlarged */
+    .find-me {
+      position: relative; z-index: 2;
+      /* width:100% is REQUIRED — .find-me is a flex child of .reel-about, and its
+         `margin:0 auto` cancels flex stretch, so without an explicit width it
+         shrink-wraps to the title text (~370px) and the photos never grow.
+         Capped by viewport HEIGHT (100vh) because a 2×2 of square photos is
+         limited by height, not width. */
+      width: 100%;
+      /* resting card = 80% of the largest that fits (cut 20%); the hover 2×2
+         spread compensates with a bigger scale/translate so it stays the same
+         absolute size as before */
+      max-width: min(1040px, 73.6vw, 80vh);
+      margin: 0 auto;
+      padding: 0 24px 120px;
+      text-align: center;
+    }
+    .find-me-title {
+      color: #fff;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 40px;
+    }
+    .find-me .fun-grid {
+      grid-template-columns: 1fr;
+      gap: 72px;
+      margin-bottom: 0;
+    }
+    .find-me .fun-card { gap: 22px; }
+    .find-me .fun-card-name { font-size: 1.2rem; }
+    /* the hover 2×2 spread is ~7.5% of the card width taller than the photo box
+       (top & bottom rows poke out). Reserve that room with a %-margin (relative to
+       width, so it scales with the card) so the spread never overlaps the label or
+       the "Find me with…" header. */
+    .find-me .photo-stack { margin: 9% 0; }
+
+    /* ── Desktop only: hovering a card spreads its 4 photos into a fully
+       separated 2×2 grid so you can see every one at once. Each photo scales to
+       ~40% and moves to a quadrant, staying inside the card footprint (nothing
+       clips). Overrides the JS carousel's inline transforms (hence !important).
+       Touch devices skip this and keep the manual swipe/dot carousel below. ── */
+    @media (hover: hover) and (pointer: fine) {
+      /* dots are redundant on desktop — hovering spreads every photo */
+      .find-me .dot-row { display: none; }
+      .find-me .fun-card:hover { transform: none; }
+
+      .find-me .photo-stack:hover .stack-img {
+        opacity: 1 !important;
+        z-index: 5 !important;
+      }
+      .find-me .photo-stack:hover .stack-img:nth-child(1) {
+        transform: translate(-30%, -30%) scale(0.55) !important;
+      }
+      .find-me .photo-stack:hover .stack-img:nth-child(2) {
+        transform: translate(30%, -30%) scale(0.55) !important;
+      }
+      .find-me .photo-stack:hover .stack-img:nth-child(3) {
+        transform: translate(-30%, 30%) scale(0.55) !important;
+      }
+      .find-me .photo-stack:hover .stack-img:nth-child(4) {
+        transform: translate(30%, 30%) scale(0.55) !important;
+      }
+
+      /* Rock Climbing card: spread the 4 photos into a DIAMOND (top/right/bottom/left)
+         instead of a 2×2 square. Extra specificity ([data-card="climb"]) beats the
+         square rules above. */
+      .find-me .photo-stack[data-card="climb"]:hover .stack-img:nth-child(1) {
+        transform: translate(0, -34%) scale(0.5) !important;   /* top */
+      }
+      .find-me .photo-stack[data-card="climb"]:hover .stack-img:nth-child(2) {
+        transform: translate(34%, 0) scale(0.5) !important;    /* right */
+      }
+      .find-me .photo-stack[data-card="climb"]:hover .stack-img:nth-child(3) {
+        transform: translate(0, 34%) scale(0.5) !important;    /* bottom */
+      }
+      .find-me .photo-stack[data-card="climb"]:hover .stack-img:nth-child(4) {
+        transform: translate(-34%, 0) scale(0.5) !important;   /* left */
+      }
+    }
+
+    /* easter egg: hovering the profile photo makes "Hello!" enlarge + shake */
+    .hello-egg {
+      display: inline-block;
+      transform-origin: center center;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .hello-egg.wiggle { animation: helloWiggle 1.05s ease-out 1; }
+    @keyframes helloWiggle {
+      0%   { transform: scale(1) rotate(0deg); }
+      12%  { transform: scale(1.55) rotate(-9deg); }
+      28%  { transform: scale(1.55) rotate(8deg); }
+      44%  { transform: scale(1.52) rotate(-6deg); }
+      60%  { transform: scale(1.48) rotate(5deg); }
+      74%  { transform: scale(1.38) rotate(-3deg); }
+      88%  { transform: scale(1.18) rotate(2deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
 
     .about-right {
       display: flex;
@@ -501,59 +916,46 @@
       box-shadow: 0 14px 50px rgba(0,0,0,0.22);
       background: linear-gradient(135deg, #7080E8, #8060D0);
       display: flex; align-items: center; justify-content: center;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.45s ease;
+    }
+    .about-avatar:hover {
+      transform: translateY(-8px) scale(1.04) rotate(-2deg);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.32);
     }
 
     .about-avatar img {
       width: 100%; height: 100%;
       object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .about-avatar:hover img { transform: scale(1.08); }
+
+    .social-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
-    .contact-card {
-      width: 100%;
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      color: white;
       background: rgba(255,255,255,0.14);
       border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 14px;
-      padding: 18px 22px;
-      text-align: center;
       backdrop-filter: blur(6px);
+      transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
     }
-
-    .contact-card .psst-row {
-      color: #F5D060;
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-bottom: 6px;
-      display: flex; align-items: center;
-      justify-content: center;
-      gap: 6px;
+    .social-link:hover {
+      transform: translateY(-6px);
+      background: rgba(255,255,255,0.22);
+      border-color: rgba(255,255,255,0.42);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
     }
-
-    .contact-card .psst-arrow {
-      width: 0; height: 0;
-      border-top: 6px solid transparent;
-      border-bottom: 6px solid transparent;
-      border-left: 9px solid #F5D060;
-      display: inline-block;
-    }
-
-    .contact-card .reach-text {
-      color: rgba(255,255,255,0.75);
-      font-size: 0.85rem;
-      margin-bottom: 4px;
-    }
-
-    .contact-card .email-text {
-      color: white;
-      font-weight: 700;
-      font-size: 0.9rem;
-      word-break: break-all;
-    }
-
-    .contact-card .asap-text {
-      color: rgba(255,255,255,0.6);
-      font-size: 0.82rem;
-      margin-top: 4px;
-    }
+    .social-link svg { width: 26px; height: 26px; display: block; }
 
     /* =====================
        FUN PAGE
@@ -624,56 +1026,76 @@
     }
 
     .fun-title {
-      font-size: 3rem;
+      font-size: 3.4rem;
       font-weight: 800;
       color: white;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
     }
 
     .fun-intro {
-      color: rgba(255,255,255,0.78);
-      font-size: 0.92rem;
+      color: rgba(255,255,255,0.82);
+      font-size: 1rem;
       line-height: 1.6;
-      margin-bottom: 48px;
+      max-width: 460px;
+      margin-bottom: 56px;
     }
 
     .fun-section-title {
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: white;
-      margin-bottom: 26px;
-      letter-spacing: -0.01em;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .fun-section-title::before {
+      content: "";
+      width: 26px; height: 2px;
+      background: rgba(255,255,255,0.55);
+      display: inline-block;
+      flex-shrink: 0;
     }
 
     .fun-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 50px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 64px;
+      align-items: start;
     }
 
     .fun-card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
+      transition: transform 0.25s cubic-bezier(.34,1.56,.64,1);
     }
+    .fun-card:hover { transform: translateY(-5px); }
 
     /* stacked photos */
     .photo-stack {
       position: relative;
       width: 100%;
-      padding-bottom: 72%;
+      padding-bottom: 100%;
     }
 
     .photo-stack .stack-img {
       position: absolute;
       inset: 0;
-      border-radius: 10px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-      transition: opacity 0.35s ease;
+      box-shadow: 0 12px 32px rgba(50,16,70,0.34);
+      /* animate transform + opacity together on a promoted GPU layer so
+         swiping/tapping through the stack stays fluid instead of snapping */
+      transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      transform: translateZ(0);
       background: #8870C8;
     }
 
@@ -708,11 +1130,27 @@
     }
 
     .fun-card-name {
-      font-size: 0.98rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: white;
       text-align: center;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
     }
+    /* forced line break in "NU's Rock / Climbing Club" — mobile only (see media query) */
+    .rcc-break { display: none; }
+    /* small Instagram link to the right of each community name */
+    .ig-link {
+      display: inline-flex;
+      align-items: center;
+      color: rgba(255,255,255,0.72);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .ig-link:hover { color: #fff; transform: scale(1.12); }
+    .ig-link svg { display: block; }
 
     .fun-card-desc {
       font-size: 0.83rem;
@@ -888,6 +1326,20 @@
       margin-bottom: 12px;
       letter-spacing: 0.01em;
     }
+    /* explanatory subheading beneath a section label */
+    .detail-section-sublabel {
+      color: var(--mid);
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      max-width: 640px;
+    }
+    .detail-section-sublabel .sublabel-arrow {
+      color: var(--blue);
+      font-weight: 700;
+      margin-right: 8px;
+    }
 
     .detail-overview-text {
       font-size: 1.1rem;
@@ -1004,11 +1456,16 @@
       nav { padding: 0 28px; }
       .nav-links { gap: 20px; }
       .nav-links a { font-size: 1.2rem; }
-      .nav-logo { font-size: 1.6rem; }
+      .nav-logo { font-size: 1.7rem; }
 
-      .home-body { padding: 80px 36px 60px; flex-direction: column; justify-content: flex-end; gap: 28px; }
-      .home-name { font-size: clamp(3.5rem, 11vw, 6rem); }
-      .home-tagline, .home-role { font-size: 1.15rem; }
+      .home-body { display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 24px; padding: calc(var(--nav-height) + 32px) 36px 48px; }
+      .home-text { position: static; top: auto; left: auto; max-width: 100%; order: 2; transform: none; }
+      .home-photo-wrap { position: static; top: auto; right: auto; order: 1; }
+      /* keep the scattered S-curve on mobile — give the name its own canvas so the
+         letters spread across it instead of collapsing into a tight inline row */
+      .home-name { position: relative; inset: auto; left: auto; right: auto; bottom: auto; order: 3; padding: 0; width: 100%; aspect-ratio: 3 / 2; max-height: 42vh; font-size: clamp(3rem, 12vw, 5rem); line-height: 1; }
+      .home-name .char { position: absolute; }
+      .home-role { font-size: 1.15rem; }
       .avatar { width: 200px; height: 200px; }
 
       .section-wrap { padding: 48px 28px 0; }
@@ -1022,7 +1479,7 @@
 
       .fun-body { padding: 48px 28px 60px; }
       .fun-title { font-size: 2.4rem; }
-      .fun-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .fun-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
       .detail-body { padding: 40px 28px 60px; }
       .detail-header { grid-template-columns: 1fr; gap: 28px; }
@@ -1038,43 +1495,31 @@
 
       /* Nav: hamburger */
       nav { padding: 0 20px; }
-      .nav-logo { font-size: 1.4rem; }
-      .nav-hamburger { display: flex; }
-      .nav-links {
-        display: none;
-        position: fixed;
-        top: 64px; left: 0; right: 0;
-        background: rgba(245,239,227,0.97);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        flex-direction: column;
-        gap: 0;
-        padding: 8px 0 16px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        z-index: 199;
-        list-style: none;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links li { width: 100%; }
-      .nav-links a {
-        display: block;
-        padding: 14px 24px;
-        font-size: 1.15rem;
-        color: var(--dark) !important;
-      }
+      .nav-logo { font-size: 1.55rem; }
+      /* touch has no "unhover", so the desktop tilt would stick after a tap —
+         keep the ST logo sitting horizontal on mobile */
+      .nav-logo:hover, .nav-logo:active, .nav-logo:focus { transform: none; }
+      /* single "projects" item with its dropdown lives right in the bar — no hamburger */
+      .nav-hamburger { display: none; }
+      .nav-links { display: flex; gap: 0; list-style: none; }
+      .nav-links a { font-size: 1.35rem; }
+      .nav-submenu a { font-size: 1.05rem !important; }
 
-      /* Home */
-      .home-body { flex-direction: column; align-items: center; justify-content: center; padding: var(--nav-height) 20px 44px; gap: 8px; text-align: center; }
-      .home-photo-wrap { order: -1; }
-      .home-text { order: 1; }
-      .avatar { width: 208px; height: 208px; }
-      .home-name { font-size: clamp(2.4rem, 10.8vw, 3.36rem); margin-bottom: 8px; }
-      .home-tagline { font-size: 1.06rem; margin-bottom: 6px; }
-      .home-role { font-size: 1.06rem; }
+      /* Home — mirror the desktop hero: letters scattered across the full
+         canvas (bigger + pulled higher), tagline pinned bottom-left */
+      .home-body { position: relative; display: block; min-height: 100vh; padding: 0; }
+      .home-name { position: absolute; inset: 0; width: auto; aspect-ratio: auto; max-height: none; padding: 0; margin-bottom: 0; line-height: 1; font-size: clamp(2.8rem, 13.5vw, 4rem); }
+      .home-text { position: absolute; left: 24px; bottom: 13vh; top: auto; right: auto; max-width: 84%; text-align: left; transform: none; }
+      .scroll-arrow { bottom: calc(26px + 3vh); }
+      .home-role { font-size: 1.5rem; }
+      .role-indent { margin-left: 1.6em; }
 
       /* Projects */
       .section-wrap { padding: 36px 20px 0; }
       .section-label { font-size: 1.6rem; letter-spacing: 0.04em; }
+      /* a touch more breathing room between the category title (e.g. "UIUX Design")
+         and the first project card — applies to every tab, so it stays consistent */
+      #proj-heading { margin-bottom: 60px; }
       .section-desc { font-size: 0.92rem; max-width: 100%; margin-bottom: 22px; }
       .cards-grid { grid-template-columns: 1fr; gap: 26px; }
       .proj-label { font-size: 1rem; }
@@ -1089,13 +1534,17 @@
       .about-avatar { width: 200px; height: 200px; }
       .about-location { font-size: 0.92rem; }
 
-      /* Fun */
+      /* Fun / Find me with… */
+      .find-me { padding: 0 20px 80px; }
+      .find-me-title { font-size: 1.35rem; margin-bottom: 26px; }
+      .find-me .fun-grid { gap: 44px; }
       .fun-body { padding: 36px 20px 48px; }
       .fun-title { font-size: 1.8rem; margin-bottom: 4px; }
       .fun-intro { font-size: 0.84rem; margin-bottom: 28px; }
       .fun-section-title { font-size: 1.05rem; margin-bottom: 16px; }
       .fun-grid { grid-template-columns: 1fr; gap: 28px; }
       .fun-card-name { font-size: 0.9rem; }
+      .rcc-break { display: inline; }   /* break onto: "NU's Rock" / "Climbing Club" */
       .fun-card-desc { font-size: 0.8rem; }
       .fun-divider { margin-bottom: 28px; }
 
@@ -1111,177 +1560,88 @@
       .detail-links-row { margin-top: 24px; }
       .detail-link { font-size: 0.92rem; }
       .back-btn { font-size: 0.82rem; margin-bottom: 28px; }
+
+      /* Concept-sketch pages: on phones, match the regular project pages —
+         same body padding/borders and full-width stacked images instead of a
+         cramped 2-column grid that shrank the images toward the center */
+      .detail-body.sketch-layout { padding: 28px 20px 48px; max-width: none; }
+      .detail-body.sketch-layout .detail-section { margin-bottom: 40px; }
+      .detail-body.sketch-layout [style*="grid-template-columns:1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+      .detail-body.sketch-layout .detail-section-label { font-size: 0.98rem; margin-bottom: 14px; }
     }
   </style>
 </head>
 <body>
 
 <!-- ── NAV ── -->
-<nav id="main-nav" class="cream-bg">
-  <span class="nav-logo" onclick="go('home')">ST</span>
+<nav id="main-nav" class="on-cream">
+  <span class="nav-logo" onclick="go('home')" role="link" aria-label="ST — home">ST</span>
   <ul class="nav-links" id="nav-links">
-    <li><a id="nl-projects" onclick="go('projects')">projects</a></li>
-    <li><a id="nl-about" onclick="go('about')">about</a></li>
-    <li><a id="nl-fun" onclick="go('fun')">fun</a></li>
+    <li class="nav-dropdown" id="nav-projects-drop">
+      <a id="nl-projects" class="nav-parent" onclick="toggleProjMenu(event)">projects <span class="nav-caret" aria-hidden="true"></span></a>
+      <div class="nav-submenu">
+        <a onclick="goProjects('uiux')">uiux design</a>
+        <a onclick="goProjects('industrial')">industrial design</a>
+        <a onclick="goProjects('service')">service design</a>
+      </div>
+    </li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" onclick="toggleNav()">
-    <span></span><span></span><span></span>
-  </button>
 </nav>
 
 
 <!-- ══════════════════════════════════════════
      HOME
 ══════════════════════════════════════════ -->
-<section id="page-home" class="page active">
-  <div class="blob-layer">
-    <div class="blob home-blob-1"></div>
-    <div class="blob home-blob-2"></div>
-    <div class="blob home-blob-3"></div>
-    <div class="blob home-blob-4"></div>
-    <div class="blob home-blob-5"></div>
-  </div>
+<div id="reel" class="active">
+  <!-- HOME (first panel of the scroll reel) -->
+<section id="page-home" class="reel-hero">
   <div class="home-body">
     <div class="home-text">
-      <p class="home-tagline">empathy-driven design</p>
-      <h1 class="home-name">sarah thornton</h1>
-      <p class="home-role">psychology + design student<br>@ northwestern university</p>
+      <p class="home-role">psych &amp; design<br><span class="role-indent">@ northwestern</span></p>
     </div>
-    <div class="home-photo-wrap">
-      <div class="avatar">
-        <img src="IMG_4734 2.jpg" alt="Sarah Thornton">
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     PROJECTS
-══════════════════════════════════════════ -->
-<section id="page-projects" class="page">
-  <div class="blob-layer">
-    <div class="blob proj-blob-1"></div>
-    <div class="blob proj-blob-2"></div>
-    <div class="blob proj-blob-3"></div>
-    <div class="blob proj-blob-4"></div>
-    <div class="blob proj-blob-5"></div>
-    <div class="blob proj-blob-6"></div>
-  </div>
-
-  <div class="section-wrap">
-    <h2 class="section-label">PROJECTS</h2>
-    <p class="section-desc">Work spanning <strong>digital experiences</strong>, <strong>physical products</strong>, and the desire to better understand people.</p>
-
-    <div class="cards-grid">
-      <div class="proj-card" onclick="openProject('shopify-mobile')">
-        <div class="thumb"><img src="Shopify cover on projects page.jpg" alt="Shopify Mobile"></div>
-        <span class="proj-label">ShopCampus</span>
-        <p class="proj-desc">An AI-powered Shopify experience that helps college students go from idea to first sale with less friction.</p>
-      </div>
-      <div class="proj-card" onclick="openProject('fetchride')">
-        <div class="thumb"><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide" style="object-fit:contain;background:#f5f5f5;"></div>
-        <span class="proj-label">FetchRide</span>
-        <p class="proj-desc">Making animal shelter volunteering easier through a student-friendly transportation experience.</p>
-      </div>
-      <div class="proj-card" onclick="openProject('stow')">
-        <div class="thumb"><img src="STOW cover.jpg" alt="Stow"></div>
-        <span class="proj-label">Stow</span>
-        <p class="proj-desc">A modular furniture system designed for college living, balancing affordability and flexibility in small spaces.</p>
-      </div>
-      <div class="proj-card" onclick="openProject('cloudflex')">
-        <div class="thumb"><img src="Cloudflx cover photo (1).jpg" alt="CloudFlex Headrest"></div>
-        <span class="proj-label">The CloudFlex Headrest</span>
-        <p class="proj-desc">An adaptable airline seating concept rethinking ergonomic support for long-haul flights.</p>
-      </div>
-      <div class="proj-card" onclick="openProject('trova')">
-        <div class="thumb"><img src="Screenshot%202026-06-02%20at%2010.15.50%20AM.jpg" alt="Trova"></div>
-        <span class="proj-label">Trova</span>
-        <p class="proj-desc">A social travel experience combining AI itineraries with recommendations from like-minded explorers.</p>
-      </div>
-    </div>
-
-    <div class="sketches-section">
-      <h2 class="section-label">SKETCHES</h2>
-      <p class="section-desc">A space for ideas, experiments, and <strong>forms in progress</strong>.</p>
-      <div class="cards-grid">
-        <div class="proj-card" onclick="openProject('footwear')">
-          <div class="thumb"><img src="Footwear Final pers:side.jpeg" alt="Footwear Design"></div>
-          <span class="proj-label">Footwear</span>
-          <p class="proj-desc">A series of hiking footwear concepts blending outdoor performance with expressive, functional design.</p>
-        </div>
-        <div class="proj-card" onclick="openProject('bus-stop')">
-          <div class="thumb"><img src="Kellogg steps final - perspective.jpeg" alt="Northwestern Bus Stop"></div>
-          <span class="proj-label">Northwestern Bus Stop</span>
-          <p class="proj-desc">Reimagining the Northwestern bus stop through a community-focused concept inspired by Kellogg Steps.</p>
-        </div>
-        <div class="proj-card" onclick="openProject('furniture')">
-          <div class="thumb"><img src="FurnitureNookFinal1.jpeg" alt="Furniture Design"></div>
-          <span class="proj-label">Furniture</span>
-          <p class="proj-desc">Exploring children's furniture through whimsical concepts designed for comfort and creativity.</p>
-        </div>
-      </div>
+    <h1 class="home-name">sarah thornton</h1>
+    <div class="scroll-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 2 L12 12 L22 2" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
   </div>
 </section>
 
-
-<!-- ══════════════════════════════════════════
-     ABOUT
-══════════════════════════════════════════ -->
-<section id="page-about" class="page">
-  <div class="blob-layer">
-    <div class="blob about-blob-1"></div>
-    <div class="blob about-blob-2"></div>
-    <div class="blob about-blob-3"></div>
-    <div class="blob about-blob-4"></div>
-  </div>
+  <!-- ABOUT (second panel of the scroll reel) -->
+<section id="page-about" class="reel-about">
   <div class="about-body">
     <div class="about-text">
-      <p>Hello! My name is Sarah Thornton.</p>
-      <p>I'm a junior at Northwestern University studying <strong>psychology</strong> and <strong>design</strong>, drawn to the intersection of those two interests.</p>
-      <p>My goal is to create <strong>thoughtful, human-centered</strong> designs that make people feel seen, understood, and genuinely comfortable in the spaces they move through.</p>
-      <p>This summer, I'll be working at Andalusia Design, a custom parametric design and architectural fabrication services startup in Austin, TX. I'm excited to add a whimsical touch to the things I create and the people around me.</p>
-      <p>Feel free to click and scroll around! <span style="white-space: nowrap">I'm happy to have you here :)</span></p>
+      <p><span class="hello-egg">Hello!</span> My name is Sarah Thornton.</p>
+      <p>I'm a senior at Northwestern University pursuing a B.A. in Psychology and the Segal Design Certificate, inspired by the intersection of human behavior and design.</p>
+      <p>I'm currently working at Andalusia Design, a custom parametric design and architectural fabrication startup in Austin, TX, where I'm learning how thoughtful design shapes the way people experience spaces.</p>
+      <p>My goal is to create <strong>human-centered designs</strong> that make people feel understood and genuinely comfortable in the spaces they move through.</p>
+      <p>Feel free to click and scroll around!</p>
+      <p><span style="white-space: nowrap">I'm happy to have you here :)</span></p>
     </div>
     <div class="about-right">
+      <div class="about-avatar">
+        <img src="IMG_4391.jpg" alt="Sarah Thornton">
+      </div>
       <p class="about-location">
         <svg width="14" height="18" viewBox="0 0 14 18" fill="none"><path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 7 4.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>
         Evanston / Chicago, IL
       </p>
-      <div class="about-avatar">
-        <img src="IMG_4391.jpg" alt="Sarah Thornton">
-      </div>
-      <div class="contact-card" onclick="window.location.href='mailto:sarahthornton2027@u.northwestern.edu'" style="cursor:pointer;">
-        <div class="psst-row">
-          <span class="psst-arrow"></span>
-          Pssst!!&nbsp; <span style="font-weight:400;color:rgba(255,255,255,0.85)">Reach me here:</span>
-        </div>
-        <p class="email-text">sarahthornton2027@u.northwestern.edu</p>
-        <p class="asap-text">I'll get back to you ASAP.</p>
+      <div class="social-row">
+        <a class="social-link" href="mailto:sarahthornton2027@u.northwestern.edu" aria-label="Email Sarah">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 6.5L21 6"/></svg>
+        </a>
+        <a class="social-link" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        </a>
       </div>
     </div>
   </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════
-     FUN
-══════════════════════════════════════════ -->
-<section id="page-fun" class="page">
-  <div class="blob-layer">
-    <div class="blob fun-blob-1"></div>
-    <div class="blob fun-blob-2"></div>
-    <div class="blob fun-blob-3"></div>
-    <div class="blob fun-blob-4"></div>
-    <div class="blob fun-blob-5"></div>
-    <div class="blob fun-blob-6"></div>
-  </div>
-  <div class="fun-body">
-    <h2 class="fun-title">FUN!</h2>
-    <p class="fun-intro">Things that keep me inspired and make me feel most myself.</p>
-
-    <h3 class="fun-section-title">My campus communities</h3>
+  <div class="find-me">
+    <h3 class="find-me-title">Find me with&hellip;</h3>
     <div class="fun-grid">
 
       <!-- QUARK Design Labs — 4 images -->
@@ -1292,8 +1652,8 @@
           <div class="stack-img"><img src="IMG_4394.jpg" alt="QUARK Design Labs"></div>
           <div class="stack-img"><img src="IMG_4395.jpg" alt="QUARK Design Labs"></div>
         </div>
-        <p class="fun-card-name">QUARK Design Labs</p>
-                <div class="dot-row" data-for="quark">
+        <p class="fun-card-name">QUARK Design Labs<a class="ig-link" href="https://www.instagram.com/quarkdesignlabs_" target="_blank" rel="noopener" aria-label="QUARK Design Labs on Instagram (@quarkdesignlabs_)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/></svg></a></p>
+        <div class="dot-row" data-for="quark">
           <div class="dot on" data-i="0"></div>
           <div class="dot" data-i="1"></div>
           <div class="dot" data-i="2"></div>
@@ -1309,7 +1669,7 @@
           <div class="stack-img"><img src="./IMG_0307.jpg" alt="Rock Climbing Club"></div>
           <div class="stack-img"><img src="rcc-11-14-25-3_Original.jpg" alt="Rock Climbing Club"></div>
         </div>
-        <p class="fun-card-name">NU's Rock Climbing Club</p>
+        <p class="fun-card-name"><span class="rcc-name">NU's Rock <br class="rcc-break">Climbing Club</span><a class="ig-link" href="https://www.instagram.com/nu.rcc" target="_blank" rel="noopener" aria-label="NU's Rock Climbing Club on Instagram (@nu.rcc)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/></svg></a></p>
         <div class="dot-row" data-for="climb">
           <div class="dot on" data-i="0"></div>
           <div class="dot" data-i="1"></div>
@@ -1326,7 +1686,7 @@
           <div class="stack-img"><img src="IMG_5033.JPG" alt="D1 Golf"></div>
           <div class="stack-img"><img src="IMG_5034.JPG" alt="D1 Golf"></div>
         </div>
-        <p class="fun-card-name">D1 Golf</p>
+        <p class="fun-card-name">D1 Golf<a class="ig-link" href="https://www.instagram.com/nuwgolf" target="_blank" rel="noopener" aria-label="D1 Golf on Instagram (@nuwgolf)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/></svg></a></p>
         <div class="dot-row" data-for="golf">
           <div class="dot on" data-i="0"></div>
           <div class="dot" data-i="1"></div>
@@ -1335,13 +1695,100 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="fun-divider"></div>
+  <!-- shared blob band: the seam between Home and About -->
+  <div class="blob-layer reel-blobs">
+    <div class="blob home-blob-1"></div>
+    <div class="blob home-blob-2"></div>
+    <div class="blob home-blob-3"></div>
+    <div class="blob home-blob-4"></div>
+    <div class="blob home-blob-5"></div>
+  </div>
+</div>
 
-    <h3 class="fun-section-title">Other things I love</h3>
+
+<!-- ══════════════════════════════════════════
+     PROJECTS
+══════════════════════════════════════════ -->
+<section id="page-projects" class="page">
+  <div class="section-wrap">
+    <h2 class="section-label" id="proj-heading">PROJECTS</h2>
+    <p class="section-desc" id="proj-desc">Work spanning <strong>digital experiences</strong>, <strong>physical products</strong>, and the desire to better understand people.</p>
+
+    <!-- ── UIUX DESIGN ── -->
+    <div class="proj-subsection" data-cat="uiux">
+      <div class="cards-grid">
+        <div class="proj-card" data-cat="uiux" onclick="openProject('shopify-mobile')">
+          <div class="thumb"><span class="stage-tag tag-case">Case Study</span><img src="Shopify cover on projects page.jpg" alt="Shopify Mobile"></div>
+          <span class="proj-label">ShopCampus</span>
+          <p class="proj-desc">An AI-powered Shopify experience that helps college students go from idea to first sale with less friction.</p>
+        </div>
+        <div class="proj-card" data-cat="uiux" onclick="openProject('trova')">
+          <div class="thumb"><span class="stage-tag tag-sprint">Sprint</span><img src="Screenshot%202026-06-02%20at%2010.15.50%20AM.jpg" alt="Trova"></div>
+          <span class="proj-label">Trova</span>
+          <p class="proj-desc">A social travel experience combining AI itineraries with recommendations from like-minded explorers.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SERVICE DESIGN ── -->
+    <div class="proj-subsection" data-cat="service">
+      <div class="cards-grid">
+        <div class="proj-card" data-cat="service" onclick="openProject('fetchride')">
+          <div class="thumb"><span class="stage-tag tag-case">Case Study</span><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide" style="object-fit:contain;background:#f5f5f5;"></div>
+          <span class="proj-label">FetchRide</span>
+          <p class="proj-desc">Making animal shelter volunteering easier through a student-friendly transportation experience.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INDUSTRIAL DESIGN ── -->
+    <div class="proj-subsection" data-cat="industrial">
+      <div class="cards-grid">
+        <div class="proj-card" data-cat="industrial" onclick="openProject('stow')">
+          <div class="thumb"><span class="stage-tag tag-proto">Prototype</span><img src="STOW cover.jpg" alt="Stow"></div>
+          <span class="proj-label">Stow</span>
+          <p class="proj-desc">A modular furniture system designed for college living, balancing affordability and flexibility in small spaces.</p>
+        </div>
+        <div class="proj-card" data-cat="industrial" onclick="openProject('cloudflex')">
+          <div class="thumb"><span class="stage-tag tag-case">Case Study</span><img src="Cloudflx cover photo (1).jpg" alt="CloudFlex Headrest"></div>
+          <span class="proj-label">The CloudFlex Headrest</span>
+          <p class="proj-desc">An adaptable airline seating concept rethinking ergonomic support for long-haul flights.</p>
+        </div>
+        <div class="proj-card" data-cat="industrial" onclick="openProject('footwear')">
+          <div class="thumb"><span class="stage-tag tag-sketch">Concept Sketch</span><img src="Footwear Final pers:side.jpeg" alt="Footwear Design"></div>
+          <span class="proj-label">Footwear</span>
+          <p class="proj-desc">A series of hiking footwear concepts blending outdoor performance with expressive, functional design.</p>
+        </div>
+        <div class="proj-card" data-cat="industrial" onclick="openProject('bus-stop')">
+          <div class="thumb"><span class="stage-tag tag-sketch">Concept Sketch</span><img src="Kellogg steps final - perspective.jpeg" alt="Northwestern Bus Stop"></div>
+          <span class="proj-label">Northwestern Bus Stop</span>
+          <p class="proj-desc">Reimagining the Northwestern bus stop through a community-focused concept inspired by Kellogg Steps.</p>
+        </div>
+        <div class="proj-card" data-cat="industrial" onclick="openProject('furniture')">
+          <div class="thumb"><span class="stage-tag tag-sketch">Concept Sketch</span><img src="FurnitureNookFinal1.jpeg" alt="Furniture Design"></div>
+          <span class="proj-label">Furniture</span>
+          <p class="proj-desc">Exploring children's furniture through whimsical concepts designed for comfort and creativity.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     "Other things I love" — TEMPORARILY REMOVED from the site.
+     The campus-community cards (QUARK / Rock Climbing / Golf) now live in the
+     About section under "Find me with…". The cards below are kept commented out
+     for an easy restore; the image files remain in the repo folder. To bring
+     this section back, wrap it in a section again and uncomment.
+══════════════════════════════════════════ -->
+<!--
     <div class="fun-grid">
 
-      <!-- Hiking — 5 -->
+      Hiking — 5
       <div class="fun-card">
         <div class="photo-stack" data-card="hiking">
           <div class="stack-img"><img src="IMG_2134.jpg" alt="Hiking"></div>
@@ -1360,9 +1807,9 @@
         </div>
       </div>
 
-      <!-- Food — 4 -->
+      Food — 4
       <div class="fun-card">
-        <div class="photo-stack" data-card="food" style="padding-bottom: 100%;">
+        <div class="photo-stack" data-card="food">
           <div class="stack-img"><img src="IMG_6636.jpg" alt="Food"></div>
           <div class="stack-img"><img src="IMG_2873.jpg" alt="Food"></div>
           <div class="stack-img"><img src="IMG_7198.jpg" alt="Food"></div>
@@ -1377,7 +1824,7 @@
         </div>
       </div>
 
-      <!-- Dogs — 3 -->
+      Dogs — 3
       <div class="fun-card">
         <div class="photo-stack" data-card="dogs">
           <div class="stack-img"><img src="IMG_4351.jpg" alt="Dogs"></div>
@@ -1393,8 +1840,8 @@
       </div>
 
     </div>
-  </div>
-</section>
+-->
+
 
 
 <!-- ══════════════════════════════════════════
@@ -1448,6 +1895,140 @@
      JAVASCRIPT
 ══════════════════════════════════════════ -->
 <script>
+// ── Scatter the home name letters across the hero; they fly into place on load ──
+(function scatterHomeName() {
+  const el = document.querySelector('.home-name');
+  if (!el) return;
+  const HOVER_COLORS = ['#E88878', '#CF70CC', '#F0B060', '#5A4FD6', '#E890A8', '#7B5BD6'];
+  // centre positions (x%, y%) — two readable clusters, matching the mockup
+  const POS_DESKTOP = [
+    [11,38],[19,40],[28,42],[37,39],[44,34],                        // s a r a h  (upper-left)
+    [37,64],[44,71],[52,66],[58,64],[64,68],[70,62],[75,68],[81,72] // t h o r n t o n  (lower)
+  ];
+  // mobile: the name fills the full-height hero (like desktop), tagline pinned
+  // bottom-left. Each word rides one gentle smooth arc (not a per-letter zigzag)
+  // so it reads as a flowing wave; letters spread wide so they don't crowd.
+  const POS_MOBILE = [
+    [8,41],[21,44],[34,45],[47,44],[60,41],                          // s a r a h  (gentle wave)
+    [6,59],[18,61],[30,62],[42,63],[54,63],[66,62],[78,61],[90,59]   // t h o r n t o n  (gentle wave)
+  ];
+  const POS = window.matchMedia('(max-width: 540px)').matches ? POS_MOBILE : POS_DESKTOP;
+  const text = 'sarah thornton';
+  el.textContent = '';
+  el.classList.add('scatter');
+  let li = 0;
+  [...text].forEach(ch => {
+    if (ch === ' ') { el.appendChild(document.createTextNode(' ')); return; }
+    const [x, y] = POS[li] || [50, 50];
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.style.left = x + '%';
+    span.style.top = y + '%';
+    // entrance: fly in from a random direction, spinning, then settle
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 90 + Math.random() * 90;
+    span.style.setProperty('--fromX', (Math.cos(ang) * dist).toFixed(0) + 'px');
+    span.style.setProperty('--fromY', (Math.sin(ang) * dist).toFixed(0) + 'px');
+    span.style.setProperty('--fromR', ((Math.random() * 2 - 1) * 14).toFixed(0) + 'deg');
+    const inD = 0.1 + li * 0.09;
+    span.style.setProperty('--inDelay', inD.toFixed(2) + 's');
+    // hover: this letter nudges lightly in its own direction + colour
+    span.style.setProperty('--hoverX', ((Math.random()*2-1)*(0.06+Math.random()*0.08)).toFixed(3)+'em');
+    span.style.setProperty('--hoverY', ((Math.random()*2-1)*(0.06+Math.random()*0.08)).toFixed(3)+'em');
+    span.style.setProperty('--hoverRot', ((Math.random()*2-1)*8).toFixed(1)+'deg');
+    span.style.setProperty('--hoverColor', HOVER_COLORS[li % HOVER_COLORS.length]);
+    // inner span floats on its own — each letter its own slow rhythm
+    const inner = document.createElement('span');
+    inner.className = 'char-inner';
+    const dur = (5.5 + Math.random() * 3.5).toFixed(2);
+    inner.style.setProperty('--dur', dur + 's');
+    inner.style.setProperty('--del', (inD + 1.35).toFixed(2) + 's');   // float begins only after the letter lands
+    inner.style.setProperty('--amp', (-(7 + Math.random() * 7)).toFixed(1) + 'px');        // up 7–14px
+    inner.style.setProperty('--driftX', ((Math.random() * 2 - 1) * 5).toFixed(1) + 'px');   // ±5px
+    inner.style.setProperty('--rot', ((Math.random() * 2 - 1) * 3).toFixed(2) + 'deg');     // ±3deg
+    const hover = document.createElement('span');
+    hover.className = 'char-hover';
+    hover.textContent = ch;
+    inner.appendChild(hover);
+    const px = document.createElement('span');
+    px.className = 'char-px';
+    px.dataset.depth = (0.5 + Math.random() * 0.8).toFixed(2);   // varied parallax depth
+    px.appendChild(inner);
+    span.appendChild(px);
+    el.appendChild(span);
+    li++;
+  });
+
+  // cursor parallax — runs on its own layer, smooth from the first frame (no hand-off)
+  const pxEls = [...el.querySelectorAll('.char-px')];
+  let tx = 0, ty = 0, cx = 0, cy = 0;
+  window.addEventListener('mousemove', (e) => {
+    tx = (e.clientX / window.innerWidth) * 2 - 1;
+    ty = (e.clientY / window.innerHeight) * 2 - 1;
+  }, { passive: true });
+
+  // mobile: let a finger drag the name around (desktop uses the mouse parallax
+  // above; touch events only fire on touch devices, so this is mobile-only).
+  // Relative drag with spring-back; listeners are passive so scrolling past the
+  // hero still works, and they're scoped to the home section so only the name moves.
+  const homeSection = document.getElementById('page-home');
+  if (homeSection) {
+    let dragX = 0, dragY = 0, dragging = false;
+    const RANGE = 150;   // px of finger travel that maps to a full letter offset
+    const clamp = v => Math.max(-1.6, Math.min(1.6, v));
+    // light up whichever letter sits under the finger as it drags across
+    const litUp = (x, y) => {
+      const hit = document.elementFromPoint(x, y);
+      const ch = hit && hit.closest && hit.closest('.char');
+      if (ch) ch.classList.add('lit');
+    };
+    homeSection.addEventListener('touchstart', (e) => {
+      const t = e.touches[0]; if (!t) return;
+      dragX = t.clientX; dragY = t.clientY; dragging = true;
+      litUp(t.clientX, t.clientY);
+    }, { passive: true });
+    homeSection.addEventListener('touchmove', (e) => {
+      if (!dragging) return;
+      const t = e.touches[0]; if (!t) return;
+      tx = clamp((t.clientX - dragX) / RANGE);
+      ty = clamp((t.clientY - dragY) / RANGE);
+      litUp(t.clientX, t.clientY);
+    }, { passive: true });
+    const release = () => {
+      dragging = false; tx = 0; ty = 0;                    // ease the name back to centre
+      el.querySelectorAll('.char.lit').forEach(c => c.classList.remove('lit'));  // fade colours out
+    };
+    homeSection.addEventListener('touchend', release, { passive: true });
+    homeSection.addEventListener('touchcancel', release, { passive: true });
+  }
+
+  (function parallaxLoop() {
+    cx += (tx - cx) * 0.07;
+    cy += (ty - cy) * 0.07;
+    for (const p of pxEls) {
+      const d = parseFloat(p.dataset.depth);
+      p.style.transform = `translate(${(cx * d * 26).toFixed(1)}px, ${(cy * d * 20).toFixed(1)}px)`;
+    }
+    requestAnimationFrame(parallaxLoop);
+  })();
+})();
+
+// ── Easter egg: hover the profile photo → "Hello!" enlarges + shakes ──
+(function helloEgg() {
+  const avatar = document.querySelector('.about-avatar');
+  const hello = document.querySelector('.hello-egg');
+  if (!avatar || !hello) return;
+  const shake = () => {
+    hello.classList.remove('wiggle');
+    void hello.offsetWidth;              // restart the animation cleanly
+    hello.classList.add('wiggle');       // plays the ring shake once per trigger
+  };
+  avatar.addEventListener('mouseenter', shake);
+  // mobile: hover fires only on the first tap and then sticks, so re-trigger on
+  // every tap (touchstart is touch-only, so desktop behaviour is unchanged)
+  avatar.addEventListener('touchstart', shake, { passive: true });
+})();
+
 // ── Project data ──────────────────────────────
 const PROJECTS = {
   'shopify-mobile': {
@@ -1592,7 +2173,8 @@ const PROJECTS = {
         smallImages: []
       },
       {
-        label: 'Final Concept: A trail shoe that combines the comfort of a house slipper with the protection and traction needed for outdoor adventures.',
+        label: 'Final Concept',
+        sublabel: 'A trail shoe that combines the comfort of a house slipper with the protection and traction needed for outdoor adventures.',
         grid: true,
         images: [
           'Footwear Final Top:Bottom.jpeg',
@@ -1622,7 +2204,7 @@ const PROJECTS = {
         images: ['Thumbnails - bus stop.jpeg']
       },
       {
-        label: 'Concept Development',
+        label: 'Concept Development 1',
         grid: true,
         images: [
           'glass waves working drawing.jpeg',
@@ -1634,13 +2216,14 @@ const PROJECTS = {
         smallImages: []
       },
       {
-        label: 'Concept Development 2.0',
+        label: 'Concept Development 2',
         grid: true,
         images: ['Kellog steps working drawing 2.jpeg'],
         smallImages: []
       },
       {
-        label: 'Final Concept: A minimalist take on Northwestern\'s Kellogg Steps.',
+        label: 'Final Concept',
+        sublabel: 'A minimalist take on Northwestern\'s Kellogg Steps.',
         grid: true,
         images: [
           'Kellogg steps front and side final.jpeg',
@@ -1652,7 +2235,7 @@ const PROJECTS = {
     links: []
   },
   'furniture': {
-    title: 'Furniture Design',
+    title: 'Furniture: Children\'s Playscapes',
     desc: '',
     role: '',
     timeline: '',
@@ -1687,7 +2270,8 @@ const PROJECTS = {
         smallImages: []
       },
       {
-        label: 'Final Concept: A modular mushroom nook that transforms from a reading retreat into a collaborative play space.',
+        label: 'Final Concept',
+        sublabel: 'A modular mushroom nook that transforms from a reading retreat into a collaborative play space.',
         grid: true,
         images: [
           'FurnitureNookFinal1.jpeg',
@@ -1703,23 +2287,115 @@ const PROJECTS = {
 // ── Navigation ────────────────────────────────
 let currentPage = 'home';
 
+// which pages have a dark background (need light nav text)
+const NAV_STATE = { home: 'on-cream', projects: 'on-cream', detail: 'on-cream', about: 'on-dark' };
+
 function go(page) {
+  const REEL = ['home', 'about'];
+  const wasReel = REEL.includes(currentPage);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('reel').classList.remove('active');
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
 
+  const nav = document.getElementById('main-nav');
+
+  // Home + About + Fun live in one scrollable reel
+  if (REEL.includes(page)) {
+    document.getElementById('reel').classList.add('active');
+    const nl = document.getElementById('nl-' + page);
+    if (nl) nl.classList.add('active');
+    if (page === 'home') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      const target = document.getElementById('page-' + page);
+      if (wasReel) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // arriving from another page — land directly on the panel, no visible jump
+        requestAnimationFrame(() => target.scrollIntoView({ behavior: 'instant' }));
+      }
+    }
+    currentPage = page;
+    requestAnimationFrame(updateReel);
+    return;
+  }
+
+  // Projects / Fun / Detail are standalone swapped pages
   const el = document.getElementById('page-' + page);
   if (el) el.classList.add('active');
-
+  if (nav) {
+    nav.classList.remove('on-cream', 'on-dark');
+    nav.classList.add(NAV_STATE[page] || 'on-cream');
+  }
   const nl = document.getElementById('nl-' + page);
   if (nl) nl.classList.add('active');
   if (page === 'detail') {
     const nlp = document.getElementById('nl-projects');
     if (nlp) nlp.classList.add('active');
   }
-
   window.scrollTo({ top: 0, behavior: 'instant' });
   currentPage = page;
 }
+
+// Go to the projects page, filtered to a category ('all' | 'uiux' | 'industrial')
+function goProjects(cat) {
+  document.getElementById('nav-projects-drop')?.classList.remove('open');  // close the menu
+  go('projects');
+  filterProjects(cat || 'all');
+}
+
+// Mobile: no hover, so tapping "projects" toggles its dropdown open/closed
+function toggleProjMenu(e) {
+  if (!window.matchMedia('(max-width: 540px)').matches) return;  // desktop uses hover
+  e.stopPropagation();
+  document.getElementById('nav-projects-drop')?.classList.toggle('open');
+}
+// tap anywhere outside the dropdown closes it
+document.addEventListener('click', (e) => {
+  const drop = document.getElementById('nav-projects-drop');
+  if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+});
+
+// Show/hide project cards by their data-cat, and hide any section left empty
+function filterProjects(cat) {
+  // show only the stage sub-sections belonging to the active category
+  document.querySelectorAll('#page-projects .proj-subsection').forEach(sec => {
+    sec.style.display = (cat === 'all' || sec.dataset.cat === cat) ? '' : 'none';
+  });
+  // swap the page heading + intro line for the active category
+  const heading = document.getElementById('proj-heading');
+  const desc = document.getElementById('proj-desc');
+  const TITLES = { all: 'PROJECTS', uiux: 'UIUX Design', service: 'Service Design', industrial: 'Industrial Design' };
+  if (heading) heading.textContent = TITLES[cat] || TITLES.all;
+  if (desc) desc.style.display = cat === 'all' ? '' : 'none';
+}
+
+// Drive nav colour + blob parallax from the reel's scroll position
+function updateReel() {
+  const reel = document.getElementById('reel');
+  if (!reel.classList.contains('active')) return;
+  const nav = document.getElementById('main-nav');
+  const ref = window.scrollY + window.innerHeight * 0.5;   // middle of the viewport
+  const aboutTop = document.getElementById('page-about').offsetTop;
+  const section = ref >= aboutTop ? 'about' : 'home';
+  if (nav) {
+    nav.classList.remove('on-cream', 'on-dark');
+    nav.classList.add(NAV_STATE[section] || 'on-cream');
+  }
+  currentPage = section;
+  const rb = document.querySelector('.reel-blobs');
+  if (rb) rb.style.transform = `translateY(${window.scrollY * 0.18}px)`;
+}
+window.addEventListener('scroll', updateReel, { passive: true });
+window.addEventListener('resize', updateReel, { passive: true });
+
+// frosted nav backing appears once you scroll off the very top (any page)
+function updateNavScrolled() {
+  const nav = document.getElementById('main-nav');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 24);
+}
+window.addEventListener('scroll', updateNavScrolled, { passive: true });
+updateNavScrolled();
 
 function openProject(id) {
   const p = PROJECTS[id];
@@ -1815,7 +2491,8 @@ function openProject(id) {
         imgHTML = sec.images.map(img => `<img src="${img}" alt="${sec.label}" style="width:100%;border-radius:10px;display:block;margin-bottom:16px;">`).join('');
       }
       extraHTML += `<div class="detail-section">
-        ${sec.label ? `<p class="detail-section-label" style="margin-bottom:14px;">${sec.label}</p>` : ''}
+        ${sec.label ? `<p class="detail-section-label" style="margin-bottom:${sec.sublabel ? '6px' : '14px'};">${sec.label}</p>` : ''}
+        ${sec.sublabel ? `<p class="detail-section-sublabel"><span class="sublabel-arrow">&rarr;</span>${sec.sublabel}</p>` : ''}
         ${imgHTML}
       </div>`;
     });
@@ -1847,10 +2524,14 @@ function toggleNav() {
   document.getElementById('nav-links').classList.toggle('open');
 }
 document.querySelectorAll('.nav-links a').forEach(a => {
+  if (a.classList.contains('nav-parent')) return;  // parent only opens the submenu
   a.addEventListener('click', () => {
     document.getElementById('nav-links').classList.remove('open');
   });
 });
+
+// ── Scrollytelling: Home → About is now a real continuous scroll (see updateReel) ──
+updateReel();
 
 // ── Fun page: dot/stack interaction + swipe ──────
 document.querySelectorAll('.dot-row').forEach(row => {
