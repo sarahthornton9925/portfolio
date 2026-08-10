@@ -5,30 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sarah Thornton — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Sniglet:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+  <!-- Warm the connection to Figma up front so the ShopCampus/Trova prototype
+       embeds start rendering the moment the detail page opens (saves the DNS +
+       TLS handshake, which is otherwise paid only after the iframe is created). -->
+  <link rel="preconnect" href="https://embed.figma.com" crossorigin>
+  <link rel="preconnect" href="https://www.figma.com" crossorigin>
+  <link rel="preconnect" href="https://s3-alpha.figma.com" crossorigin>
+  <link rel="dns-prefetch" href="https://embed.figma.com">
+  <link rel="dns-prefetch" href="https://www.figma.com">
   <style>
     :root {
-      --cream: #F5EFE3;
-      --blue: #5A4FD6;
-      --blue-bg: #4B52DF;
-      --blue-bg-dark: #3D43C8;
-      --pink: #E8929E;
-      --coral: #E88878;
-      --orange: #E8A85A;
-      --purple: #C870C8;
-      --light-purple: #C8B8F0;
-      --soft-purple: #D4C8F5;
-      --dark: #18181E;
-      --mid: #484860;
+      /* ── "Pinboard" style-tile palette: cool grey studio wall + one indigo ── */
+      --cream: #DEDFE2;           /* studio wall — the board (was warm cream) */
+      --paper: #F4F4F2;           /* pinned paper — cards */
+      --blue: #4B41E8;            /* indigo — links, stage tags, accents */
+      --blue-bg: #4B41E8;         /* indigo — the About card */
+      --blue-bg-dark: #241EA0;    /* deep indigo — shadows */
+      /* pastel set retired: repoint to the indigo family so any legacy usage
+         (blobs, gradient fallbacks) stays on-palette instead of rainbow */
+      --pink: #4B41E8;
+      --coral: #4B41E8;
+      --orange: #6E7178;
+      --purple: #241EA0;
+      --light-purple: #C6C3F5;
+      --soft-purple: #DEDBF7;
+      --dark: #17181C;            /* ink — headings, discipline tags */
+      --mid: #6E7178;             /* graphite — labels, secondary text */
+      --body: #3D4048;            /* body copy on the grey wall */
       --nav-height: 90px;
+      /* ── ONE FONT, EVERYWHERE: Inter. Hierarchy comes from weight + size only ──
+         --display and --mono kept as aliases so every legacy reference resolves
+         to Inter without hunting them all down. */
+      --font: 'DM Sans', system-ui, sans-serif;              /* PRIMARY — nav, body, labels, metadata, buttons */
+      --display: 'Bricolage Grotesque', 'DM Sans', sans-serif; /* DISPLAY — name, section titles, project names, pull quotes */
+      --mono: var(--font);                                    /* labels are primary font now */
+      /* THREE SIZES — the whole site uses only these (plus the hero name) */
+      --fs-lg: clamp(2.2rem, 4.6vw, 3.6rem);   /* headings: section titles, detail titles, about headline */
+      --fs-md: 1.0625rem;                       /* body: prose, descriptions, taglines, product titles */
+      --fs-sm: 0.75rem;                         /* small: labels, nav, tags, meta, eyebrows */
+      /* two weights only: 400 regular · 700 bold (500 for label punch) */
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* form controls don't inherit fonts by default — keep them on-system (no Arial) */
+    button, input, select, textarea { font-family: inherit; }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font);
       background: var(--cream);
       color: var(--dark);
       overflow-x: hidden;
@@ -43,18 +69,17 @@
       top: 0; left: 0; right: 0;
       z-index: 200;
       height: var(--nav-height);
-      padding: 0 48px;
+      padding: 18px 36px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
       transition: background 0.3s, backdrop-filter 0.3s;
     }
 
-    /* transparent header so it blends seamlessly over the scrollytelling reel;
-       link/logo colours swap per section (see .on-cream / .on-dark) for contrast */
+    /* solid header — opaque grey wall so content never shows through as it scrolls under */
     nav {
-      background: transparent;
-      border-bottom: 1px solid transparent;
+      background: var(--cream);
+      border-bottom: 1px solid rgba(23,24,28,0.10);
       transition: background 0.3s ease, border-color 0.3s ease;
     }
 
@@ -62,12 +87,12 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      font-family: 'DM Sans', sans-serif;   /* match the home hero "sarah thornton" */
-      font-weight: 800;
-      font-size: 1.9rem;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: var(--fs-sm);
       line-height: 1;
       letter-spacing: 0;
-      text-transform: lowercase;            /* render as lowercase "st" like the hero name */
+      text-transform: none;            /* render as lowercase "st" like the hero name */
       transition: color 0.2s, transform 0.2s;
     }
     .nav-logo:hover { transform: rotate(-4deg) scale(1.05); }
@@ -80,7 +105,7 @@
 
     .nav-links a {
       text-decoration: none;
-      font-size: 1.85rem;
+      font-size: var(--fs-sm);
       font-weight: 400;
       cursor: pointer;
       transition: color 0.2s;
@@ -157,14 +182,13 @@
       border-top: 6px solid currentColor;
       transition: transform 0.2s;
     }
-    .nav-dropdown:hover .nav-caret,
     .nav-dropdown.open .nav-caret { transform: rotate(180deg); }
     .nav-submenu {
       position: absolute;
       top: 100%;
       right: 0;
       left: auto;
-      min-width: 190px;
+      min-width: 250px;
       /* frosted glass — blue-tinted so white text stays legible whether the menu
          opens over the cream Home or the blue About */
       background: rgba(58, 50, 140, 0.40);
@@ -174,7 +198,7 @@
       border-radius: 14px;
       box-shadow: 0 14px 32px rgba(0,0,0,0.25);
       padding: 0;                    /* rows go edge-to-edge for full-width dividers */
-      overflow: hidden;              /* clip rows to the rounded corners */
+      overflow: hidden;              /* clip the inline accordion to the rounded panel */
       display: flex;
       flex-direction: column;
       gap: 0;
@@ -184,24 +208,75 @@
       transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
       z-index: 210;
     }
-    .nav-dropdown:hover .nav-submenu,
-    .nav-dropdown:focus-within .nav-submenu,
     .nav-dropdown.open .nav-submenu {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
     }
     .nav-submenu a {
-      font-size: 1.15rem !important;
+      font-size: var(--fs-md) !important;
       color: #fff !important;
       padding: 12px 18px;
       border-radius: 0;
       white-space: nowrap;
       transition: background 0.15s, color 0.15s;
     }
-    /* hairline divider between each project */
-    .nav-submenu a + a { border-top: 1px solid rgba(255,255,255,0.18); }
     .nav-submenu a:hover { background: rgba(255,255,255,0.16); color: #fff !important; }
+
+    /* ── mega-menu: each category row reveals a fly-out of its projects ── */
+    .nav-cat { position: relative; }
+    .nav-cat + .nav-cat { border-top: 1px solid rgba(255,255,255,0.18); }
+    /* round the first/last rows so hover states respect the panel's corners
+       (the panel itself no longer clips — overflow is visible for the fly-outs) */
+    .nav-cat:first-child .nav-cat-label {
+      border-top-left-radius: 14px; border-top-right-radius: 14px;
+    }
+    .nav-cat:last-child .nav-cat-label {
+      border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
+    }
+    /* category header row: label on the left, a circular chevron on the right */
+    .nav-cat-label {
+      display: flex !important;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .nav-cat-chevron {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; opacity: 0.85;
+      transition: transform 0.28s ease, background 0.2s ease, opacity 0.2s ease;
+    }
+    .nav-cat-chevron svg { width: 10px; height: 7px; display: block; }
+    .nav-cat:hover > .nav-cat-label { background: rgba(255,255,255,0.12); }
+
+    /* projects expand inline beneath their category (accordion). Exactly one
+       category is open at a time — which one is set by JS via .hover-open, so
+       hovering another category closes the previous (see the accordion script). */
+    .nav-flyout {
+      overflow: hidden;
+      max-height: 0;
+      display: flex; flex-direction: column;
+      background: rgba(0,0,0,0.14);
+      transition: max-height 0.25s ease;
+    }
+    .nav-cat.open > .nav-flyout { max-height: 340px; }
+    .nav-cat.open > .nav-cat-label { background: rgba(255,255,255,0.16); }
+    .nav-cat.open > .nav-cat-label .nav-cat-chevron {
+      transform: rotate(180deg);
+      background: rgba(255,255,255,0.16);
+      opacity: 1;
+    }
+    .nav-flyout a {
+      padding: 11px 20px 11px 30px !important;
+      font-size: var(--fs-md) !important;
+      white-space: nowrap;
+    }
+    .nav-flyout a + a { border-top: 1px solid rgba(255,255,255,0.12); }
 
     /* =====================
        PAGE SYSTEM
@@ -330,7 +405,7 @@
     ===================== */
     #page-home {
       background: var(--cream);
-      min-height: 100vh;
+      /* height is driven by .home-body (~74vh) so projects peek under the name */
     }
 
     /* blob sizes/colours/drift (positions set by .reel-blobs rules above) */
@@ -379,116 +454,71 @@
       animation: homeDrift3 13.5s ease-in-out infinite 1.5s, blobMorph5 17s ease-in-out infinite 1s;
     }
 
+    /* ── Full-screen landing: huge left-aligned name · divider · meta row · foot row ── */
     .home-body {
       position: relative;
       z-index: 2;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: calc(var(--nav-height) + 20px) 48px 92px;
     }
+    .home-lockup { width: 100%; }
+    .role-indent { margin-left: 0; }
 
-    /* tagline — anchored bottom-left */
-    .home-text {
-      position: absolute;
-      left: 44px;
-      bottom: 6vh;
-      z-index: 3;
+    /* name — huge, left-aligned, two lines (Bricolage). Each letter hovers to indigo. */
+    .home-name {
+      color: var(--dark);
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(3.4rem, 13vw, 11rem);
+      line-height: 0.84;
+      letter-spacing: -0.045em;
+      margin: 0;
       text-align: left;
     }
-
-    .home-tagline {
-      font-size: clamp(0.85rem, 1.15vw, 1rem);
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      line-height: 1;
-      color: var(--dark);
-      opacity: 0.7;
-      margin-bottom: 1px;
-      margin-left: 0.15em;
-    }
-
-    .home-role {
-      font-size: clamp(1.6rem, 2.7vw, 2.4rem);
-      font-weight: 800;
-      letter-spacing: 0.005em;
-      line-height: 1.12;
-      color: var(--dark);
-    }
-    .role-indent { margin-left: 2.4em; }
-
-    /* name — letters scattered across the hero, flying into place on load */
-    .home-name {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      color: var(--dark);
-      font-weight: 800;
-      font-size: clamp(3.6rem, 9vw, 10.8rem);
-      line-height: 1;
+    .home-name .ltr { display: inline-block; transition: color 0.22s ease; }
+    .home-name .ltr:hover,
+    .home-name .ltr.lit { color: var(--blue); }
+    /* heart + star flourishes flanking the name — indigo accent */
+    .home-name .name-star {
+      color: var(--blue);
+      font-size: 0.28em;
+      font-weight: 400;
       letter-spacing: 0;
-    }
-    .home-name .char {
-      position: absolute;            /* left/top set per-letter in JS */
-      will-change: transform, opacity;
-      transform: translate(-50%, -50%);
-      animation: scatterIn 1.35s cubic-bezier(0.16, 1, 0.3, 1) var(--inDelay, 0s) both;
-    }
-    @keyframes scatterIn {
-      from {
-        opacity: 0;
-        transform: translate(calc(-50% + var(--fromX, 0px)), calc(-50% + var(--fromY, 0px)))
-                   rotate(var(--fromR, 0deg)) scale(0.85);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(0deg) scale(1);
-      }
-    }
-    .home-name .char-px {
-      display: inline-block;
-      will-change: transform;
-    }
-    .home-name .char-inner {
-      display: inline-block;
-      animation: charBob var(--dur, 6s) ease-in-out var(--del, 0s) infinite;
-    }
-    @keyframes charBob {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      50%      { transform: translate(var(--driftX, 0px), var(--amp, -4px)) rotate(var(--rot, 0deg)); }
-    }
-    /* hover a single letter: it nudges lightly in its own direction + changes colour */
-    .home-name .char-hover {
-      display: inline-block;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
-    }
-    /* .lit is added on mobile as a dragging finger passes over each letter */
-    .home-name .char:hover .char-hover,
-    .home-name .char.lit .char-hover {
-      transform: translate(var(--hoverX, 0), var(--hoverY, 0)) rotate(var(--hoverRot, 0deg));
-      color: var(--hoverColor, var(--dark));
+      vertical-align: 0.9em;
+      white-space: nowrap;
     }
 
-    /* wordless scroll arrow — an affordance, not an instruction */
-    .scroll-arrow {
+    .home-divider { height: 1px; background: rgba(23,24,28,0.18); margin: clamp(28px, 5vh, 56px) 0 22px; }
+
+    .home-metarow {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+    }
+    /* shared uppercase micro-label voice for the landing meta + foot row */
+    .home-role, .home-cue, .home-footrow span {
+      font-family: var(--font);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      line-height: 1.7;
+      margin: 0;
+    }
+    .home-role { max-width: 640px; }
+    .home-cue { white-space: nowrap; flex: none; }
+
+    .home-footrow {
       position: absolute;
-      left: 50%;
-      bottom: 26px;
-      transform: translateX(-50%);
-      z-index: 4;
-      color: var(--dark);
-      pointer-events: none;
-      animation: cueFadeIn 0.8s ease 1.6s both;
-    }
-    .scroll-arrow svg {
-      width: 28.6px; height: 16.5px;
-      display: block;
-      animation: scrollBounce 1.6s ease-in-out infinite;
-    }
-    @keyframes scrollBounce {
-      0%, 100% { transform: translateY(0); opacity: 0.5; }
-      50%      { transform: translateY(7px); opacity: 1; }
-    }
-    @keyframes cueFadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      left: 48px; right: 48px; bottom: 34px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
     }
 
 
@@ -518,7 +548,7 @@
 
     .avatar-placeholder {
       color: rgba(255,255,255,0.7);
-      font-size: 0.78rem;
+      font-size: var(--fs-sm);
       text-align: center;
       padding: 12px;
       line-height: 1.4;
@@ -593,16 +623,16 @@
     }
 
     .section-label {
-      font-size: 2.8rem;
+      font-size: var(--fs-lg);
       font-weight: 800;
       color: var(--dark);
       letter-spacing: 0.06em;
-      text-transform: uppercase;
+      text-transform: none;
       margin-bottom: 10px;
     }
 
     .section-desc {
-      font-size: 1.1rem;
+      font-size: var(--fs-md);
       color: var(--mid);
       line-height: 1.6;
       max-width: 380px;
@@ -631,14 +661,14 @@
     .proj-subsection { margin-bottom: 56px; }
     .proj-subsection:last-child { margin-bottom: 0; }
     .subsection-label {
-      font-size: 1.5rem;
+      font-size: var(--fs-md);
       font-weight: 700;
       color: var(--dark);
       letter-spacing: 0.01em;
       margin-bottom: 6px;
     }
     .subsection-desc {
-      font-size: 1rem;
+      font-size: var(--fs-md);
       color: var(--mid);
       line-height: 1.5;
       max-width: 440px;
@@ -657,39 +687,44 @@
       display: flex; align-items: center; justify-content: center;
     }
 
+    /* covers whose key text sits at the very top are nudged down so the fidelity
+       pill doesn't overlap it; the small strip left behind uses a soft neutral */
+    .thumb--shift { background: #EFE9DC; }
+
+    /* same fidelity pill, but inline on the detail page (above the title) so it
+       flows with the layout instead of floating over a thumbnail corner */
+    .stage-tag.detail-stage {
+      position: static;
+      top: auto; left: auto;
+      display: inline-flex;
+      margin-bottom: 16px;
+    }
+
     /* fidelity tag shown on a card's thumbnail */
+    /* squared studio tag (matches the .pill system): DM Mono, uppercase */
     .stage-tag {
       position: absolute;
       top: 10px; left: 10px;
       z-index: 2;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(245,239,227,0.92);
+      font-family: var(--mono);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      letter-spacing: 0.11em;
+      text-transform: lowercase;
+      padding: 6px 9px;
+      border-radius: 2px;
+      background: rgba(244,244,242,0.92);
       color: var(--dark);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
-      border: 1px solid rgba(24,24,30,0.14);
+      border: 1px solid rgba(23,24,28,0.14);
     }
-    /* colour-coded by fidelity/type */
-    .stage-tag.tag-proto {
-      background: var(--blue); color: #fff; border-color: var(--blue);
-      box-shadow: 0 3px 12px rgba(90,79,214,0.4);
-    }
-    .stage-tag.tag-case {
-      background: var(--dark); color: #fff; border-color: var(--dark);
-      box-shadow: 0 3px 12px rgba(24,24,30,0.4);
-    }
-    .stage-tag.tag-sketch {
-      background: #E86FA0; color: #fff; border-color: #E86FA0;
-      box-shadow: 0 3px 12px rgba(232,111,160,0.4);
-    }
+    /* monochrome: every fidelity/type pill is solid indigo (the one accent) */
+    .stage-tag.tag-proto,
+    .stage-tag.tag-case,
+    .stage-tag.tag-sketch,
     .stage-tag.tag-sprint {
-      background: #fff; color: var(--dark); border-color: rgba(24,24,30,0.18);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+      background: var(--blue); color: var(--paper); border-color: var(--blue);
     }
 
     .thumb img {
@@ -700,12 +735,28 @@
 
     .thumb-placeholder {
       color: rgba(90,79,214,0.5);
-      font-size: 0.8rem;
+      font-size: var(--fs-sm);
       text-align: center;
     }
 
+    /* gradient stand-in for a project whose cover image isn't exported yet */
+    .thumb-ph {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 55%, var(--coral) 100%);
+    }
+    .thumb-ph span {
+      color: #fff;
+      font-weight: 700;
+      font-size: var(--fs-md);
+      letter-spacing: 0.02em;
+      line-height: 1.25;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.22);
+    }
+
     .proj-label {
-      font-size: 1.15rem;
+      font-size: var(--fs-md);
       font-weight: 500;
       color: var(--dark);
       text-decoration: underline;
@@ -719,7 +770,7 @@
     }
 
     .proj-desc {
-      font-size: 1rem;
+      font-size: var(--fs-md);
       color: var(--mid);
       line-height: 1.5;
       margin-top: 6px;
@@ -729,29 +780,268 @@
       margin-top: 60px;
     }
 
+    /* ─────────────────────────────────────────────
+       PROJECTS — editorial scrollytelling index
+       (SKYLRK product-hero + Snarkitecture restraint).
+       New markup uses .pj-* classes; the old .proj-card /
+       .thumb / .stage-tag styles above are kept because the
+       "Selected Projects" band still reuses them.
+    ───────────────────────────────────────────── */
+    .pj-wrap { max-width: 900px; margin: 0 auto; }
+
+    /* big, clean, left-aligned page title — sits well clear of the reel/nav
+       and of the first project so the header reads as its own beat */
+    .pj-page-title {
+      font-size: var(--fs-lg);
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-align: left;
+      margin-bottom: 18px;
+    }
+    .pj-intro {
+      font-size: var(--fs-md);
+      color: var(--mid);
+      line-height: 1.6;
+      max-width: 460px;
+    }
+    .pj-intro strong { color: var(--dark); font-weight: 600; }
+
+    /* one project per beat, generous negative space between them */
+    .pj-list {
+      display: flex;
+      flex-direction: column;
+      gap: 116px;
+      margin-top: 84px;
+    }
+
+    /* each project is a link tile: visual on top, title + pills beneath.
+       Opacity is the only thing the hover effect touches, so nothing ever
+       reflows. */
+    .pj {
+      display: block;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      outline: none;
+    }
+    .pj:focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 14px;
+      border-radius: 24px;
+    }
+
+    /* Snarkitecture-style isolation: hovering the list fades every project,
+       the hovered one snaps back to full. Pointer-only so touch never gets
+       stuck in a dimmed state (mobile falls back to a plain tap → open). */
+    @media (hover: hover) and (pointer: fine) {
+      .pj-list:hover .pj { opacity: 0.32; }
+      .pj-list:hover .pj:hover { opacity: 1; }
+    }
+
+    .pj-visual {
+      display: flex;
+      justify-content: center;
+      transition: transform 0.5s cubic-bezier(.22,1,.36,1);
+      will-change: transform;
+    }
+    .pj:hover .pj-visual { transform: translateY(-8px) scale(1.015); }
+
+    .pj-meta { text-align: center; margin-top: 32px; }
+    .pj-title {
+      font-size: var(--fs-md);
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -0.015em;
+      line-height: 1.05;
+      transition: color 0.25s ease;
+    }
+    .pj:hover .pj-title { color: var(--blue); }
+    .pj-pills {
+      display: flex;
+      gap: 9px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    /* pills read as secondary to the title: small, tidy, colour-coded.
+       pill 1 = discipline (3 colours), pill 2 = project type (its own set). */
+    /* squared studio-tag system: DM Mono, uppercase, wide tracking, 2px corners.
+       Discipline = solid ink, stage = indigo outline. Only ink + indigo. */
+    .pill {
+      font-family: var(--mono);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      letter-spacing: 0.11em;
+      text-transform: lowercase;
+      line-height: 1;
+      padding: 6px 9px;
+      border-radius: 2px;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+    .pill-uiux, .pill-industrial, .pill-service {
+      background: var(--dark); color: var(--paper); border-color: var(--dark);
+    }
+    .pill-case, .pill-proto, .pill-sprint, .pill-sketch {
+      background: transparent; color: var(--blue); border-color: rgba(75,65,232,.45);
+    }
+
+    /* ── device mockups: the interface is the hero, the frame just gives
+       context. Each project gets the format that matches how it's really used. ── */
+    .device { position: relative; }
+    .device-screen { position: relative; overflow: hidden; background: #000; }
+    .device-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── CUTOUT PRODUCT ── a transparent PNG that floats directly on the grey
+       wall, no frame, no plate, no background. The drawing IS the product.
+       (Industrial cutouts — footwear, bus stop, furniture — use this.) */
+    .product-cutout { width: 100%; display: flex; justify-content: center; }
+    .product-cutout img {
+      width: 100%; height: auto; display: block;
+      background: none;
+      /* shadow follows the cut-out silhouette, so it reads as a real object */
+      filter: drop-shadow(0 16px 22px rgba(23,24,28,0.18));
+    }
+    /* projects grid: keep the cutout to a product-sized footprint, centered */
+    .pj .product-cutout { max-width: 460px; margin: 0 auto; }
+    /* in the floating shop, the .shop-visual already casts the drop-shadow,
+       so the image itself doesn't need its own (avoids a double shadow) */
+    .shop-visual .product-cutout img { filter: none; }
+
+    /* iPhone 17 — mobile products (ShopCampus, Trova) */
+    .device--phone {
+      width: 300px;
+      max-width: 78vw;
+      /* screen aspect matched to the 402×874 phone screenshots so the bottom nav
+         bar isn't clipped (was 300/620, which cropped ~6px off the bottom) */
+      aspect-ratio: 300 / 628;
+      background: #1b1b21;
+      border-radius: 46px;
+      padding: 11px;
+      box-shadow: 0 34px 60px -26px rgba(24,24,30,.55), inset 0 0 0 2px rgba(255,255,255,.05);
+    }
+    .device--phone .device-screen { width: 100%; height: 100%; border-radius: 36px; }
+    /* dynamic island */
+    .device--phone::after {
+      content: ''; position: absolute; top: 21px; left: 50%; transform: translateX(-50%);
+      width: 88px; height: 25px; background: #0a0a0c; border-radius: 13px; z-index: 3;
+    }
+
+    /* MacBook — desktop web products (Andalusia Workshop) */
+    .device--laptop { width: min(640px, 100%); }
+    .device--laptop .laptop-lid {
+      position: relative;
+      background: #1b1b21;
+      border-radius: 18px;
+      padding: 13px 13px 12px;
+      box-shadow: 0 30px 54px -28px rgba(24,24,30,.5);
+    }
+    .device--laptop .laptop-cam {
+      position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+      width: 5px; height: 5px; border-radius: 50%; background: #33333b;
+    }
+    .device--laptop .device-screen { aspect-ratio: 16 / 10; border-radius: 6px; }
+    .device--laptop .device-screen img { object-position: top center; }
+    .device--laptop .laptop-base {
+      position: relative;
+      height: 15px; width: 116%; margin-left: -8%;
+      background: linear-gradient(#cfd0d6, #a6a7af);
+      border-radius: 0 0 11px 11px;
+    }
+    .device--laptop .laptop-base::after {
+      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 96px; height: 8px; background: #96969f; border-radius: 0 0 8px 8px;
+    }
+
+    /* Browser window — live websites / service products (FetchRide) */
+    .device--browser {
+      width: min(640px, 100%);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(24,24,30,.08);
+      box-shadow: 0 28px 52px -28px rgba(24,24,30,.42);
+    }
+    .device--browser .browser-bar {
+      height: 40px; display: flex; align-items: center; gap: 7px;
+      padding: 0 15px; background: #ececf1; border-bottom: 1px solid rgba(24,24,30,.06);
+    }
+    .browser-dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+    .browser-dot.r { background: #ED6A5E; }
+    .browser-dot.y { background: #F4BE4F; }
+    .browser-dot.g { background: #61C554; }
+    .browser-addr {
+      flex: 1; height: 20px; margin-left: 8px; border-radius: 6px;
+      background: #fff; border: 1px solid rgba(24,24,30,.08);
+    }
+    .device--browser .device-screen { aspect-ratio: 16 / 10; background: #f5f5f5; }
+    .device--browser .device-screen img { object-position: top center; }
+
+    /* Product plate — physical products shown large, no device chrome
+       (industrial design: Stow, CloudFlex, Footwear, Bus Stop, Furniture) */
+    .device--product {
+      width: min(620px, 100%);
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #EFE9DC, #E6DDCB);
+      border: 1px solid rgba(24,24,30,.06);
+      box-shadow: 0 24px 48px -28px rgba(24,24,30,.4);
+    }
+    .device--product .device-screen { width: 100%; height: 100%; background: transparent; }
+    /* sketch-style covers sit on the plate rather than bleed to its edges */
+    .device--product.is-contain .device-screen img { object-fit: contain; padding: 4%; }
+
+    /* framed sketch — the original artwork on its paper, with a thin black border
+       and (via the .shop-visual drop-shadow) a soft shadow so it feels grounded.
+       Used for the concept sketches + Stow + CloudFlex. */
+    .device--framed {
+      background: #fff;
+      border: 1.5px solid #1c1c22;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .device--framed .device-screen {
+      background: #fff;
+      border-radius: 0;
+    }
+    .device--framed .device-screen img {
+      width: 100%; height: auto;
+      object-fit: contain;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pj, .pj-visual, .pj-title { transition: none; }
+      .pj:hover .pj-visual { transform: none; }
+    }
+
     /* =====================
        ABOUT PAGE
     ===================== */
     /* ===== scroll reel: Home + About as one continuous native scroll ===== */
-    #reel { display: none; position: relative; background: var(--blue-bg); overflow: clip; }
+    #reel { display: none; position: relative; background: var(--cream); overflow: clip; }
     #reel.active { display: block; animation: pageIn 0.35s ease forwards; }
 
     .reel-hero {
       position: relative;
-      min-height: 100vh;
+      /* height comes from .home-body (~74vh) so the projects band peeks in
+         under the name on first load — "name → immediately projects" */
       background: var(--cream);
       overflow: hidden;
     }
+    /* pastel blob layers retired in favour of clean gradients */
+    .reel-blobs, .band-blobs { display: none !important; }
+    /* About is a half-viewport BAND now (not a full-screen card), placed after the work */
     .reel-about {
       position: relative;
-      min-height: 100vh;
-      padding-top: var(--nav-height);
-      /* cream -> blue fade across the top hides the seam line */
-      background: linear-gradient(to bottom, var(--cream) 0, var(--blue-bg) 320px);
+      background: var(--cream);
+      padding: 80px 0 12vh;   /* "about" sits ~80px below the nav */
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
     }
 
     /* shared blob band straddling the Home/About seam; JS adds parallax translateY */
@@ -770,33 +1060,329 @@
     .reel-blobs .home-blob-4 { top: calc(100vh - 360px); bottom: auto; left: 55%; }
     .reel-blobs .home-blob-5 { top: calc(100vh - 260px); bottom: auto; right: -70px; }
 
-    .about-body {
+    /* ── ABOUT band: photo (left) · "About Me" + narrower text squished right ── */
+    .about-band {
       position: relative; z-index: 2;
-      /* fill most of the first About screen so its content stays centered,
-         but leave a ~120px gap so "Find me with…" peeks above the fold */
-      min-height: calc(100vh - var(--nav-height) - 120px);
-      padding: 40px 80px 60px;
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      border-bottom: 1px solid rgba(23,24,28,.14);
+      padding: 0 24px 56px;      /* top handled by the header's 72px; aligns to columns */
+      display: flex;
+      align-items: center;
+      justify-content: center;   /* photo + copy centered as a group */
+      gap: 48px;
+    }
+    .about-vlabel {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-family: var(--display);      /* Bricolage Grotesque */
+      font-size: var(--fs-md);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--mid);
+      white-space: nowrap;
+      flex: none;
+    }
+    .about-copy { flex: none; width: 460px; max-width: 460px; }
+    .about-photo-col { flex: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+    .about-band .about-avatar {
+      width: 240px; height: 240px;      /* photo is the centerpiece now (enlarged) */
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid rgba(23,24,28,.14);
+      background: rgba(23,24,28,.05);
+      margin: 0;
+    }
+    .about-meta {
+      font-size: var(--fs-sm);
+      color: var(--mid);
+      line-height: 1.55;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;   /* keep it on one line */
+    }
+    .about-copy p {
+      font-size: var(--fs-md);
+      line-height: 1.6;
+      color: var(--body);
+      margin: 0 0 16px;               /* skip a line between paragraphs */
+    }
+    .about-copy .hello-egg { font-weight: 700; color: var(--dark); }
+    .about-links { display: flex; gap: 24px; margin-top: 22px; }
+    .about-link {
+      font-size: var(--fs-sm);
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+    .about-link:hover { opacity: .65; }
+    @media (max-width: 820px) {
+      /* center the photo above the copy, and give the band horizontal padding so
+         the paragraphs sit inside the framed band instead of running off the edge */
+      .about-band { flex-direction: column; align-items: center; gap: 24px; padding: 40px 24px; }
+      .about-vlabel { writing-mode: horizontal-tb; transform: none; margin-left: 0; }
+      .about-copy { width: 100%; max-width: 100%; }
+      .about-band .about-avatar { width: 190px; height: 190px; }
+    }
+
+    /* the closing word "projects" reads as a tappable chip, echoing the nav tab,
+       and opens the same projects pop-up menu */
+    /* the closing word "projects" reads as an inline text link (underlined),
+       not a bubble — still clearly clickable, and opens the projects menu */
+    .about-projects-pill {
+      font: inherit;
+      font-weight: 700;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+      text-decoration-color: rgba(255,255,255,0.6);
+      transition: text-decoration-color 0.2s ease, text-underline-offset 0.2s ease;
+    }
+    .about-projects-pill:hover {
+      text-decoration-color: #fff;
+      text-underline-offset: 6px;
+    }
+
+    /* "View my most recent work" — two featured cards closing the About band */
+    /* recent work breaks out of the blue About band into its own cream panel;
+       the gradient fades blue → cream as you scroll in (scrollytelling beat) */
+    .recent-work-band {
+      position: relative; z-index: 2;
+      width: 100%;
+      /* hold solid blue at the top (seamless with the About band), then fade to
+         cream through the MIDDLE of the blob cluster so the blobs mask the seam */
+      background: linear-gradient(to bottom, var(--blue-bg) 0, var(--blue-bg) 120px, var(--cream) 300px);
+      padding-bottom: clamp(90px, 16vh, 200px);
+      overflow: hidden;   /* keep the bridge blobs clipped to the band */
+    }
+    /* the blob bridge fills the transition zone above the title; ~20 blobs are
+       injected by seedBandBlobs() so they span the width and stay fully on-screen */
+    .band-blobs {
+      inset: 0 0 auto 0;
+      height: 380px;
+      z-index: 1;
+    }
+    .recent-work {
+      position: relative; z-index: 2;
+      width: 100%;
+      max-width: 874px;
+      margin: 0 auto;
+      /* top padding clears the blob-bridge / fade so the title lands on cream */
+      padding: 380px 24px 0;
+      text-align: center;
+    }
+    .recent-work-title {
+      color: var(--dark);
+      font-size: var(--fs-md);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 48px;   /* match the cards → "Explore all projects" gap */
+    }
+    .recent-work-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      gap: 56px;
+      text-align: left;
+    }
+    .recent-work-more {
+      margin-top: 48px;
+      text-align: center;
+    }
+    .recent-work-all {
+      font: inherit;
+      font-size: var(--fs-md);
+      font-weight: 600;
+      color: var(--blue);
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
-      max-width: 1300px;
+      gap: 7px;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: rgba(90,79,214,0.35);
+      transition: opacity 0.2s, text-decoration-color 0.2s;
+    }
+    .recent-work-all svg { transition: transform 0.2s; }
+    .recent-work-all:hover { text-decoration-color: var(--blue); }
+    .recent-work-all:hover svg { transform: translateY(-3px); }
+
+    /* ─────────────────────────────────────────────
+       FLOATING "SHOP" GALLERY — all 9 projects as small products
+       drifting on a grainy blue gradient (SKYLRK product-float model).
+       Lives in the band below About; reuses the .device-* mockups small.
+    ───────────────────────────────────────────── */
+    .shop-band {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 36px 0 clamp(80px, 12vh, 160px);   /* 44px hero base + 36px = 80px band→word */
+      overflow: visible;   /* don't clip the hover lift/scale of the top-row products */
+      background: var(--cream);   /* consistent cream — no seam, no fade */
+    }
+    /* film grain — masked so it fades IN below the seam (no hard top edge/line) */
+    .shop-band::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none;
+      opacity: 0.4;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 260px);
+      mask-image: linear-gradient(to bottom, transparent 0, #000 260px);
+    }
+
+    /* section header — same voice as the landing name: lowercase display 800, full
+       ink, flush-left at the 40px page margin, with a small uppercase meta on the
+       right (statement left · meta right, exactly like the landing caption). Used by
+       both Projects and About so the two sections announce themselves identically. */
+    .section-head {
+      position: relative; z-index: 2;
+      width: 100%;
+      max-width: 1180px;             /* same container as the product grid / about */
+      margin: 0 auto 72px;          /* 72px from the rule down to the first row */
+      box-sizing: border-box;
+      padding: 0 24px 38px;         /* aligns to the columns; 38px word → rule */
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    /* hairline rule under the header, inset to line up with the content columns */
+    .section-head::after {
+      content: '';
+      position: absolute; left: 24px; right: 24px; bottom: 0;
+      border-top: 1px solid rgba(23,24,28,.14);
+    }
+    .section-head-title {
+      font-family: var(--display);          /* same face as the name */
+      font-weight: 800;
+      font-size: clamp(40px, 4.4vw, 64px);  /* ~a third of the 172px name */
+      letter-spacing: -0.04em;              /* matches the name */
+      line-height: 1;
+      color: var(--dark);                   /* full ink — no more tentative grey */
+      text-transform: none;
+    }
+    .section-head-meta {
+      flex: none;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--mid);
+      white-space: nowrap;
+    }
+    @media (max-width: 900px) {
+      .section-head { padding: 0 20px 28px; margin-bottom: 40px; }
+      .section-head::after { left: 20px; right: 20px; }
+    }
+
+    /* ── Projects as a grid of cards (all screen sizes). Each card is a light
+       "paper" frame whose contents center inside it; the frame edges line up
+       with the grid columns. The device mockups (phone / laptop / browser /
+       cutout) are kept intact and centered in a fixed-height image well so
+       every card stays level regardless of a tall phone vs a wide laptop. ── */
+    .shop-stage {
+      position: relative; z-index: 2;
+      width: 100%;
+      max-width: 1180px;
       margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      align-items: stretch;
     }
 
-    /* optical centering — nudge the photo column slightly above true center */
-    .about-right { align-self: center; margin-top: -2vh; }
-
-    .about-text p {
-      color: white;
-      font-size: 1.27rem;
-      line-height: 1.8;
-      margin-bottom: 26px;
-      font-weight: 400;
+    .shop-item {
+      box-sizing: border-box;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex; flex-direction: column; align-items: center;
+      background: var(--paper);
+      border: 1px solid rgba(23,24,28,.07);
+      border-radius: 26px;
+      padding: 34px 30px 30px;
+      box-shadow: 0 1px 2px rgba(23,24,28,.05);
+      transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s ease;
+    }
+    /* the whole card lifts on hover */
+    .shop-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 26px 50px -22px rgba(23,24,28,.32);
     }
 
-    .about-text p:last-child { margin-bottom: 0; }
-    .about-text strong { font-weight: 700; }
+    /* fixed-height image well — device centered & scaled to fit (contain) */
+    .shop-visual {
+      width: 100%;
+      height: clamp(240px, 24vw, 320px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .shop-item .device { width: auto; }
+    /* portrait phone: size by height */
+    .shop-item .device--phone { height: 92%; width: auto; max-width: 100%; }
+    /* landscape laptop / browser: size by width, centered vertically */
+    .shop-item .device--laptop,
+    .shop-item .device--browser { width: min(86%, 380px); height: auto; }
+    /* transparent cutouts: contain within the well, keep a soft ground shadow */
+    .shop-item .product-cutout { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .shop-item .product-cutout img {
+      width: auto; height: auto; max-width: 92%; max-height: 88%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 20px rgba(23,24,28,.16));
+    }
+
+    /* trim the mockup chrome down to product scale */
+    .shop-item .device--phone { border-radius: 26px; padding: 6px; }
+    .shop-item .device--phone .device-screen { border-radius: 21px; }
+    .shop-item .device--phone::after { top: 12px; width: 46px; height: 13px; border-radius: 7px; }
+    .shop-item .device--laptop .laptop-lid { border-radius: 11px; padding: 7px 7px 6px; }
+    .shop-item .device--laptop .device-screen { border-radius: 4px; }
+    .shop-item .device--browser { border-radius: 9px; }
+    .shop-item .device--browser .browser-bar { height: 22px; padding: 0 8px; gap: 4px; }
+    .shop-item .device--browser .browser-dot { width: 6px; height: 6px; }
+    .shop-item .device--product { border-radius: 12px; }
+
+    /* title + category pills under each product (mirrors the projects-page meta) */
+    .shop-meta { text-align: center; margin-top: 20px; }
+    .shop-title {
+      display: block;
+      font-size: var(--fs-md);      /* +20% */
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--dark);
+      transition: color 0.25s ease;
+    }
+    .shop-pills {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .shop-pills .pill { font-size: var(--fs-sm); padding: 5px 11px; letter-spacing: 0.02em; }  /* +20% */
+
+    .shop-item:focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 4px;
+      border-radius: 26px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .shop-item { transition: none; }
+      .shop-item:hover { transform: none; }
+    }
 
     /* "Find me with..." — campus communities shown at the end of About;
        cards stacked one-on-top-of-the-other and enlarged */
@@ -818,7 +1404,7 @@
     }
     .find-me-title {
       color: #fff;
-      font-size: 1.75rem;
+      font-size: var(--fs-md);
       font-weight: 700;
       letter-spacing: 0.01em;
       margin-bottom: 40px;
@@ -829,7 +1415,7 @@
       margin-bottom: 0;
     }
     .find-me .fun-card { gap: 22px; }
-    .find-me .fun-card-name { font-size: 1.2rem; }
+    .find-me .fun-card-name { font-size: var(--fs-md); }
     /* the hover 2×2 spread is ~7.5% of the card width taller than the photo box
        (top & bottom rows poke out). Reserve that room with a %-margin (relative to
        width, so it scales with the card) so the spread never overlaps the label or
@@ -908,7 +1494,7 @@
 
     .about-location {
       color: white;
-      font-size: 1.1rem;
+      font-size: var(--fs-md);
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -964,6 +1550,115 @@
       box-shadow: 0 18px 44px rgba(0,0,0,0.24);
     }
     .social-link svg { width: 26px; height: 26px; display: block; }
+
+    /* =====================
+       FEATURED WORK (on the blue About panel)
+    ===================== */
+    .featured {
+      position: relative; z-index: 2;
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 8px 80px 100px;
+      text-align: center;
+    }
+    .featured-eyebrow {
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: none;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 10px;
+    }
+    .featured-title {
+      color: #fff;
+      font-size: var(--fs-lg);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 40px;
+    }
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .feat-card {
+      position: relative;
+      text-align: left;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 14px 40px rgba(24,20,60,0.22);
+      transition: transform 0.4s cubic-bezier(.34,1.4,.64,1), box-shadow 0.4s ease;
+      outline: none;
+    }
+    .feat-card:hover,
+    .feat-card:focus-visible {
+      transform: translateY(-10px) scale(1.015);
+      box-shadow: 0 30px 66px rgba(24,20,60,0.34);
+    }
+    .feat-card:focus-visible {
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.85), 0 30px 66px rgba(24,20,60,0.34);
+    }
+
+    .feat-media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #C8B8F0;
+    }
+    .feat-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.5s ease, transform 0.6s ease;
+    }
+    .feat-img--hover { opacity: 0; }
+    .feat-card:hover .feat-img--base  { opacity: 0; transform: scale(1.06); }
+    .feat-card:hover .feat-img--hover { opacity: 1; transform: scale(1.06); }
+
+    /* gradient stand-in for a project whose cover isn't exported yet (Andalusia) */
+    .feat-ph {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 55%, var(--coral) 100%);
+      background-size: 170% 170%;
+      background-position: 0% 50%;
+      transition: background-position 0.9s ease, transform 0.6s ease;
+    }
+    .feat-card:hover .feat-ph { background-position: 100% 50%; transform: scale(1.04); }
+    .feat-ph span {
+      color: #fff; font-weight: 700; font-size: var(--fs-md); line-height: 1.2;
+      letter-spacing: 0.01em; text-shadow: 0 2px 14px rgba(0,0,0,0.24);
+    }
+
+    .feat-cat {
+      position: absolute; top: 14px; left: 14px; z-index: 2;
+      font-size: var(--fs-sm); font-weight: 600;
+      letter-spacing: 0.06em; text-transform: none;
+      padding: 5px 12px; border-radius: 999px;
+      background: rgba(245,239,227,0.92); color: var(--dark);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(24,24,30,0.14);
+    }
+    .feat-info { padding: 22px 24px 26px; }
+    .feat-name {
+      font-size: var(--fs-md); font-weight: 700; color: var(--dark);
+      margin-bottom: 8px; letter-spacing: 0.01em;
+    }
+    .feat-desc {
+      font-size: var(--fs-md); color: var(--mid); line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .feat-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: var(--fs-md); font-weight: 600; color: var(--blue);
+    }
+    .feat-arrow { transition: transform 0.3s cubic-bezier(.34,1.4,.64,1); }
+    .feat-card:hover .feat-arrow { transform: translateX(6px); }
 
     /* =====================
        FUN PAGE
@@ -1034,7 +1729,7 @@
     }
 
     .fun-title {
-      font-size: 3.4rem;
+      font-size: var(--fs-lg);
       font-weight: 800;
       color: white;
       letter-spacing: -0.03em;
@@ -1043,16 +1738,16 @@
 
     .fun-intro {
       color: rgba(255,255,255,0.82);
-      font-size: 1rem;
+      font-size: var(--fs-md);
       line-height: 1.6;
       max-width: 460px;
       margin-bottom: 56px;
     }
 
     .fun-section-title {
-      font-size: 1.05rem;
+      font-size: var(--fs-md);
       font-weight: 700;
-      text-transform: uppercase;
+      text-transform: none;
       letter-spacing: 0.12em;
       color: rgba(255,255,255,0.92);
       margin-bottom: 30px;
@@ -1133,12 +1828,12 @@
     .stack-placeholder {
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.78rem;
+      font-size: var(--fs-sm);
       color: rgba(255,255,255,0.5);
     }
 
     .fun-card-name {
-      font-size: 1.05rem;
+      font-size: var(--fs-md);
       font-weight: 600;
       color: white;
       text-align: center;
@@ -1161,7 +1856,7 @@
     .ig-link svg { display: block; }
 
     .fun-card-desc {
-      font-size: 0.83rem;
+      font-size: var(--fs-sm);
       color: rgba(255,255,255,0.72);
       text-align: center;
       margin-top: -4px;
@@ -1202,7 +1897,7 @@
 
     .detail-body {
       position: relative; z-index: 1;
-      padding: 60px 80px 80px;
+      padding: 60px 60px 80px;   /* 60px inset → edges land on the shared 1180 content column */
       max-width: 1300px;
       margin: 0 auto;
     }
@@ -1230,7 +1925,7 @@
     }
 
     .detail-body.sketch-layout .detail-section-label {
-      font-size: 1.3rem;
+      font-size: var(--fs-md);
       font-weight: 800;
       margin-bottom: 16px;
     }
@@ -1240,20 +1935,25 @@
     }
 
     .back-btn {
-      display: inline-flex;
+      display: flex;
+      width: fit-content;
       align-items: center;
       gap: 8px;
       color: var(--blue);
-      font-size: 0.88rem;
+      font-family: var(--mono);
+      font-size: var(--fs-sm);
       font-weight: 500;
       cursor: pointer;
-      margin-bottom: 40px;
+      margin-bottom: 26px;
       transition: gap 0.2s;
       border: none; background: none;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
     }
     .back-btn:hover { gap: 12px; }
     .back-btn svg { flex-shrink: 0; }
+    /* second "Back to Projects" at the very bottom so the reader can continue the
+       flow without scrolling back up — spaced above instead of below */
+    .back-btn--bottom { margin-top: 48px; margin-bottom: 0; margin-left: auto; }
 
     .detail-header {
       display: grid;
@@ -1263,6 +1963,21 @@
       margin-bottom: 60px;
     }
 
+    /* Prototype pages (ShopCampus / Andalusia / Trova): meta stacks over the
+       overview+takeaway in column one, with the interactive prototype filling
+       column two. On mobile this collapses so the order reads
+       meta → prototype → overview/takeaway (see the ≤820 reset). */
+    .detail-header.proto-header {
+      grid-template-areas: "meta proto" "ot proto";
+      grid-template-rows: auto auto;
+      column-gap: 52px;
+      row-gap: 0;
+      align-items: start;
+    }
+    .detail-header.proto-header .detail-left  { grid-area: meta; }
+    .detail-header.proto-header .detail-right { grid-area: proto; }
+    .detail-header.proto-header #d-left-ot    { grid-area: ot; }
+
     .detail-left {
       display: flex;
       flex-direction: column;
@@ -1271,7 +1986,7 @@
     }
 
     .detail-title {
-      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      font-size: var(--fs-lg);
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.05;
@@ -1280,24 +1995,24 @@
     }
 
     .detail-desc {
-      font-size: 1.15rem;
+      font-size: var(--fs-md);
       color: var(--mid);
       line-height: 1.7;
-      margin-bottom: 32px;
+      margin-bottom: 28px;   /* uniform gap between left-column blocks */
     }
 
     .detail-meta-label {
       color: var(--blue);
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: var(--fs-md);        /* match .detail-section-label (Overview/Takeaway) */
+      font-weight: 700;         /* bold, like the Overview/Takeaway headers */
       margin-bottom: 4px;
       letter-spacing: 0.01em;
     }
 
     .detail-meta-value {
-      font-size: 1.05rem;
+      font-size: var(--fs-md);        /* match .detail-overview-text */
       color: var(--dark);
-      margin-bottom: 22px;
+      margin-bottom: 28px;      /* uniform gap between left-column blocks */
       line-height: 1.5;
     }
 
@@ -1305,7 +2020,7 @@
       width: 100%;
       border-radius: 10px;
       overflow: hidden;
-      border: 2px solid var(--dark);
+      border: none;
       background: var(--soft-purple);
       display: flex; align-items: center; justify-content: center;
       min-height: 240px;
@@ -1316,11 +2031,68 @@
       object-fit: cover; display: block;
     }
 
+    /* portrait (phone-mockup) heroes: cap the frame so the tall image
+       doesn't stretch the row and leave whitespace beside the text */
+    .detail-hero.compact {
+      max-width: 240px;
+      margin: 0 auto;
+      align-self: start;
+    }
+
+    /* when the hero slot holds an interactive prototype instead of an image,
+       drop the image frame styling — the mobile prototype brings its own */
+    .detail-hero.is-prototype {
+      border: none;
+      background: transparent;
+      min-height: 0;
+      overflow: visible;
+      border-radius: 0;
+      display: block;
+      align-self: start;
+    }
+    .header-prototype { text-align: center; }
+    .header-prototype .live-demo-actions { margin-top: 16px; }
+
+    /* purple "Interactive Prototype" cue above the phone so visitors know it's live */
+    .proto-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 auto 16px;
+      padding: 7px 15px;
+      background: rgba(90,79,214,0.10);   /* clear purple wash */
+      color: var(--blue);
+      font-size: var(--fs-sm);
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: none;
+      border-radius: 999px;
+      border: 1px solid rgba(90,79,214,0.35);
+    }
+    .proto-tag svg { flex: none; }
+
+    /* short usage hint under the tag (e.g. ShopCampus → where to tap to start) */
+    .proto-hint {
+      max-width: 340px;
+      margin: 0 auto 18px;
+      font-size: var(--fs-md);
+      line-height: 1.5;
+      color: var(--mid);
+    }
+    .proto-hint strong { color: var(--blue); font-weight: 700; }
+
     .detail-hero-placeholder {
       color: rgba(90,79,214,0.45);
-      font-size: 0.88rem;
+      font-size: var(--fs-sm);
       text-align: center;
       padding: 40px;
+    }
+
+    /* call-to-action pill sitting directly under the hero image */
+    .detail-hero-cta {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
     }
 
     .detail-section {
@@ -1329,7 +2101,7 @@
 
     .detail-section-label {
       color: var(--blue);
-      font-size: 1.1rem;
+      font-size: var(--fs-md);
       font-weight: 700;
       margin-bottom: 12px;
       letter-spacing: 0.01em;
@@ -1337,7 +2109,7 @@
     /* explanatory subheading beneath a section label */
     .detail-section-sublabel {
       color: var(--mid);
-      font-size: 1rem;
+      font-size: var(--fs-md);
       font-weight: 400;
       line-height: 1.6;
       margin-bottom: 14px;
@@ -1350,9 +2122,10 @@
     }
 
     .detail-overview-text {
-      font-size: 1.1rem;
+      font-size: var(--fs-md);
       color: var(--dark);
       line-height: 1.85;
+      white-space: pre-line;   /* honor blank lines in overview/takeaway copy */
     }
 
     .detail-links-row {
@@ -1362,10 +2135,15 @@
       gap: 8px;
       margin-top: 48px;
     }
+    /* prototype layout: links sit left-aligned directly under the takeaway */
+    .detail-links-row.proto-links {
+      align-items: flex-start;
+      margin-top: 0;
+    }
 
     .detail-link {
       color: var(--blue);
-      font-size: 1.1rem;
+      font-size: var(--fs-md);
       font-weight: 600;
       text-decoration: underline;
       text-underline-offset: 3px;
@@ -1435,6 +2213,218 @@
     }
 
     /* =====================
+       LIVE DEMO (reusable across projects)
+       — clean, minimal container; no fake device chrome
+    ===================== */
+    .live-demo { margin-top: 18px; }
+
+    /* short intro copy above the embed */
+    .live-demo-lead {
+      color: var(--mid);
+      font-size: var(--fs-md);
+      line-height: 1.6;
+      margin-bottom: 22px;
+      max-width: 640px;
+    }
+
+    /* centring wrapper so mobile frames sit in the middle of the page */
+    .live-demo-stage {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* the proportional container that actually holds the iframe.
+       width/aspect are set inline per-demo so the component stays reusable */
+    .live-demo-frame {
+      position: relative;
+      width: 100%;
+      background: #fff;
+      overflow: hidden;
+      border: 1px solid rgba(24,24,30,0.10);
+      box-shadow: 0 8px 30px rgba(24,24,30,0.06);
+    }
+    /* mobile product: slim, tall, softly rounded — room to breathe, no notch/bezel */
+    .live-demo-frame.is-mobile {
+      max-width: 100%;
+      border-radius: 26px;
+    }
+    /* website product: wide browser-style container with a minimal top bar */
+    .live-demo-frame.is-browser {
+      border-radius: 12px;
+    }
+
+    /* minimal browser bar — a hint of chrome, not a decorative mockup */
+    .live-demo-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 14px;
+      background: #F1ECE1;
+      border-bottom: 1px solid rgba(24,24,30,0.08);
+    }
+    .live-demo-bar .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(24,24,30,0.16);
+    }
+    .live-demo-bar .url {
+      flex: 1;
+      margin-left: 8px;
+      font-size: var(--fs-sm);
+      color: var(--mid);
+      background: #fff;
+      border-radius: 6px;
+      padding: 5px 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* the aspect-ratio box the iframe fills */
+    .live-demo-viewport {
+      position: relative;
+      width: 100%;
+    }
+    .live-demo-viewport iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* subtle loading state, sits over the viewport until the frame loads */
+    .live-demo-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: var(--cream);
+      color: var(--mid);
+      font-size: var(--fs-sm);
+      letter-spacing: 0.02em;
+      transition: opacity 0.4s ease;
+      z-index: 2;
+    }
+    .live-demo-frame.loaded .live-demo-loading {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .live-demo-spinner {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 3px solid rgba(90,79,214,0.18);
+      border-top-color: var(--blue);
+      animation: live-demo-spin 0.8s linear infinite;
+    }
+    @keyframes live-demo-spin { to { transform: rotate(360deg); } }
+
+    /* instant poster: the prototype's first screen shows immediately while the
+       (slow) Figma embed loads behind it — the page never looks blank/loading */
+    .proto-poster {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+    }
+    .proto-loadchip {
+      position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 1; display: flex; align-items: center; gap: 8px;
+      background: rgba(24,24,30,0.74); color: #fff;
+      font-size: var(--fs-sm); letter-spacing: 0.02em; white-space: nowrap;
+      padding: 7px 14px 7px 11px; border-radius: 999px;
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    }
+    .proto-loadchip .live-demo-spinner {
+      width: 13px; height: 13px; border-width: 2px;
+      border-color: rgba(255,255,255,0.35); border-top-color: #fff;
+    }
+    /* click-to-load: launch button over the poster */
+    .proto-launch {
+      position: absolute; z-index: 2; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-flex; align-items: center; gap: 9px; white-space: nowrap;
+      background: rgba(24,24,30,0.82); color: #fff; border: none; cursor: pointer;
+      font-family: inherit; font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0.02em;
+      padding: 12px 20px; border-radius: 999px;
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      box-shadow: 0 10px 28px rgba(24,24,30,0.32);
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+    .proto-launch:hover { transform: translate(-50%, -50%) scale(1.05); background: var(--blue); }
+    .proto-launch .tri { font-size: var(--fs-sm); margin-top: 1px; }
+    /* the embed stays invisible until it has actually loaded, so the poster behind
+       it shows during the wait instead of a blank white frame */
+    .live-demo-viewport iframe { opacity: 0; transition: opacity 0.5s ease; }
+    .live-demo-frame.loaded .live-demo-viewport iframe { opacity: 1; }
+
+    /* fallback shown if the embed cannot load (or the visitor prefers to leave) */
+    .live-demo-fallback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      text-align: center;
+      padding: 32px;
+      background: var(--cream);
+      color: var(--mid);
+      font-size: var(--fs-md);
+      line-height: 1.55;
+      z-index: 3;
+    }
+    .live-demo-frame.failed .live-demo-fallback { display: flex; }
+    .live-demo-frame.failed .live-demo-loading { display: none; }
+
+    /* controls row beneath the embed: restart + open-full button */
+    .live-demo-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .live-demo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: var(--fs-md);
+      font-weight: 600;
+      padding: 11px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: opacity 0.2s, background 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .live-demo-btn:active { transform: translateY(1px); }
+    .live-demo-btn.primary {
+      background: var(--blue);
+      color: #fff;
+      border: 1px solid var(--blue);
+    }
+    .live-demo-btn.primary:hover { opacity: 0.88; }
+    .live-demo-btn.ghost {
+      background: transparent;
+      color: var(--blue);
+      border: 1px solid rgba(90,79,214,0.35);
+    }
+    .live-demo-btn.ghost:hover { background: rgba(90,79,214,0.06); }
+
+    @media (max-width: 640px) {
+      /* drop heavy chrome on small screens so the product fills the width */
+      .live-demo-frame.is-mobile {
+        border-radius: 22px;
+      }
+      .live-demo-actions { margin-top: 16px; }
+      .live-demo-btn { font-size: var(--fs-sm); padding: 10px 18px; }
+    }
+
+    /* =====================
        HAMBURGER (hidden on desktop)
     ===================== */
     .nav-hamburger {
@@ -1463,36 +2453,56 @@
 
       nav { padding: 0 28px; }
       .nav-links { gap: 20px; }
-      .nav-links a { font-size: 1.2rem; }
-      .nav-logo { font-size: 1.7rem; }
+      .nav-links a { font-size: var(--fs-md); }
+      .nav-logo { font-size: var(--fs-md); }
 
-      .home-body { display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 24px; padding: calc(var(--nav-height) + 32px) 36px 48px; }
-      .home-text { position: static; top: auto; left: auto; max-width: 100%; order: 2; transform: none; }
-      .home-photo-wrap { position: static; top: auto; right: auto; order: 1; }
-      /* keep the scattered S-curve on mobile — give the name its own canvas so the
-         letters spread across it instead of collapsing into a tight inline row */
-      .home-name { position: relative; inset: auto; left: auto; right: auto; bottom: auto; order: 1; padding: 0; width: 100%; aspect-ratio: 3 / 2; max-height: 42vh; font-size: clamp(3rem, 12vw, 5rem); line-height: 1; }
-      .home-name .char { position: absolute; }
-      .home-role { font-size: 1.15rem; }
+      .home-body { min-height: 44vh; padding: calc(var(--nav-height) + 6px) 24px 4vh; }
+      .home-name { font-size: var(--fs-lg); line-height: 0.9; }
+      .home-scroll-cue { bottom: 22px; }
       .avatar { width: 200px; height: 200px; }
 
       .section-wrap { padding: 48px 28px 0; }
-      .section-label { font-size: 2rem; }
-      .section-desc { font-size: 1rem; margin-bottom: 28px; }
+      .section-label { font-size: var(--fs-lg); }
+      .section-desc { font-size: var(--fs-md); margin-bottom: 28px; }
       .cards-grid { grid-template-columns: 1fr 1fr; gap: 20px 16px; }
+
+      /* projects scrollytelling — tighten the beats on tablet */
+      .pj-list { gap: 84px; margin-top: 60px; }
+      .device--laptop, .device--browser, .device--product { width: 100%; }
+
+      /* project cards → two columns on tablet (device sizing comes from the
+         shared base rules; only the column count changes per breakpoint) */
+      .shop-band { padding: 1px 0 64px; }
+      .shop-head { padding: 52px 28px 12px; font-size: calc(var(--fs-md) * 1.1); }
+      .shop-stage {
+        max-width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px; padding: 8px 20px;
+      }
 
       .about-body { grid-template-columns: 1fr; padding: 48px 28px 60px; gap: 32px; }
       .about-right { flex-direction: column; align-items: center; }
       .about-avatar { width: 260px; height: 260px; }
 
       .fun-body { padding: 48px 28px 60px; }
-      .fun-title { font-size: 2.4rem; }
+      .fun-title { font-size: var(--fs-lg); }
       .fun-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
       .detail-body { padding: 40px 28px 60px; }
       .detail-header { grid-template-columns: 1fr; gap: 28px; }
+      /* drop the desktop grid-areas so proto pages stack in DOM order:
+         meta (role/timeline) → prototype → overview/takeaway. The children's
+         named grid-area must be cleared too, or they collapse onto one another. */
+      .detail-header.proto-header { grid-template-areas: none; grid-template-rows: none; row-gap: 28px; }
+      .detail-header.proto-header .detail-left,
+      .detail-header.proto-header .detail-right,
+      .detail-header.proto-header #d-left-ot { grid-area: auto; }
       .detail-links-row { align-items: flex-start; }
-      .detail-title { font-size: clamp(2rem, 6vw, 3rem); }
+      .detail-title { font-size: var(--fs-lg); }
+
+      .featured { padding: 8px 28px 84px; }
+      .featured-title { font-size: var(--fs-md); }
+      .featured-grid { gap: 22px; }
     }
 
     /* =====================
@@ -1503,15 +2513,17 @@
 
       /* Nav: hamburger */
       nav { padding: 0 20px; }
-      .nav-logo { font-size: 1.55rem; }
+      /* tuck Projects/About closer to the spiral logo (desktop gap is 30px) */
+      #main-nav .nav-left { gap: 16px; }
+      .nav-logo { font-size: var(--fs-md); }
       /* touch has no "unhover", so the desktop tilt would stick after a tap —
          keep the ST logo sitting horizontal on mobile */
       .nav-logo:hover, .nav-logo:active, .nav-logo:focus { transform: none; }
       /* single "projects" item with its dropdown lives right in the bar — no hamburger */
       .nav-hamburger { display: none; }
       .nav-links { display: flex; gap: 0; list-style: none; }
-      .nav-links a { font-size: 1.35rem; }
-      .nav-submenu a { font-size: 1.05rem !important; }
+      .nav-links a { font-size: var(--fs-md); }
+      .nav-submenu a { font-size: var(--fs-md) !important; }
 
       /* Mobile only: the submenu shows purely from the .open class (JS toggles it).
          Touch makes :hover/:focus "stick" to the tapped option, which otherwise
@@ -1530,62 +2542,72 @@
         visibility: visible;
         transform: translateY(0);
       }
+      /* Same fix for the caret: sticky :hover would leave it flipped up after a
+         tap, so tie its rotation to .open only. The .open rule sits AFTER the
+         hover-reset so it still wins while the menu is genuinely open. */
+      .nav-dropdown:hover .nav-caret { transform: none; }
+      .nav-dropdown.open .nav-caret { transform: rotate(180deg); }
 
-      /* Home — mirror the desktop hero: letters scattered across the full
-         canvas (bigger + pulled higher), tagline pinned bottom-left */
-      .home-body { position: relative; display: block; min-height: 100vh; padding: 0; }
-      .home-name { position: absolute; inset: 0; width: auto; aspect-ratio: auto; max-height: none; padding: 0; margin-bottom: 0; line-height: 1; font-size: clamp(2.8rem, 13.5vw, 4rem); }
-      .home-text { position: absolute; left: 24px; bottom: 13vh; top: auto; right: auto; max-width: 84%; text-align: left; transform: none; }
-      .scroll-arrow { bottom: calc(26px + 3vh); }
-      .home-role { font-size: 1.5rem; }
-      .role-indent { margin-left: 1.6em; }
+      /* Home — clean stacked name lower-left; projects peek below (matches desktop) */
+      .home-body { min-height: 44vh; padding: calc(var(--nav-height) + 6px) 20px 4vh; }
+      .home-name { font-size: var(--fs-lg); line-height: 0.9; }
+      .home-role { font-size: var(--fs-sm); margin-top: 22px; }
+      .role-indent { margin-left: 0; }
 
       /* Projects */
       .section-wrap { padding: 36px 20px 0; }
-      .section-label { font-size: 1.6rem; letter-spacing: 0.04em; }
-      /* a touch more breathing room between the category title (e.g. "UIUX Design")
-         and the first project card — applies to every tab, so it stays consistent */
-      #proj-heading { margin-bottom: 60px; }
-      .section-desc { font-size: 0.92rem; max-width: 100%; margin-bottom: 22px; }
+      .section-label { font-size: var(--fs-md); letter-spacing: 0.04em; }
+      .section-desc { font-size: var(--fs-md); max-width: 100%; margin-bottom: 22px; }
       .cards-grid { grid-template-columns: 1fr; gap: 26px; }
-      .proj-label { font-size: 1rem; }
-      .proj-desc { font-size: 0.88rem; }
+      .proj-label { font-size: var(--fs-md); }
+      .proj-desc { font-size: var(--fs-sm); }
       .sketches-section { margin-top: 44px; }
+
+      /* projects scrollytelling — phone layout */
+      .pj-page-title { margin-bottom: 12px; }
+      .pj-intro { font-size: var(--fs-md); }
+      .pj-list { gap: 68px; margin-top: 44px; }
+      .pj-meta { margin-top: 22px; }
+      .device--phone { width: 260px; }
 
       /* About — reorder: right column (photo/contact) first, text second */
       .about-body { display: flex; flex-direction: column; padding: 36px 20px 48px; gap: 24px; }
       .about-right { order: 1; }
       .about-text { order: 2; }
-      .about-text p { font-size: 0.98rem; line-height: 1.75; margin-bottom: 18px; }
+      .about-text p { font-size: var(--fs-md); line-height: 1.75; margin-bottom: 18px; }
       .about-avatar { width: 200px; height: 200px; }
-      .about-location { font-size: 0.92rem; }
+      .about-location { font-size: var(--fs-md); }
+
+      /* project cards → single column on phones */
+      .shop-head { padding: 44px 20px 8px; }
+      .shop-stage { grid-template-columns: 1fr; gap: 22px; }
 
       /* Fun / Find me with… */
       .find-me { padding: 0 20px 80px; }
-      .find-me-title { font-size: 1.35rem; margin-bottom: 26px; }
+      .find-me-title { font-size: var(--fs-md); margin-bottom: 26px; }
       .find-me .fun-grid { gap: 44px; }
       .fun-body { padding: 36px 20px 48px; }
-      .fun-title { font-size: 1.8rem; margin-bottom: 4px; }
-      .fun-intro { font-size: 0.84rem; margin-bottom: 28px; }
-      .fun-section-title { font-size: 1.05rem; margin-bottom: 16px; }
+      .fun-title { font-size: var(--fs-md); margin-bottom: 4px; }
+      .fun-intro { font-size: var(--fs-sm); margin-bottom: 28px; }
+      .fun-section-title { font-size: var(--fs-md); margin-bottom: 16px; }
       .fun-grid { grid-template-columns: 1fr; gap: 28px; }
-      .fun-card-name { font-size: 0.9rem; }
+      .fun-card-name { font-size: var(--fs-sm); }
       .rcc-break { display: inline; }   /* break onto: "NU's Rock" / "Climbing Club" */
-      .fun-card-desc { font-size: 0.8rem; }
+      .fun-card-desc { font-size: var(--fs-sm); }
       .fun-divider { margin-bottom: 28px; }
 
       /* Detail */
       .detail-body { padding: 28px 20px 48px; }
-      .detail-title { font-size: 1.9rem !important; }
-      .detail-desc { font-size: 0.98rem; }
-      .detail-overview-text { font-size: 0.98rem; line-height: 1.75; }
-      .detail-meta-label { font-size: 0.85rem; }
-      .detail-meta-value { font-size: 0.95rem; margin-bottom: 16px; }
+      .detail-title { font-size: var(--fs-lg) !important; }
+      .detail-desc { font-size: var(--fs-md); }
+      .detail-overview-text { font-size: var(--fs-md); line-height: 1.75; }
+      .detail-meta-label { font-size: var(--fs-md); }
+      .detail-meta-value { font-size: var(--fs-md); margin-bottom: 16px; }
       #d-overview-takeaway-row { grid-template-columns: 1fr !important; gap: 24px !important; }
-      .detail-section-label { font-size: 0.98rem; }
+      .detail-section-label { font-size: var(--fs-md); }
       .detail-links-row { margin-top: 24px; }
-      .detail-link { font-size: 0.92rem; }
-      .back-btn { font-size: 0.82rem; margin-bottom: 28px; }
+      .detail-link { font-size: var(--fs-md); }
+      .back-btn { font-size: var(--fs-sm); margin-bottom: 28px; }
 
       /* Concept-sketch pages: on phones, match the regular project pages —
          same body padding/borders and full-width stacked images instead of a
@@ -1596,7 +2618,207 @@
         grid-template-columns: 1fr !important;
         gap: 16px !important;
       }
-      .detail-body.sketch-layout .detail-section-label { font-size: 0.98rem; margin-bottom: 14px; }
+      .detail-body.sketch-layout .detail-section-label { font-size: var(--fs-md); margin-bottom: 14px; }
+
+      /* Featured work — single column on phones */
+      .featured { padding: 4px 20px 64px; }
+      .featured-eyebrow { font-size: var(--fs-sm); letter-spacing: 0.14em; }
+      .featured-title { font-size: var(--fs-md); margin-bottom: 26px; }
+      .featured-grid { grid-template-columns: 1fr; gap: 22px; }
+      .feat-name { font-size: var(--fs-md); }
+      .feat-desc { font-size: var(--fs-sm); }
+
+      /* Mega-menu fly-outs become inline accordions (touch has no hover) */
+      .nav-flyout {
+        position: static; right: auto; min-width: 0;
+        background: rgba(0,0,0,0.16); border: none; border-radius: 0;
+        box-shadow: none; transform: none;
+        max-height: 0; opacity: 1; visibility: visible;
+        transition: max-height 0.3s ease;
+      }
+      .nav-cat:hover > .nav-flyout { max-height: 0; }        /* neutralize sticky hover */
+      .nav-cat.open > .nav-flyout { max-height: 360px; }
+      .nav-flyout a { padding-left: 34px !important; font-size: var(--fs-md) !important; }
+      .nav-cat.open > .nav-cat-label .nav-cat-chevron { transform: rotate(180deg); background: rgba(255,255,255,0.16); opacity: 1; }
+    }
+    /* ═══ Display type — refined grotesk + UPPERCASE (editorial voice) ═══ */
+    .home-name, .nav-logo,
+    .shop-head, .shop-title, .detail-title,
+    .pj-page-title, .pj-title { font-family: var(--display); }
+
+    /* lowercase + gentle tracking = softer, more personal (not shouting) */
+    /* CASE RULE — Bricolage is always lowercase (name, section + project titles) */
+    .home-name, .nav-logo,
+    .shop-head, .shop-title, .detail-title, .pj-title, .pj-page-title,
+    .featured-eyebrow, .feat-cat,
+    .fun-section-title, .section-label { text-transform: none; letter-spacing: 0.02em; }
+    .proto-tag { text-transform: lowercase; }
+    /* CASE RULE — DM Mono is always UPPERCASE (tagline, nav, tags, back link) */
+    .home-role, .back-btn { text-transform: none; }
+
+    /* small labels adopt the studio-artifact voice: DM Mono, UPPERCASE, graphite */
+    /* the ONE place uppercase is allowed — Apple-style eyebrow labels (Role /
+       Timeline / Overview). Small, bold, letter-spaced, the rare 3rd tier. */
+    .detail-meta-label, .detail-section-label {
+      font-family: var(--font);
+      text-transform: lowercase;
+      letter-spacing: 0.1em !important;
+      font-size: var(--fs-sm);
+      font-weight: 700;
+      color: var(--mid) !important;
+    }
+
+    /* ── v2 nav: flush to the top edge, no pills. Logo + section links left,
+       email + LinkedIn icons right. Logo is display (Bricolage); links are primary. */
+    #main-nav { height: auto; padding: 16px 48px; border-bottom: 1px solid rgba(23,24,28,0.10); }
+    .nav-left, .nav-right { display: flex; align-items: center; }
+    .nav-left { gap: 30px; }
+    .nav-right { gap: 18px; }
+    /* reset the old pill-chip styling on logo + links */
+    .nav-logo, .nav-link {
+      background: none !important; border: none !important;
+      padding: 0 !important; border-radius: 0 !important;
+      backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    }
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1.6rem;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: var(--blue);
+      cursor: pointer;
+    }
+    .nav-logo:hover { opacity: 0.7; }
+    .nav-link {
+      font-family: var(--font);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--dark);
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    /* active/visited link rests black... */
+    .nav-link.active { color: var(--dark); }
+    /* ...but hover ALWAYS wins → indigo (listed last so it beats .active) */
+    .nav-link:hover,
+    .nav-link.active:hover { color: var(--blue); }
+    .nav-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; color: var(--dark);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .nav-icon svg { width: 20px; height: 20px; display: block; }
+    .nav-icon:hover { color: var(--blue); transform: translateY(-1px); }
+    .shop-head { letter-spacing: -0.01em; }
+    .shop-title { letter-spacing: 0.005em; }
+    .detail-title { letter-spacing: -0.015em; }
+    .detail-section-label, .detail-meta-label { letter-spacing: 0.03em; }
+    .back-btn { letter-spacing: 0.02em; }
+
+    /* ═══ Signature motif: corner brackets — the framed/editorial feel at just the
+       four corners (so no line ever cuts across the projects); pulled out far
+       enough to enclose the nav pills, soft rounded elbows ═══ */
+    .corner-frame { position: fixed; inset: 13px; pointer-events: none; z-index: 100; }
+    .corner-frame i { position: absolute; width: 26px; height: 26px; border: 1px solid rgba(38,34,30,0.24); }
+    .corner-frame i:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; border-top-left-radius: 10px; }
+    .corner-frame i:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; border-top-right-radius: 10px; }
+    .corner-frame i:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; border-bottom-left-radius: 10px; }
+    .corner-frame i:nth-child(4) { bottom: 0; right: 0; border-left: 0; border-top: 0; border-bottom-right-radius: 10px; }
+    @media (max-width: 540px) { .corner-frame { inset: 10px; } .corner-frame i { width: 18px; height: 18px; } }
+
+    /* ═══ Split-line landing hero — name rendered twice, clipped at the indigo
+       line (dark above the grey wall, cream below on the indigo field), with a
+       cursor-follow glow on lighter copies. Reuses the site's Bricolage name font,
+       DM Sans subheader, and indigo token. --lp-split / --lp-stage-h must stay
+       fixed px because the two name copies are clipped exactly at that line. ═══ */
+    .lp-hero {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: calc(var(--nav-height) + 20px) 0 44px;
+      overflow: hidden;
+    }
+    .lp-stage {
+      --lp-split: 221px;   /* cuts through the exact vertical middle of "thornton" */
+      --lp-stage-h: 452px;
+      --lp-name-size: 172px;
+      --lp-glow-r: 85px;
+      position: relative;
+      height: var(--lp-stage-h);
+      flex: none;
+    }
+    .lp-field { position: absolute; left: 0; right: 0; top: var(--lp-split); bottom: 0; background: var(--blue); }
+    .lp-clip-top { position: absolute; left: 0; right: 0; top: 0; height: var(--lp-split); overflow: hidden; }
+    .lp-clip-bottom { position: absolute; left: 0; right: 0; top: var(--lp-split); bottom: 0; overflow: hidden; }
+    .lp-name {
+      position: absolute; left: 0; right: 0; padding: 0 48px; margin: 0;
+      font-family: var(--display);        /* Bricolage Grotesque — the site's name font */
+      font-weight: 800;
+      font-size: var(--lp-name-size);
+      line-height: 0.86;
+      letter-spacing: -0.05em;
+      white-space: nowrap;
+      animation: lpRise 0.9s cubic-bezier(.22,1,.36,1) both;
+    }
+    .lp-clip-top .lp-name { top: 0; bottom: 0; }
+    .lp-clip-bottom .lp-name { top: calc(var(--lp-split) * -1); height: var(--lp-stage-h); }
+    .lp-l2 { display: flex; align-items: flex-start; gap: 0.12em; }
+    .lp-star { font-size: 0.34em; font-weight: 400; line-height: 1; margin-top: 0.18em; }
+    .lp-name--dark { color: var(--dark); }
+    .lp-name--dark .lp-star { color: var(--blue); }   /* indigo accent, like the current name */
+    .lp-name--cream { color: #EDEDF5; }
+    /* cursor glow: a lighter copy of the name revealed through a radial mask */
+    .lp-name--glow {
+      pointer-events: none;
+      -webkit-mask-image: var(--lp-mask); mask-image: var(--lp-mask);
+      --lp-mask: radial-gradient(circle var(--lp-glow-r) at -999px -999px, #000 0%, transparent 70%);
+    }
+    .lp-glow-top { color: #6F66F0; }
+    .lp-glow-bottom { color: #BCB6FF; }
+    .lp-caption {
+      position: absolute; left: 48px; right: 48px; bottom: 30px; z-index: 2;
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap;
+      animation: lpFadeUp 0.8s 0.35s cubic-bezier(.22,1,.36,1) both;
+    }
+    .lp-caption p { margin: 0; font-family: var(--font); font-size: var(--fs-md); font-weight: 500; letter-spacing: 0.01em; color: #DAD8FA; }
+    .lp-caption p span { color: #fff; }
+    .lp-caption a { font-family: var(--font); font-size: 13px; font-weight: 500; letter-spacing: 0.13em; text-transform: none; color: #BFBBF6; cursor: pointer; }
+    .lp-caption a:hover { color: #fff; }
+    @keyframes lpRise { from { transform: translateY(0.16em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes lpFadeUp { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 900px) {
+      .lp-stage { --lp-name-size: 96px; --lp-stage-h: 290px; --lp-split: 123px; }
+      .lp-name { padding: 0 20px; }
+      .lp-caption { left: 20px; right: 20px; }
+    }
+    @media (max-width: 540px) {
+      .lp-stage { --lp-name-size: 74px; --lp-stage-h: 280px; --lp-split: 95px; }
+      /* push the name lockup toward the bottom so the name sits lower and the
+         "projects ↓" cue tucks near the bottom edge (was centered, riding high) */
+      .lp-hero { justify-content: flex-end; padding-bottom: 44px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lp-name, .lp-caption { animation: none !important; }
+    }
+
+    /* ── Centered mobile layout: hero, section headers, and about copy all
+       center at/below tablet so the whole reel reads consistently centered.
+       (The project cards and the "find me" section are already centered.) ── */
+    @media (max-width: 820px) {
+      /* landing hero — name lines + caption row */
+      .lp-name { text-align: center; }
+      .lp-l2 { justify-content: center; }
+      .lp-caption { flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+
+      /* "projects" / "about" section headers (title + meta stack, centered) */
+      .section-head { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; }
+
+      /* about bio copy — photo + meta are already centered */
+      .about-copy, .about-copy p { text-align: center; }
+      .about-links { justify-content: center; }
     }
   </style>
 </head>
@@ -1604,18 +2826,21 @@
 
 <!-- ── NAV ── -->
 <nav id="main-nav" class="on-cream">
-  <span class="nav-logo" onclick="go('home')" role="link" aria-label="ST — home">ST</span>
-  <ul class="nav-links" id="nav-links">
-    <li class="nav-dropdown" id="nav-projects-drop">
-      <a id="nl-projects" class="nav-parent" onclick="toggleProjMenu(event)">projects <span class="nav-caret" aria-hidden="true"></span></a>
-      <div class="nav-submenu">
-        <a onclick="goProjects('uiux')">uiux design</a>
-        <a onclick="goProjects('industrial')">industrial design</a>
-        <a onclick="goProjects('service')">service design</a>
-      </div>
-    </li>
-  </ul>
+  <div class="nav-left">
+    <span class="nav-logo" onclick="go('home')" role="link" aria-label="Sarah Thornton — home">꩜</span>
+    <a id="nl-projects" class="nav-link" onclick="scrollToProjects(event)" role="link" tabindex="0">projects</a>
+    <a id="nl-about" class="nav-link" onclick="go('about')" role="link" tabindex="0">about</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-icon" href="mailto:sarahthornton2027@u.northwestern.edu" aria-label="Email" title="Email">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 6.5L21 6"/></svg>
+    </a>
+    <a class="nav-icon" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+    </a>
+  </div>
 </nav>
+
 
 
 <!-- ══════════════════════════════════════════
@@ -1624,106 +2849,193 @@
 <div id="reel" class="active">
   <!-- HOME (first panel of the scroll reel) -->
 <section id="page-home" class="reel-hero">
-  <div class="home-body">
-    <div class="home-text">
-      <p class="home-role">psych &amp; design<br><span class="role-indent">@ northwestern</span></p>
-    </div>
-    <h1 class="home-name">sarah thornton</h1>
-    <div class="scroll-arrow" aria-hidden="true">
-      <svg viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 2 L12 12 L22 2" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+  <!-- Split-line hero: the name is rendered twice and clipped at the indigo line —
+       dark above, cream below — with a cursor-follow glow on lighter copies. -->
+  <div class="lp-hero">
+    <div class="lp-stage" id="lp-stage">
+
+      <div class="lp-field"></div>
+
+      <!-- above the line: dark name + glow copy -->
+      <div class="lp-clip-top">
+        <h1 class="lp-name lp-name--dark">
+          <div class="lp-l1">sarah</div>
+          <div class="lp-l2">thornton</div>
+        </h1>
+        <div class="lp-name lp-name--glow lp-glow-top" aria-hidden="true">
+          <div class="lp-l1">sarah</div>
+          <div class="lp-l2">thornton</div>
+        </div>
+      </div>
+
+      <!-- below the line: cream name + glow copy -->
+      <div class="lp-clip-bottom">
+        <div class="lp-name lp-name--cream" aria-hidden="true">
+          <div class="lp-l1">sarah</div>
+          <div class="lp-l2">thornton</div>
+        </div>
+        <div class="lp-name lp-name--glow lp-glow-bottom" aria-hidden="true">
+          <div class="lp-l1">sarah</div>
+          <div class="lp-l2">thornton</div>
+        </div>
+      </div>
+
+      <div class="lp-caption">
+        <p>Human-centered designer <span>·</span> Northwestern University</p>
+        <a onclick="scrollToProjects(event)" role="link" tabindex="0">projects ↓</a>
+      </div>
+
     </div>
   </div>
 </section>
 
-  <!-- ABOUT (second panel of the scroll reel) -->
+  <!-- ABOUT section moved below the projects band — reel order is now
+       name → projects → about (see #page-about further down). -->
+
+<!-- projects, presented as a floating "shop": all 9 drift as small products on the
+     grey studio wall. Each is clickable → openProject(). Sits directly under the
+     name so recruiters see work immediately. -->
+<div class="shop-band" id="page-shop">
+  <div class="section-head">
+    <span class="section-head-title">projects</span>
+  </div>
+  <div class="shop-stage">
+
+    <!-- ROW 1 — ShopCampus · Andalusia Workshop · Trova -->
+    <!-- ShopCampus — mobile commerce app → iPhone -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open ShopCampus"
+       style="--w:146px"
+       onclick="openProject('shopify-mobile')">
+      <div class="shop-visual">
+        <div class="device device--phone">
+          <div class="device-screen"><img src="shopcampus-cover.png" alt="ShopCampus mobile onboarding" style="object-position:50% 0;"></div>
+        </div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">ShopCampus</span><span class="shop-pills"><span class="pill pill-uiux">UI/UX Design</span><span class="pill pill-case">Case Study</span></span></div>
+    </a>
+
+    <!-- Andalusia Workshop — desktop web product → MacBook -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open Andalusia Workshop"
+       style="--w:322px"
+       onclick="openProject('andalusia-workshop')">
+      <div class="shop-visual">
+        <div class="device device--laptop">
+          <div class="laptop-lid"><span class="laptop-cam"></span>
+            <div class="device-screen"><img src="andalusia-cover.png" alt="Andalusia Workshop customization tool"></div>
+          </div>
+          <div class="laptop-base"></div>
+        </div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">Andalusia Workshop</span><span class="shop-pills"><span class="pill pill-uiux">UI/UX Design</span><span class="pill pill-proto">Prototype</span></span></div>
+    </a>
+
+    <!-- Trova — mobile travel app → iPhone -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open Trova"
+       style="--w:146px"
+       onclick="openProject('trova')">
+      <div class="shop-visual">
+        <div class="device device--phone">
+          <div class="device-screen"><img src="trova-home.jpg" alt="Trova social travel app" style="object-position:50% 0;"></div>
+        </div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">Trova</span><span class="shop-pills"><span class="pill pill-uiux">UI/UX Design</span><span class="pill pill-sprint">Sprint</span></span></div>
+    </a>
+
+    <!-- ROW 2 — the three concept sketches: Footwear · Bus Stop · Furniture -->
+    <!-- Footwear — concept sketch → cutout -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open Footwear"
+       style="--w:268px"
+       onclick="openProject('footwear')">
+      <div class="shop-visual">
+        <div class="product-cutout"><img src="footwear-cover.png" alt="Cloud-quilted slip-on footwear concept"></div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">Footwear</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-sketch">Concept Sketch</span></span></div>
+    </a>
+
+    <!-- Northwestern Bus Stop — concept sketch → product plate -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open Northwestern Bus Stop"
+       style="--w:268px"
+       onclick="openProject('bus-stop')">
+      <div class="shop-visual">
+        <div class="product-cutout"><img src="busstop-cover.png" alt="Northwestern bus stop concept"></div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">Northwestern Bus Stop</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-sketch">Concept Sketch</span></span></div>
+    </a>
+
+    <!-- Children's Furniture — concept sketch → cutout -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open Children's Furniture"
+       style="--w:261px"
+       onclick="openProject('furniture')">
+      <div class="shop-visual">
+        <div class="product-cutout"><img src="furniture-cover.png" alt="Children's furniture concept"></div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">Children's Furniture</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-sketch">Concept Sketch</span></span></div>
+    </a>
+
+    <!-- ROW 3 — CloudFlex · Stow · FetchRide (last, bottom-right) -->
+    <!-- CloudFlex Headrest — physical product → product plate -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open The CloudFlex Headrest"
+       style="--w:246px"
+       onclick="openProject('cloudflex')">
+      <div class="shop-visual">
+        <div class="product-cutout"><img src="cloudflex-cover.png" alt="CloudFlex airline headrest concept"></div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">CloudFlex Headrest</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-case">Case Study</span></span></div>
+    </a>
+
+    <!-- Stow — physical product → cutout -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open Stow"
+       style="--w:258px"
+       onclick="openProject('stow')">
+      <div class="shop-visual">
+        <div class="product-cutout"><img src="stow-cover.png" alt="Stow modular furniture system"></div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">Stow</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-proto">Prototype</span></span></div>
+    </a>
+
+    <!-- FetchRide — live service website → MacBook -->
+    <a class="shop-item" role="link" tabindex="0" aria-label="Open FetchRide"
+       style="--w:322px"
+       onclick="openProject('fetchride')">
+      <div class="shop-visual">
+        <div class="device device--laptop">
+          <div class="laptop-lid"><span class="laptop-cam"></span>
+            <div class="device-screen"><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide shuttle service website"></div>
+          </div>
+          <div class="laptop-base"></div>
+        </div>
+      </div>
+      <div class="shop-meta"><span class="shop-title">FetchRide</span><span class="shop-pills"><span class="pill pill-service">Service Design</span><span class="pill pill-case">Case Study</span></span></div>
+    </a>
+
+  </div>
+</div>
+
+  <!-- ABOUT — now the closing panel of the reel (name → projects → about) -->
 <section id="page-about" class="reel-about">
-  <div class="about-body">
-    <div class="about-text">
-      <p><span class="hello-egg">Hi, I'm Sarah.</span></p>
-      <p>I'm a senior at Northwestern University pursuing a B.A. in Psychology and the Segal Design Certificate, inspired by the intersection of human behavior and design.</p>
-      <p>I'm currently working at Andalusia Design, a custom parametric design and architectural fabrication startup in Austin, TX, where I'm learning how thoughtful design shapes the way people experience spaces.</p>
-      <p>My goal is to create <strong>human-centered designs</strong> that make people feel understood and genuinely comfortable in the spaces they move through.</p>
-      <p>Thanks for stopping by! Feel free to explore my recent projects.</p>
-    </div>
-    <div class="about-right">
-      <div class="about-avatar">
-        <img src="IMG_4391.jpg" alt="Sarah Thornton">
-      </div>
-      <p class="about-location">
-        <svg width="14" height="18" viewBox="0 0 14 18" fill="none"><path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 7 4.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>
-        Evanston / Chicago, IL
-      </p>
-      <div class="social-row">
-        <a class="social-link" href="mailto:sarahthornton2027@u.northwestern.edu" aria-label="Email Sarah">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 6.5L21 6"/></svg>
-        </a>
-        <a class="social-link" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-        </a>
-      </div>
-    </div>
+  <div class="section-head">
+    <span class="section-head-title">about</span>
   </div>
-  <div class="find-me">
-    <h3 class="find-me-title">Find me with&hellip;</h3>
-    <div class="fun-grid">
-
-      <!-- QUARK Design Labs — 4 images -->
-      <div class="fun-card">
-        <div class="photo-stack" data-card="quark">
-          <div class="stack-img"><img src="IMG_4392.jpg" alt="QUARK Design Labs"></div>
-          <div class="stack-img"><img src="IMG_4393.jpg" alt="QUARK Design Labs"></div>
-          <div class="stack-img"><img src="IMG_4394.jpg" alt="QUARK Design Labs"></div>
-          <div class="stack-img"><img src="IMG_4395.jpg" alt="QUARK Design Labs"></div>
-        </div>
-        <p class="fun-card-name">QUARK Design Labs<a class="ig-link" href="https://www.instagram.com/quarkdesignlabs_" target="_blank" rel="noopener" aria-label="QUARK Design Labs on Instagram (@quarkdesignlabs_)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/></svg></a></p>
-        <div class="dot-row" data-for="quark">
-          <div class="dot on" data-i="0"></div>
-          <div class="dot" data-i="1"></div>
-          <div class="dot" data-i="2"></div>
-          <div class="dot" data-i="3"></div>
-        </div>
-      </div>
-
-      <!-- Rock Climbing Club — 4 images -->
-      <div class="fun-card">
-        <div class="photo-stack" data-card="climb">
-          <div class="stack-img"><img src="outdoorz.JPEG" alt="Rock Climbing Club"></div>
-          <div class="stack-img"><img src="7f6f5203-9b3d-4504-9c7f-57a56da2a5fb.JPG" alt="Rock Climbing Club"></div>
-          <div class="stack-img"><img src="./IMG_0307.jpg" alt="Rock Climbing Club"></div>
-          <div class="stack-img"><img src="rcc-11-14-25-3_Original.jpg" alt="Rock Climbing Club"></div>
-        </div>
-        <p class="fun-card-name"><span class="rcc-name">NU's Rock <br class="rcc-break">Climbing Club</span><a class="ig-link" href="https://www.instagram.com/nu.rcc" target="_blank" rel="noopener" aria-label="NU's Rock Climbing Club on Instagram (@nu.rcc)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/></svg></a></p>
-        <div class="dot-row" data-for="climb">
-          <div class="dot on" data-i="0"></div>
-          <div class="dot" data-i="1"></div>
-          <div class="dot" data-i="2"></div>
-          <div class="dot" data-i="3"></div>
-        </div>
-      </div>
-
-      <!-- Golf — 4 -->
-      <div class="fun-card">
-        <div class="photo-stack" data-card="golf">
-          <div class="stack-img"><img src="IMG_5031.JPG" alt="D1 Golf"></div>
-          <div class="stack-img"><img src="IMG_5032.JPG" alt="D1 Golf"></div>
-          <div class="stack-img"><img src="IMG_5033.JPG" alt="D1 Golf"></div>
-          <div class="stack-img"><img src="IMG_5034.JPG" alt="D1 Golf"></div>
-        </div>
-        <p class="fun-card-name">D1 Golf<a class="ig-link" href="https://www.instagram.com/nuwgolf" target="_blank" rel="noopener" aria-label="D1 Golf on Instagram (@nuwgolf)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/></svg></a></p>
-        <div class="dot-row" data-for="golf">
-          <div class="dot on" data-i="0"></div>
-          <div class="dot" data-i="1"></div>
-          <div class="dot" data-i="2"></div>
-          <div class="dot" data-i="3"></div>
-        </div>
+  <div class="about-band">
+    <div class="about-photo-col">
+      <div class="about-avatar"><img src="IMG_4391.jpg" alt="Sarah Thornton"></div>
+      <p class="about-meta">Chicago, IL · B.A. Psychology + Segal Design Certificate</p>
+    </div>
+    <div class="about-copy">
+      <p><span class="hello-egg">Hi, I'm Sarah.</span></p>
+      <p>I'm a senior at Northwestern University pursuing a B.A. in Psychology and the Segal Design Certificate.</p>
+      <p>My work sits at the intersection of human behavior and design, where I aim to create experiences that help people feel understood and genuinely comfortable in the spaces they move through.</p>
+      <p>Outside of design, I can be found testing rice cooker recipes, hiking somewhere scenic, or cafe hopping in search of a new favorite spot. I'm naturally curious and happiest when exploring.</p>
+      <p>Thanks for stopping by!</p>
+      <div class="about-links">
+        <a class="about-link" href="mailto:sarahthornton2027@u.northwestern.edu">Email ↗</a>
+        <a class="about-link" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener">LinkedIn ↗</a>
       </div>
     </div>
   </div>
 </section>
 
-  <!-- shared blob band: the seam between Home and About -->
+  <!-- shared blob band (hidden): retained for the reel's parallax hook -->
   <div class="blob-layer reel-blobs">
     <div class="blob home-blob-1"></div>
     <div class="blob home-blob-2"></div>
@@ -1739,66 +3051,174 @@
 ══════════════════════════════════════════ -->
 <section id="page-projects" class="page">
   <div class="section-wrap">
-    <h2 class="section-label" id="proj-heading">PROJECTS</h2>
-    <p class="section-desc" id="proj-desc">Work spanning <strong>digital experiences</strong>, <strong>physical products</strong>, and the desire to better understand people.</p>
+   <div class="pj-wrap">
+    <h2 class="pj-page-title" id="proj-heading">Projects</h2>
+    <p class="pj-intro" id="proj-desc">Work spanning <strong>digital experiences</strong>, <strong>physical products</strong>, and the desire to better understand people.</p>
 
-    <!-- ── UIUX DESIGN ── -->
-    <div class="proj-subsection" data-cat="uiux">
-      <div class="cards-grid">
-        <div class="proj-card" data-cat="uiux" onclick="openProject('shopify-mobile')">
-          <div class="thumb"><span class="stage-tag tag-case">Case Study</span><img src="Shopify cover on projects page.jpg" alt="Shopify Mobile"></div>
-          <span class="proj-label">ShopCampus</span>
-          <p class="proj-desc">An AI-powered Shopify experience that helps college students go from idea to first sale with less friction.</p>
-        </div>
-        <div class="proj-card" data-cat="uiux" onclick="openProject('trova')">
-          <div class="thumb"><span class="stage-tag tag-sprint">Sprint</span><img src="Screenshot%202026-06-02%20at%2010.15.50%20AM.jpg" alt="Trova"></div>
-          <span class="proj-label">Trova</span>
-          <p class="proj-desc">A social travel experience combining AI itineraries with recommendations from like-minded explorers.</p>
-        </div>
-      </div>
-    </div>
+    <div class="pj-list">
 
-    <!-- ── SERVICE DESIGN ── -->
-    <div class="proj-subsection" data-cat="service">
-      <div class="cards-grid">
-        <div class="proj-card" data-cat="service" onclick="openProject('fetchride')">
-          <div class="thumb"><span class="stage-tag tag-case">Case Study</span><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide" style="object-fit:contain;background:#f5f5f5;"></div>
-          <span class="proj-label">FetchRide</span>
-          <p class="proj-desc">Making animal shelter volunteering easier through a student-friendly transportation experience.</p>
+      <!-- Andalusia Workshop — desktop web product → MacBook -->
+      <a class="pj" role="link" tabindex="0" data-cat="uiux" data-type="proto"
+         aria-label="Open Andalusia Workshop — UI/UX design prototype"
+         onclick="openProject('andalusia-workshop')">
+        <div class="pj-visual">
+          <div class="device device--laptop">
+            <div class="laptop-lid">
+              <span class="laptop-cam"></span>
+              <div class="device-screen"><img src="andalusia-cover.png" alt="Andalusia Workshop customization tool"></div>
+            </div>
+            <div class="laptop-base"></div>
+          </div>
         </div>
-      </div>
-    </div>
+        <div class="pj-meta">
+          <h3 class="pj-title">Andalusia Workshop</h3>
+          <div class="pj-pills">
+            <span class="pill pill-uiux">UI/UX Design</span>
+            <span class="pill pill-proto">Prototype</span>
+          </div>
+        </div>
+      </a>
 
-    <!-- ── INDUSTRIAL DESIGN ── -->
-    <div class="proj-subsection" data-cat="industrial">
-      <div class="cards-grid">
-        <div class="proj-card" data-cat="industrial" onclick="openProject('stow')">
-          <div class="thumb"><span class="stage-tag tag-proto">Prototype</span><img src="STOW cover.jpg" alt="Stow"></div>
-          <span class="proj-label">Stow</span>
-          <p class="proj-desc">A modular furniture system designed for college living, balancing affordability and flexibility in small spaces.</p>
+      <!-- ShopCampus — mobile commerce app → iPhone 17 -->
+      <a class="pj" role="link" tabindex="0" data-cat="uiux" data-type="case"
+         aria-label="Open ShopCampus — UI/UX design case study"
+         onclick="openProject('shopify-mobile')">
+        <div class="pj-visual">
+          <div class="device device--phone">
+            <div class="device-screen"><img src="shopcampus-cover.png" alt="ShopCampus mobile onboarding" style="object-position: 50% 0;"></div>
+          </div>
         </div>
-        <div class="proj-card" data-cat="industrial" onclick="openProject('cloudflex')">
-          <div class="thumb"><span class="stage-tag tag-case">Case Study</span><img src="Cloudflx cover photo (1).jpg" alt="CloudFlex Headrest"></div>
-          <span class="proj-label">The CloudFlex Headrest</span>
-          <p class="proj-desc">An adaptable airline seating concept rethinking ergonomic support for long-haul flights.</p>
+        <div class="pj-meta">
+          <h3 class="pj-title">ShopCampus</h3>
+          <div class="pj-pills">
+            <span class="pill pill-uiux">UI/UX Design</span>
+            <span class="pill pill-case">Case Study</span>
+          </div>
         </div>
-        <div class="proj-card" data-cat="industrial" onclick="openProject('footwear')">
-          <div class="thumb"><span class="stage-tag tag-sketch">Concept Sketch</span><img src="Footwear Final pers:side.jpeg" alt="Footwear Design"></div>
-          <span class="proj-label">Footwear</span>
-          <p class="proj-desc">A series of hiking footwear concepts blending outdoor performance with expressive, functional design.</p>
+      </a>
+
+      <!-- Trova — mobile travel app → iPhone 17 -->
+      <a class="pj" role="link" tabindex="0" data-cat="uiux" data-type="sprint"
+         aria-label="Open Trova — UI/UX design sprint"
+         onclick="openProject('trova')">
+        <div class="pj-visual">
+          <div class="device device--phone">
+            <div class="device-screen"><img src="trova-home.jpg" alt="Trova social travel app" style="object-position: 50% 0;"></div>
+          </div>
         </div>
-        <div class="proj-card" data-cat="industrial" onclick="openProject('bus-stop')">
-          <div class="thumb"><span class="stage-tag tag-sketch">Concept Sketch</span><img src="Kellogg steps final - perspective.jpeg" alt="Northwestern Bus Stop"></div>
-          <span class="proj-label">Northwestern Bus Stop</span>
-          <p class="proj-desc">Reimagining the Northwestern bus stop through a community-focused concept inspired by Kellogg Steps.</p>
+        <div class="pj-meta">
+          <h3 class="pj-title">Trova</h3>
+          <div class="pj-pills">
+            <span class="pill pill-uiux">UI/UX Design</span>
+            <span class="pill pill-sprint">Sprint</span>
+          </div>
         </div>
-        <div class="proj-card" data-cat="industrial" onclick="openProject('furniture')">
-          <div class="thumb"><span class="stage-tag tag-sketch">Concept Sketch</span><img src="FurnitureNookFinal1.jpeg" alt="Furniture Design"></div>
-          <span class="proj-label">Furniture</span>
-          <p class="proj-desc">Exploring children's furniture through whimsical concepts designed for comfort and creativity.</p>
+      </a>
+
+      <!-- FetchRide — live service website → browser window -->
+      <a class="pj" role="link" tabindex="0" data-cat="service" data-type="case"
+         aria-label="Open FetchRide — service design case study"
+         onclick="openProject('fetchride')">
+        <div class="pj-visual">
+          <div class="device device--browser">
+            <div class="browser-bar">
+              <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+              <span class="browser-addr"></span>
+            </div>
+            <div class="device-screen"><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide shuttle service website"></div>
+          </div>
         </div>
-      </div>
+        <div class="pj-meta">
+          <h3 class="pj-title">FetchRide</h3>
+          <div class="pj-pills">
+            <span class="pill pill-service">Service Design</span>
+            <span class="pill pill-case">Case Study</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Stow — physical product → cutout -->
+      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="proto"
+         aria-label="Open Stow — industrial design prototype"
+         onclick="openProject('stow')">
+        <div class="pj-visual">
+          <div class="product-cutout"><img src="stow-cover.png" alt="Stow modular furniture system"></div>
+        </div>
+        <div class="pj-meta">
+          <h3 class="pj-title">Stow</h3>
+          <div class="pj-pills">
+            <span class="pill pill-industrial">Industrial Design</span>
+            <span class="pill pill-proto">Prototype</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CloudFlex Headrest — physical product → product plate -->
+      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="case"
+         aria-label="Open The CloudFlex Headrest — industrial design case study"
+         onclick="openProject('cloudflex')">
+        <div class="pj-visual">
+          <div class="product-cutout"><img src="cloudflex-cover.png" alt="CloudFlex airline headrest concept"></div>
+        </div>
+        <div class="pj-meta">
+          <h3 class="pj-title">The CloudFlex Headrest</h3>
+          <div class="pj-pills">
+            <span class="pill pill-industrial">Industrial Design</span>
+            <span class="pill pill-case">Case Study</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Footwear — concept sketches → product plate (contain) -->
+      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+         aria-label="Open Footwear — industrial design concept sketches"
+         onclick="openProject('footwear')">
+        <div class="pj-visual">
+          <div class="product-cutout"><img src="footwear-cover.png" alt="Cloud-quilted slip-on footwear concept"></div>
+        </div>
+        <div class="pj-meta">
+          <h3 class="pj-title">Footwear</h3>
+          <div class="pj-pills">
+            <span class="pill pill-industrial">Industrial Design</span>
+            <span class="pill pill-sketch">Concept Sketch</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Northwestern Bus Stop — concept sketches → product plate (contain) -->
+      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+         aria-label="Open Northwestern Bus Stop — industrial design concept sketches"
+         onclick="openProject('bus-stop')">
+        <div class="pj-visual">
+          <div class="product-cutout"><img src="busstop-cover.png" alt="Northwestern bus stop concept"></div>
+        </div>
+        <div class="pj-meta">
+          <h3 class="pj-title">Northwestern Bus Stop</h3>
+          <div class="pj-pills">
+            <span class="pill pill-industrial">Industrial Design</span>
+            <span class="pill pill-sketch">Concept Sketch</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Children's Furniture — concept sketches → product plate (contain) -->
+      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+         aria-label="Open Children's Furniture — industrial design concept sketches"
+         onclick="openProject('furniture')">
+        <div class="pj-visual">
+          <div class="product-cutout"><img src="furniture-cover.png" alt="Children's furniture concept"></div>
+        </div>
+        <div class="pj-meta">
+          <h3 class="pj-title">Children's Furniture</h3>
+          <div class="pj-pills">
+            <span class="pill pill-industrial">Industrial Design</span>
+            <span class="pill pill-sketch">Concept Sketch</span>
+          </div>
+        </div>
+      </a>
+
     </div>
+   </div>
   </div>
 </section>
 
@@ -1874,10 +3294,12 @@
 ══════════════════════════════════════════ -->
 <section id="page-detail" class="page">
   <div class="detail-body">
-    <button class="back-btn" onclick="go('projects')">
+    <button class="back-btn" id="detail-back" onclick="backToProjects()">
       <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M6 11L1 6M1 6L6 1M1 6H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      back to projects
+      <span id="detail-back-label">back to projects</span>
     </button>
+
+    <span class="stage-tag detail-stage" id="d-stage" style="display:none"></span>
 
     <h1 class="detail-title" id="d-title" style="margin-bottom: 32px;"></h1>
 
@@ -1912,6 +3334,11 @@
     <div id="d-extra-sections"></div>
 
     <div class="detail-links-row" id="d-links"></div>
+
+    <button class="back-btn back-btn--bottom" onclick="backToProjects()">
+      <span>back to projects</span>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M10 1L15 6M15 6L10 11M15 6H1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
   </div>
 </section>
 
@@ -1920,122 +3347,30 @@
      JAVASCRIPT
 ══════════════════════════════════════════ -->
 <script>
-// ── Scatter the home name letters across the hero; they fly into place on load ──
-(function scatterHomeName() {
-  const el = document.querySelector('.home-name');
+// ── Home name: split into per-letter spans so each letter hovers to indigo ──
+// Static, uniform lockup (no scatter). Touch: letters light up under the finger
+// so mobile gets the same indigo effect hover gives on desktop.
+(function letterHover() {
+  const el = document.querySelector('.home-name .name-text') || document.querySelector('.home-name');
   if (!el) return;
-  const HOVER_COLORS = ['#E88878', '#CF70CC', '#F0B060', '#5A4FD6', '#E890A8', '#7B5BD6'];
-  // centre positions (x%, y%) — two readable clusters, matching the mockup
-  const POS_DESKTOP = [
-    [11,38],[19,40],[28,42],[37,39],[44,34],                        // s a r a h  (upper-left)
-    [37,64],[44,71],[52,66],[58,64],[64,68],[70,62],[75,68],[81,72] // t h o r n t o n  (lower)
-  ];
-  // mobile: the name fills the full-height hero (like desktop), tagline pinned
-  // bottom-left. Each word rides one gentle smooth arc (not a per-letter zigzag)
-  // so it reads as a flowing wave; letters spread wide so they don't crowd.
-  const POS_MOBILE = [
-    [8,41],[21,44],[34,45],[47,44],[60,41],                          // s a r a h  (gentle wave)
-    [6,59],[18,61],[30,62],[42,63],[54,63],[66,62],[78,61],[90,59]   // t h o r n t o n  (gentle wave)
-  ];
-  const POS = window.matchMedia('(max-width: 540px)').matches ? POS_MOBILE : POS_DESKTOP;
-  const text = 'sarah thornton';
+  const text = (el.textContent || 'Sarah Thornton').trim();
   el.textContent = '';
-  el.classList.add('scatter');
-  let li = 0;
   [...text].forEach(ch => {
-    if (ch === ' ') { el.appendChild(document.createTextNode(' ')); return; }
-    const [x, y] = POS[li] || [50, 50];
-    const span = document.createElement('span');
-    span.className = 'char';
-    span.style.left = x + '%';
-    span.style.top = y + '%';
-    // entrance: fly in from a random direction, spinning, then settle
-    const ang = Math.random() * Math.PI * 2;
-    const dist = 90 + Math.random() * 90;
-    span.style.setProperty('--fromX', (Math.cos(ang) * dist).toFixed(0) + 'px');
-    span.style.setProperty('--fromY', (Math.sin(ang) * dist).toFixed(0) + 'px');
-    span.style.setProperty('--fromR', ((Math.random() * 2 - 1) * 14).toFixed(0) + 'deg');
-    const inD = 0.1 + li * 0.09;
-    span.style.setProperty('--inDelay', inD.toFixed(2) + 's');
-    // hover: this letter nudges lightly in its own direction + colour
-    span.style.setProperty('--hoverX', ((Math.random()*2-1)*(0.06+Math.random()*0.08)).toFixed(3)+'em');
-    span.style.setProperty('--hoverY', ((Math.random()*2-1)*(0.06+Math.random()*0.08)).toFixed(3)+'em');
-    span.style.setProperty('--hoverRot', ((Math.random()*2-1)*8).toFixed(1)+'deg');
-    span.style.setProperty('--hoverColor', HOVER_COLORS[li % HOVER_COLORS.length]);
-    // inner span floats on its own — each letter its own slow rhythm
-    const inner = document.createElement('span');
-    inner.className = 'char-inner';
-    const dur = (5.5 + Math.random() * 3.5).toFixed(2);
-    inner.style.setProperty('--dur', dur + 's');
-    inner.style.setProperty('--del', (inD + 1.35).toFixed(2) + 's');   // float begins only after the letter lands
-    inner.style.setProperty('--amp', (-(7 + Math.random() * 7)).toFixed(1) + 'px');        // up 7–14px
-    inner.style.setProperty('--driftX', ((Math.random() * 2 - 1) * 5).toFixed(1) + 'px');   // ±5px
-    inner.style.setProperty('--rot', ((Math.random() * 2 - 1) * 3).toFixed(2) + 'deg');     // ±3deg
-    const hover = document.createElement('span');
-    hover.className = 'char-hover';
-    hover.textContent = ch;
-    inner.appendChild(hover);
-    const px = document.createElement('span');
-    px.className = 'char-px';
-    px.dataset.depth = (0.5 + Math.random() * 0.8).toFixed(2);   // varied parallax depth
-    px.appendChild(inner);
-    span.appendChild(px);
-    el.appendChild(span);
-    li++;
+    if (ch === ' ') { el.appendChild(document.createElement('br')); return; }  // keep the name on one line
+    const s = document.createElement('span');
+    s.className = 'ltr';
+    s.textContent = ch;
+    el.appendChild(s);
   });
-
-  // cursor parallax — runs on its own layer, smooth from the first frame (no hand-off)
-  const pxEls = [...el.querySelectorAll('.char-px')];
-  let tx = 0, ty = 0, cx = 0, cy = 0;
-  window.addEventListener('mousemove', (e) => {
-    tx = (e.clientX / window.innerWidth) * 2 - 1;
-    ty = (e.clientY / window.innerHeight) * 2 - 1;
-  }, { passive: true });
-
-  // mobile: let a finger drag the name around (desktop uses the mouse parallax
-  // above; touch events only fire on touch devices, so this is mobile-only).
-  // Relative drag with spring-back; listeners are passive so scrolling past the
-  // hero still works, and they're scoped to the home section so only the name moves.
-  const homeSection = document.getElementById('page-home');
-  if (homeSection) {
-    let dragX = 0, dragY = 0, dragging = false;
-    const RANGE = 150;   // px of finger travel that maps to a full letter offset
-    const clamp = v => Math.max(-1.6, Math.min(1.6, v));
-    // light up whichever letter sits under the finger as it drags across
-    const litUp = (x, y) => {
-      const hit = document.elementFromPoint(x, y);
-      const ch = hit && hit.closest && hit.closest('.char');
-      if (ch) ch.classList.add('lit');
-    };
-    homeSection.addEventListener('touchstart', (e) => {
-      const t = e.touches[0]; if (!t) return;
-      dragX = t.clientX; dragY = t.clientY; dragging = true;
-      litUp(t.clientX, t.clientY);
-    }, { passive: true });
-    homeSection.addEventListener('touchmove', (e) => {
-      if (!dragging) return;
-      const t = e.touches[0]; if (!t) return;
-      tx = clamp((t.clientX - dragX) / RANGE);
-      ty = clamp((t.clientY - dragY) / RANGE);
-      litUp(t.clientX, t.clientY);
-    }, { passive: true });
-    const release = () => {
-      dragging = false; tx = 0; ty = 0;                    // ease the name back to centre
-      el.querySelectorAll('.char.lit').forEach(c => c.classList.remove('lit'));  // fade colours out
-    };
-    homeSection.addEventListener('touchend', release, { passive: true });
-    homeSection.addEventListener('touchcancel', release, { passive: true });
-  }
-
-  (function parallaxLoop() {
-    cx += (tx - cx) * 0.07;
-    cy += (ty - cy) * 0.07;
-    for (const p of pxEls) {
-      const d = parseFloat(p.dataset.depth);
-      p.style.transform = `translate(${(cx * d * 26).toFixed(1)}px, ${(cy * d * 20).toFixed(1)}px)`;
-    }
-    requestAnimationFrame(parallaxLoop);
-  })();
+  const litAt = (x, y) => {
+    const hit = document.elementFromPoint(x, y);
+    if (hit && hit.classList && hit.classList.contains('ltr')) hit.classList.add('lit');
+  };
+  const clear = () => el.querySelectorAll('.ltr.lit').forEach(c => c.classList.remove('lit'));
+  el.addEventListener('touchstart', (e) => { const t = e.touches[0]; if (t) litAt(t.clientX, t.clientY); }, { passive: true });
+  el.addEventListener('touchmove',  (e) => { const t = e.touches[0]; if (t) litAt(t.clientX, t.clientY); }, { passive: true });
+  el.addEventListener('touchend', clear, { passive: true });
+  el.addEventListener('touchcancel', clear, { passive: true });
 })();
 
 // ── Easter egg: hover the profile photo → "Hi, I'm Sarah." enlarges + shakes ──
@@ -2056,26 +3391,68 @@
 
 // ── Project data ──────────────────────────────
 const PROJECTS = {
+  'andalusia-workshop': {
+    title: 'Andalusia Workshop',
+    desc: 'A client-facing customization tool that turns ideas into fabrication-ready concepts in real time.',
+    role: 'Product Designer & User Researcher',
+    timeline: '8 weeks',
+    heroImages: ['andalusia-cover.png'],
+    overview: 'In Summer 2026, I worked with Andalusia Design, an Austin-based architectural fabrication company, to streamline its concept-development process. Creating custom renderings in Rhino could take days as designers and clients worked toward an agreed-upon direction. Andalusia Workshop enabled them to visualize and customize concepts together in real time, then transfer the final design directly into Rhino for refinement and fabrication.',
+    takeaway: 'Working on Andalusia Workshop let me follow projects from concept to rendering to fabrication while designing a digital experience around that process. I saw how real-time visualization could help designers and clients communicate more clearly, align faster, and move confidently from discussion to production.\nI also learned the importance of defining brand guidelines early. Without clear standards for color, typography, components, and voice, I made inconsistent decisions and had to revisit screens later. Now, I approach every project by establishing the visual foundation first.',
+    prototypeLayout: true,
+    demo: {
+      type: 'website',
+      frame: 'browser',                          // desktop web product → wide landscape browser frame
+      heading: 'Explore Andalusia Workshop',
+      description: 'Interact with the live platform and explore its architectural customization tools.',
+      embedUrl: 'https://andalusia.design/workshop/',
+      externalUrl: 'https://andalusia.design/workshop/',
+      buttonLabel: 'Open full website',
+      headerWidth: 620,
+      aspect: '16 / 10'
+    },
+    links: []                                 // TODO: add { label: 'Visit the live tool', url: '...' } once you share the URL
+  },
   'shopify-mobile': {
     title: 'ShopCampus',
     desc: 'An AI-driven Shopify mobile product that reduces friction from idea to first sale, empowering college students to launch and run small businesses.',
     role: 'User Researcher',
     timeline: '10 weeks',
-    heroImages: ['Shopify cover.jpg'],
-    sections: [
-      {
-        label: 'Selected Screens',
-        images: [
-          'Shopify flow 1.jpg',
-          'Shopify flow 2.jpg',
-          'Shopify flow 3.jpg',
-          'ShopCampus Order Fulfillment.jpg'
-        ]
-      }
-    ],
+    heroImages: ['shopcampus-cover.png'],
+    heroCompact: true,
     overview: 'In Spring 2026, my team worked on a Shopify redesign through Northwestern\'s Digital Product Design program to explore how AI could reduce friction for first-time student entrepreneurs. The project focused on reimagining Shopify\'s mobile onboarding experience by leveraging Shop, Shopify\'s consumer-focused shopping app, to help college students quickly launch and manage small businesses. Through action-oriented design, we aimed to simplify the journey from initial idea to first sale.',
     takeaway: 'This project taught me not to become attached to a single solution. Midway through the quarter, Shopify released updates that overlapped with our original direction, requiring us to quickly pivot our concept (to what is now ShopCampus!). The experience reinforced the importance of adapting to changing constraints and focusing on the problem and the user rather than a specific design.',
-    videoId: 'Fv6VkSkGpIo',
+    prototypeLayout: true,
+    demo: {
+      type: 'figma',
+      frame: 'mobile',
+      heading: 'Try the Shop Campus Prototype',
+      poster: 'shopcampus-cover.png',   // first screen shown instantly while Figma loads
+      description: 'Click through the redesigned onboarding experience for new student users.',
+      hint: "Tap <strong>“Start selling on Shop Campus”</strong> to begin the flow.",
+      // Direct Figma embed player (used verbatim as the iframe src). Points at the
+      // bare 402×874 screen flow (node 725-406) — no device mockup around it — so
+      // scaling=contain fills the frame edge-to-edge with no letterboxing.
+      embedUrl: 'https://embed.figma.com/proto/lOiy0OHhrdY6gS567LfHUC/Shopify-Prototype?node-id=725-406&scaling=contain&content-scaling=fixed&starting-point-node-id=725-406&embed-host=share',
+      // "Open in Figma" opens the full-screen prototype in a new tab.
+      externalUrl: 'https://www.figma.com/proto/lOiy0OHhrdY6gS567LfHUC/Shopify-Prototype?node-id=725-406&starting-point-node-id=725-406',
+      buttonLabel: 'Open in Figma',
+      width: 340,
+      // Render the prototype at the artboard's true size (iPhone 17 Pro logical
+      // points, 402×874) so it reads full-size on the page rather than shrunk.
+      headerWidth: 382,
+      // Figma always pads the prototype with a margin of empty canvas in the
+      // player; `zoom` enlarges the iframe past the frame so that margin is
+      // clipped and the device fills edge-to-edge (tune 1.15–1.28 to taste).
+      zoom: 1.14,
+      // shave a little off top & bottom to trim the black canvas, but keep enough
+      // margin that the phone's screen (status bar / tab bar) is never cut off.
+      cropTop: 0.05,
+      cropBottom: 0.05,
+      // iPhone 17 logical points — matches the Figma artboard exactly (the
+      // screen export is 402x874), so `contain` fills with no letterboxing.
+      aspect: '402 / 874'
+    },
     links: [{ label: 'View the white paper', url: 'Final Deliverable White Paper - Group One.pdf' }]
   },
   'fetchride': {
@@ -2087,9 +3464,10 @@ const PROJECTS = {
     overview: 'In Spring 2025, my team developed FetchRide through a human-centered design project focused on improving connections between Northwestern students and local community. After conducting research with both students and shelter staff, we identified transportation and accessibility as major barriers to volunteering, leading us to design a free shuttle system that made shelter visits, animal socialization, and community engagement more convenient and consistent.',
     takeaway: 'As Product Manager, I learned that meaningful solutions begin with listening. Research with shelter staff challenged many of our initial assumptions and revealed barriers we hadn\'t considered, reinforcing the importance of understanding stakeholders before jumping into design. For example, one shelter employee shared that a large student volunteer group had unintentionally overwhelmed and stressed the animals, highlighting the need to prioritize animal welfare alongside student engagement. This insight shaped our thinking around a structured shuttle system that could create more consistent, manageable volunteer participation while supporting both the shelter\'s needs and students\' desire to help.',
     videoId: 'M4TI8PjUa7c',
-    links: [
-      { label: 'Check out the website', url: 'https://emmaluzio2024.wixsite.com/fetchride' }
-    ]
+    // pill button beneath the hero image (styled like the prototype "Open Full
+    // Website" CTA) instead of a plain link at the very bottom of the page
+    heroCta: { label: 'Check out the website', url: 'https://emmaluzio2024.wixsite.com/fetchride' },
+    links: []
   },
   'stow': {
     title: 'Stow',
@@ -2138,18 +3516,28 @@ const PROJECTS = {
     desc: 'An AI-powered social travel concept that helps users discover curated destinations and generate personalized itineraries based on individual travel preferences.',
     role: 'UI/UX Designer',
     timeline: '1 week',
-    heroImages: ['Screenshot%202026-06-02%20at%2010.15.50%20AM.jpg'],
+    heroImages: ['trova-cover.png'],
+    heroCompact: true,
     overview: 'In Winter 2025, I developed Trova through Quark, a student-led design club focused on rapid creative experimentation and both industrial and digital product concepts. The project explored how community recommendations and AI personalization could make travel planning feel more emotionally aligned with each user\'s personality and travel style.',
     takeaway: 'I learned how important it is to quickly identify the core value of a product when working under tight deadlines. With only one week and a two-person team to develop Trova, we had to rapidly prioritize features and focus on what would create the most value for users. This project reinforced the importance of making intentional decisions quickly and avoiding unnecessary complexity.',
-    sections: [
-      {
-        label: 'Selected Screens',
-        images: [
-          'Screenshot%202026-06-02%20at%2010.16.04%20AM.jpg',
-          'Screenshot%202026-06-02%20at%2010.16.12%20AM.jpg'
-        ]
-      }
-    ],
+    prototypeLayout: true,
+    demo: {
+      type: 'figma',
+      frame: 'mobile',
+      heading: 'Try the Trova Prototype',
+      poster: 'trova-home.jpg',   // first screen shown instantly while Figma loads
+      description: 'Explore the mobile experience and click through the primary trip-planning flow.',
+      embedUrl: 'https://embed.figma.com/proto/nlpfF12xG864fk9W8BbMdJ/Travel-App---Quark-?node-id=0-1&scaling=contain&content-scaling=fixed&embed-host=share',
+      externalUrl: 'https://www.figma.com/proto/nlpfF12xG864fk9W8BbMdJ/Travel-App---Quark-?node-id=0-1',
+      buttonLabel: 'Open in Figma',
+      // sizing matched exactly to ShopCampus so the two phones read identical
+      width: 340,
+      headerWidth: 382,
+      zoom: 1.14,
+      cropTop: 0.05,
+      cropBottom: 0.05,
+      aspect: '402 / 874'
+    },
     links: []
   },
   'tamagotchi': {
@@ -2362,39 +3750,155 @@ function go(page) {
   currentPage = page;
 }
 
+// Close the projects dropdown + any open category fly-out, and drop focus
+// (on mobile the tapped link keeps :focus inside the menu, which would otherwise
+// hold the frosted box open until a second tap elsewhere).
+function closeNavMenus() {
+  document.getElementById('nav-projects-drop')?.classList.remove('open');
+  document.querySelectorAll('.nav-cat.open').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.nav-cat.hover-open').forEach(c => c.classList.remove('hover-open'));
+  document.activeElement?.blur();
+}
+
+// Map each project id → its category, read straight from the project cards
+// (single source of truth) so the detail back-button can return to the right
+// filtered section rather than the catch-all "all projects" page.
+const PROJECT_CAT = {};
+document.querySelectorAll('#page-projects .pj').forEach(card => {
+  const m = (card.getAttribute('onclick') || '').match(/openProject\('([^']+)'\)/);
+  if (m) PROJECT_CAT[m[1]] = card.dataset.cat || 'all';
+});
+// Fidelity/stage of each project (Prototype / Case Study / Sprint / Concept
+// Sketch), read from its project row so the detail page can show the same pill —
+// visitors arriving straight from the menu still see what kind of work it is.
+// data-type maps to the detail page's existing tag-* pill styling.
+const STAGE_CLASS = { proto: 'tag-proto', case: 'tag-case', sprint: 'tag-sprint', sketch: 'tag-sketch' };
+const PROJECT_STAGE = {};
+document.querySelectorAll('#page-projects .pj').forEach(card => {
+  const m = (card.getAttribute('onclick') || '').match(/openProject\('([^']+)'\)/);
+  const typePill = card.querySelector('.pj-pills .pill:last-child');
+  if (m && typePill) {
+    PROJECT_STAGE[m[1]] = { label: typePill.textContent.trim(), cls: STAGE_CLASS[card.dataset.type] || '' };
+  }
+});
+// How many projects live in each category — used to hide the "More … projects"
+// back-button when a project is the only one in its section (e.g. FetchRide is
+// the sole Service Design project, so there's nowhere else to go back to).
+const CAT_COUNTS = {};
+Object.values(PROJECT_CAT).forEach(c => { CAT_COUNTS[c] = (CAT_COUNTS[c] || 0) + 1; });
+// Back-button label per category (falls back to the generic label)
+const BACK_LABELS = {
+  uiux: 'All UI/UX Projects',
+  industrial: 'All Industrial Design Projects',
+  service: 'All Service Design Projects',
+  all: 'Back to Projects'
+};
+// Category of the project currently shown in the detail view
+let currentProjectCat = 'all';
+
+// Detail back-button → return to the current project's category, filtered
+// "Back to Projects" (detail page) + nav "projects" both land on the shop band
+// where every project now lives, in the home reel.
+function backToProjects() {
+  scrollToProjects();
+}
+
+// Bring the shop band into view — activating the reel first if we're on a
+// standalone page (detail), then smooth-scrolling down to the products.
+function scrollToProjects(e) {
+  if (e) { e.preventDefault?.(); e.stopPropagation?.(); }
+  closeNavMenus();
+  const reel = document.getElementById('reel');
+  const target = document.getElementById('page-shop');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('nl-projects')?.classList.add('active');
+  // land on the TOP of the shop band (the "projects" header), sitting just below
+  // the fixed nav rather than under it — so the link opens the top of the page.
+  const scrollToShopTop = (behavior) => {
+    const nav = document.querySelector('nav');
+    const navH = nav ? nav.offsetHeight : 0;
+    const top = target.getBoundingClientRect().top + window.pageYOffset - navH;
+    window.scrollTo({ top, behavior });
+  };
+  if (!reel.classList.contains('active')) {
+    // coming from a swapped page (e.g. a project detail): show the reel, land on
+    // the shop band with no visible jump, then let updateReel recolour the nav
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    reel.classList.add('active');
+    currentPage = 'home';
+    requestAnimationFrame(() => {
+      scrollToShopTop('instant');
+      requestAnimationFrame(updateReel);
+    });
+  } else {
+    scrollToShopTop('smooth');
+    requestAnimationFrame(updateReel);
+  }
+}
+
 // Go to the projects page, filtered to a category ('all' | 'uiux' | 'industrial')
 function goProjects(cat) {
-  const drop = document.getElementById('nav-projects-drop');
-  drop?.classList.remove('open');       // close the menu
-  // on mobile the tapped link keeps focus inside the dropdown, so :focus-within
-  // would keep the frosted box visible — drop focus so the menu dismisses now
-  document.activeElement?.blur();
+  closeNavMenus();
   go('projects');
   filterProjects(cat || 'all');
 }
 
-// Mobile: no hover, so tapping "projects" toggles its dropdown open/closed
-function toggleProjMenu(e) {
-  if (!window.matchMedia('(max-width: 540px)').matches) return;  // desktop uses hover
+// Category row inside the mega-menu. Clicking a category expands its fly-out
+// (accordion) — exactly one open at a time — on every screen size. The menu is
+// click-driven (no hover reveal), so a tap/click toggles the section open/closed.
+function handleCat(e, cat) {
   e.stopPropagation();
-  document.getElementById('nav-projects-drop')?.classList.toggle('open');
+  const catEl = e.currentTarget.closest('.nav-cat');
+  const wasOpen = catEl.classList.contains('open');
+  document.querySelectorAll('.nav-cat.open').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) catEl.classList.add('open');
 }
-// tap anywhere outside the dropdown closes it
+
+// The "projects" chip at the end of the About copy → glide up to the nav and
+// reveal the same projects pop-up menu (works on desktop + mobile).
+function openProjectsMenu(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  const drop = document.getElementById('nav-projects-drop');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // open once the scroll has settled so the menu appears as you arrive at the nav
+  setTimeout(() => { drop && drop.classList.add('open'); }, 480);
+}
+
+// Clicking "projects" toggles its dropdown open/closed on every screen size
+// (the menu is click-driven, with no hover reveal).
+function toggleProjMenu(e) {
+  e.stopPropagation();
+  const drop = document.getElementById('nav-projects-drop');
+  const willClose = drop?.classList.contains('open');
+  drop?.classList.toggle('open');
+  if (willClose) document.querySelectorAll('.nav-cat.open').forEach(c => c.classList.remove('open'));
+}
+// tap anywhere outside the dropdown closes it (and any open category fly-out)
 document.addEventListener('click', (e) => {
   const drop = document.getElementById('nav-projects-drop');
-  if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+  if (drop && !drop.contains(e.target)) {
+    drop.classList.remove('open');
+    document.querySelectorAll('.nav-cat.open').forEach(c => c.classList.remove('open'));
+  }
 });
 
-// Show/hide project cards by their data-cat, and hide any section left empty
+// Featured cards + project rows are keyboard-operable (role="link" tiles)
+document.querySelectorAll('.feat-card, #page-projects .pj, .shop-item').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+  });
+});
+
+// Show/hide individual project rows by their data-cat (the mega-menu can jump
+// straight to a single discipline), and swap the page heading to match.
 function filterProjects(cat) {
-  // show only the stage sub-sections belonging to the active category
-  document.querySelectorAll('#page-projects .proj-subsection').forEach(sec => {
-    sec.style.display = (cat === 'all' || sec.dataset.cat === cat) ? '' : 'none';
+  document.querySelectorAll('#page-projects .pj').forEach(row => {
+    row.style.display = (cat === 'all' || row.dataset.cat === cat) ? '' : 'none';
   });
   // swap the page heading + intro line for the active category
   const heading = document.getElementById('proj-heading');
   const desc = document.getElementById('proj-desc');
-  const TITLES = { all: 'PROJECTS', uiux: 'UIUX Design', service: 'Service Design', industrial: 'Industrial Design' };
+  const TITLES = { all: 'Projects', uiux: 'UI/UX Design', service: 'Service Design', industrial: 'Industrial Design' };
   if (heading) heading.textContent = TITLES[cat] || TITLES.all;
   if (desc) desc.style.display = cat === 'all' ? '' : 'none';
 }
@@ -2407,9 +3911,11 @@ function updateReel() {
   const ref = window.scrollY + window.innerHeight * 0.5;   // middle of the viewport
   const aboutTop = document.getElementById('page-about').offsetTop;
   const section = ref >= aboutTop ? 'about' : 'home';
+  // home, About (indigo card) and the projects band all sit on cream now, so the
+  // nav stays dark-on-cream throughout the reel
   if (nav) {
     nav.classList.remove('on-cream', 'on-dark');
-    nav.classList.add(NAV_STATE[section] || 'on-cream');
+    nav.classList.add('on-cream');
   }
   currentPage = section;
   const rb = document.querySelector('.reel-blobs');
@@ -2426,11 +3932,328 @@ function updateNavScrolled() {
 window.addEventListener('scroll', updateNavScrolled, { passive: true });
 updateNavScrolled();
 
+// ── "Selected Projects" blob bridge ───────────────
+// Fill the transition zone with a row of ~20 small blobs that straddle the
+// blue→cream seam so the colour change reads smooth. Positions are clamped to
+// stay fully on-screen (never cut off at the page edges) and re-laid on resize.
+(function seedBandBlobs() {
+  const layer = document.querySelector('.band-blobs');
+  if (!layer) return;
+  const COLORS = ['#E09090', '#CF70CC', '#F0B060', '#E890A8', '#D98FD0'];
+  // reuse the hero blobs' exact drift + morph so the motion matches them
+  const DRIFT = ['homeDrift1', 'homeDrift2', 'homeDrift3'];
+  const MORPH = ['blobMorph1', 'blobMorph2', 'blobMorph3', 'blobMorph4', 'blobMorph5'];
+  const N = 20;
+  function build() {
+    const W = layer.offsetWidth || window.innerWidth;
+    const H = layer.offsetHeight || 360;
+    // keep every blob at least M from the top/bottom clip — bigger than the hero
+    // drift+scale travel — so that motion can never slice a blob flat at the edge
+    const M = H * 0.17;
+    let seed = 20260808;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    let html = '';
+    for (let i = 0; i < N; i++) {
+      // big radii (scaled to the band) so neighbours overlap and fill the width
+      const size = Math.round(H * (0.4 + rnd() * 0.24));   // ~0.4–0.64 × band height
+      const r = size / 2;
+      // spread evenly across the width, jittered, then clamp so it stays on-screen
+      const cx = Math.max(r, Math.min(W - r, (i + 0.5) / N * W + (rnd() - 0.5) * (W / N)));
+      // sit near the seam, held M away from the top/bottom clip edges
+      const cy = Math.max(r + M, Math.min(H - r - M, H * 0.5 + (rnd() - 0.5) * (H * 0.28)));
+      const op = (0.3 + rnd() * 0.28).toFixed(2);
+      const dDur = (19 + rnd() * 10).toFixed(1), mDur = (24 + rnd() * 10).toFixed(1);
+      const dDel = (rnd() * 3).toFixed(1), mDel = (rnd() * 3).toFixed(1);
+      html += `<div class="blob" style="width:${size}px;height:${size}px;`
+        + `left:${Math.round(cx - r)}px;top:${Math.round(cy - r)}px;`
+        + `background:${COLORS[i % COLORS.length]};opacity:${op};`
+        + `animation:${DRIFT[i % 3]} ${dDur}s ease-in-out infinite ${dDel}s,`
+        + `${MORPH[i % 5]} ${mDur}s ease-in-out infinite ${mDel}s;"></div>`;
+    }
+    layer.innerHTML = html;
+  }
+  build();
+  let t;
+  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(build, 200); }, { passive: true });
+})();
+
+// ── Reusable Live Demo component ──────────────────
+// Renders a clean, minimal interactive embed (Figma prototype or live website)
+// with a loading state, a restart control, and an "open full" fallback button.
+// No fake device chrome. Config shape:
+//   { type:'figma'|'website', embedUrl, externalUrl, title, heading,
+//     description, aspect, width, height, buttonLabel, frame:'mobile'|'browser' }
+let _liveDemoSeq = 0;
+
+// Resolve the iframe src for a demo. Figma has two link shapes:
+//   • embed.figma.com/proto/…  (already an embed player) → use verbatim
+//   • figma.com/proto/…        (plain share link)        → wrap in the embed endpoint
+// Websites use their URL directly.
+function figmaEmbedSrc(demo) {
+  if (!demo || !demo.embedUrl) return '';
+  if (demo.type !== 'figma') return demo.embedUrl;
+  const isEmbed = /(^https?:\/\/embed\.figma\.com|figma\.com\/embed)/.test(demo.embedUrl);
+  let url = isEmbed
+    ? demo.embedUrl
+    : 'https://www.figma.com/embed?embed_host=share&url=' + encodeURIComponent(demo.embedUrl);
+  // hide-ui strips Figma's footer bar and prev/next arrows so only the
+  // prototype screen shows — we supply our own phone frame and controls.
+  if (!/[?&]hide-ui=/.test(url)) url += (url.includes('?') ? '&' : '?') + 'hide-ui=1';
+  return url;
+}
+
+function renderLiveDemo(demo, projectTitle) {
+  if (!demo) return '';
+  const id = 'live-demo-' + (++_liveDemoSeq);
+  const isBrowser = demo.frame === 'browser';
+  const title = demo.title || projectTitle || 'Interactive demo';
+  const heading = demo.heading || 'Live Demo';
+  const btnLabel = demo.buttonLabel || (demo.type === 'figma' ? 'Open in Figma' : 'Open full website');
+
+  // Figma: a direct embed.figma.com link is used as-is; a plain prototype share
+  // link is wrapped in the official embed endpoint. Website: use the URL directly.
+  const src = figmaEmbedSrc(demo);
+  const externalUrl = demo.externalUrl || demo.embedUrl || '';
+
+  // Sizing: mobile frames are capped narrow & centred; browser frames go wide.
+  // aspect-ratio keeps the embed proportional; an explicit height overrides it.
+  const maxW = demo.width || (isBrowser ? 900 : 390);
+  const sizeStyle = demo.height
+    ? `height:${demo.height}px;`
+    : `aspect-ratio:${demo.aspect || (isBrowser ? '16 / 10' : '390 / 780')};`;
+
+  const barHTML = isBrowser
+    ? `<div class="live-demo-bar" aria-hidden="true">
+         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+         <span class="url">${externalUrl.replace(/^https?:\/\//, '')}</span>
+       </div>`
+    : '';
+
+  // No embed URL yet (e.g. a Figma link still to be added) → graceful placeholder.
+  const viewportInner = src
+    ? `<div class="live-demo-loading"><div class="live-demo-spinner"></div><span>Loading demo…</span></div>
+       <div class="live-demo-fallback">
+         <span>This demo couldn't load here.</span>
+         ${externalUrl ? `<a class="live-demo-btn primary" href="${externalUrl}" target="_blank" rel="noopener">${btnLabel}</a>` : ''}
+       </div>
+       <iframe title="${title} — interactive demo" loading="lazy" allowfullscreen
+               allow="fullscreen"
+               src="${src}"
+               onload="liveDemoLoaded('${id}')"></iframe>`
+    : `<div class="live-demo-loading"><span style="max-width:220px;text-align:center;line-height:1.5;">Interactive prototype coming soon.</span></div>`;
+
+  const restartBtn = src
+    ? `<button class="live-demo-btn ghost" type="button" onclick="liveDemoRestart('${id}')">
+         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+         Restart
+       </button>`
+    : '';
+  const externalBtn = externalUrl
+    ? `<a class="live-demo-btn primary" href="${externalUrl}" target="_blank" rel="noopener">
+         ${btnLabel}
+         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+       </a>`
+    : '';
+
+  return `<div class="detail-section live-demo">
+    <p class="detail-section-label">${heading}</p>
+    ${demo.description ? `<p class="live-demo-lead">${demo.description}</p>` : ''}
+    <div class="live-demo-stage">
+      <div class="live-demo-frame is-${isBrowser ? 'browser' : 'mobile'}" id="${id}" style="max-width:${maxW}px;">
+        ${barHTML}
+        <div class="live-demo-viewport" style="${sizeStyle}">
+          ${viewportInner}
+        </div>
+      </div>
+    </div>
+    <div class="live-demo-actions">
+      ${restartBtn}
+      ${externalBtn}
+    </div>
+  </div>`;
+}
+
+// click-to-load: build the Figma iframe only when the visitor taps Launch. The
+// poster stays behind it (via the opacity fade) so there's no blank-white flash;
+// if the embed still can't render, liveDemoWatch reveals the "open in Figma" fallback.
+function launchProto(id) {
+  const frame = document.getElementById(id);
+  const data = (window.PROTO_DATA || {})[id];
+  if (!frame || !data || !data.src) return;
+  const vp = frame.querySelector('.live-demo-viewport');
+  const btn = frame.querySelector('.proto-launch');
+  if (btn) btn.remove();
+  const z = data.zoom || 1;
+  const zoomStyle = z !== 1
+    ? `inset:auto;left:50%;top:50%;width:${(z * 100).toFixed(2)}%;height:${(z * 100).toFixed(2)}%;transform:translate(-50%,-50%);`
+    : '';
+  const ifr = document.createElement('iframe');
+  ifr.title = 'interactive prototype';
+  ifr.loading = 'eager';
+  ifr.setAttribute('allowfullscreen', '');
+  ifr.setAttribute('allow', 'fullscreen');
+  if (zoomStyle) ifr.style.cssText = zoomStyle;
+  ifr.addEventListener('load', () => {
+    // give Figma a beat to actually paint before revealing it over the poster
+    setTimeout(() => { frame.classList.add('loaded'); }, 900);
+  });
+  ifr.src = data.src;
+  vp.appendChild(ifr);
+  liveDemoWatch(id, 16000);
+}
+
+// mark a demo frame as loaded (hides the loading overlay)
+function liveDemoLoaded(id) {
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('loaded'); el.classList.remove('failed'); }
+}
+// restart: reload the iframe so a Figma prototype returns to its start frame
+function liveDemoRestart(id) {
+  const el = document.getElementById(id);
+  const iframe = el && el.querySelector('iframe');
+  if (!iframe) return;
+  el.classList.remove('loaded');
+  // reassigning src forces a full reload from the starting frame
+  const src = iframe.getAttribute('src');
+  iframe.setAttribute('src', src);
+}
+// if a frame never fires load within the window, reveal the fallback overlay
+function liveDemoWatch(id, ms) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el && !el.classList.contains('loaded')) el.classList.add('failed');
+  }, ms || 12000);
+}
+
+// Compact prototype for the detail HEADER (replaces the hero image): just the
+// mobile frame + restart / open-full buttons — no section heading or lead, since
+// the project title already sits beside it. Reuses the live-demo styles + helpers.
+function renderPrototypeFrame(demo, projectTitle) {
+  if (!demo) return '';
+  const id = 'live-demo-' + (++_liveDemoSeq);
+  const title = demo.title || projectTitle || 'Interactive demo';
+  const btnLabel = demo.buttonLabel || (demo.type === 'figma' ? 'Open in Figma' : 'Open full website');
+  const src = figmaEmbedSrc(demo);
+  const externalUrl = demo.externalUrl || demo.embedUrl || '';
+  // desktop/browser products (e.g. Andalusia Workshop) render in a wide landscape
+  // browser frame instead of the tall mobile one
+  const isBrowser = demo.frame === 'browser' || demo.frame === 'desktop';
+  const aspect = demo.aspect || (isBrowser ? '16 / 10' : '390 / 800');
+  // demo.zoom crops the embed down to just the phone screen, hiding Figma's
+  // device frame + black canvas. We enlarge the iframe's LAYOUT box (rather than
+  // CSS-transforming it) so Figma re-renders at the bigger size and stays sharp;
+  // the frame's overflow:hidden clips the overhang. 1 = no crop.
+  const z = demo.zoom || 1;
+  const zoomStyle = z !== 1
+    ? `inset:auto;left:50%;top:50%;width:${(z * 100).toFixed(2)}%;height:${(z * 100).toFixed(2)}%;transform:translate(-50%,-50%);`
+    : '';
+
+  let viewportInner;
+  if (!src) {
+    viewportInner = `<div class="live-demo-loading"><span style="max-width:200px;text-align:center;line-height:1.5;">Interactive prototype coming soon.</span></div>`;
+  } else if (demo.poster) {
+    // The live Figma embed auto-loads directly and fades in — no static thumbnail
+    // poster image, no launch button, no spinner.
+    viewportInner = `<div class="live-demo-fallback">
+         <span>Prototype didn't load?</span>
+         ${externalUrl ? `<a class="live-demo-btn primary" href="${externalUrl}" target="_blank" rel="noopener">${btnLabel}</a>` : ''}
+       </div>
+       <iframe title="${title} — interactive prototype" loading="eager" fetchpriority="high" allowfullscreen allow="fullscreen"
+               style="${zoomStyle}" src="${src}" onload="liveDemoLoaded('${id}')"></iframe>`;
+  } else {
+    viewportInner = `<div class="live-demo-loading"><div class="live-demo-spinner"></div><span>Loading…</span></div>
+       <div class="live-demo-fallback">
+         <span>This demo couldn't load here.</span>
+         ${externalUrl ? `<a class="live-demo-btn primary" href="${externalUrl}" target="_blank" rel="noopener">${btnLabel}</a>` : ''}
+       </div>
+       <iframe title="${title} — interactive prototype" loading="eager" fetchpriority="high" allowfullscreen allow="fullscreen"
+               style="${zoomStyle}" src="${src}" onload="liveDemoLoaded('${id}')"></iframe>`;
+  }
+
+  const restartBtn = src
+    ? `<button class="live-demo-btn ghost" type="button" onclick="liveDemoRestart('${id}')">
+         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+         Restart
+       </button>`
+    : '';
+  const externalBtn = externalUrl
+    ? `<a class="live-demo-btn primary" href="${externalUrl}" target="_blank" rel="noopener">
+         ${btnLabel}
+         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+       </a>`
+    : '';
+
+  // demo.cropY shaves that fraction off the TOP and BOTTOM of the box (only) so a
+  // tall device fits snugly — the frame keeps a shorter aspect while the viewport
+  // keeps the full device aspect and overflows, centered, clipped by the frame.
+  // cropTop / cropBottom shave those fractions off the top & bottom of the box
+  // independently (cropY sets both). The frame keeps a shorter aspect while the
+  // viewport keeps the full device aspect and overflows, shifted so exactly
+  // cropTop is removed up top — letting a tall device sit snug without cutting
+  // its status bar / notch.
+  const cropTop = demo.cropTop != null ? demo.cropTop : (demo.cropY || 0);
+  const cropBottom = demo.cropBottom != null ? demo.cropBottom : (demo.cropY || 0);
+  let frameExtra = '';
+  let viewportStyle = `aspect-ratio:${aspect};`;
+  if (cropTop > 0 || cropBottom > 0) {
+    const p = aspect.split('/').map(s => parseFloat(s.trim()));
+    const kept = 1 - cropTop - cropBottom;
+    frameExtra = `aspect-ratio:${p[0]} / ${(p[1] * kept).toFixed(2)};`;
+    viewportStyle = `position:absolute;left:0;width:100%;height:${(100 / kept).toFixed(3)}%;top:${(-(cropTop / kept) * 100).toFixed(3)}%;`;
+  }
+
+  const protoTag = `<div class="proto-tag"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/></svg>${demo.tagLabel || 'Interactive Prototype'}</div>`;
+  const protoHint = demo.hint ? `<p class="proto-hint">${demo.hint}</p>` : '';
+  const barHTML = isBrowser
+    ? `<div class="live-demo-bar" aria-hidden="true">
+         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+         <span class="url">${externalUrl.replace(/^https?:\/\//, '')}</span>
+       </div>`
+    : '';
+  const maxW = demo.headerWidth || (isBrowser ? 560 : 320);
+  // mobile prototypes scale proportionally with the viewport (down to a floor) so
+  // the phone shrinks as the screen does, instead of sitting full-width; browser
+  // frames keep their fixed cap.
+  const frameMaxW = isBrowser ? `${maxW}px` : `clamp(240px, 74vw, ${maxW}px)`;
+  return `<div class="header-prototype">
+    ${protoTag}
+    ${protoHint}
+    <div class="live-demo-frame is-${isBrowser ? 'browser' : 'mobile'}" id="${id}" style="max-width:${frameMaxW};margin:0 auto;${frameExtra}">
+      ${barHTML}
+      <div class="live-demo-viewport" style="${viewportStyle}">${viewportInner}</div>
+    </div>
+    ${(restartBtn || externalBtn) ? `<div class="live-demo-actions">${restartBtn}${externalBtn}</div>` : ''}
+  </div>`;
+}
+
 function openProject(id) {
   const p = PROJECTS[id];
   if (!p) return;
+  closeNavMenus();   // dismiss the mega-menu when a project is picked from it
+
+  // every project now lives together in the shop band, so the back-button always
+  // returns to the full set and reads "Back to Projects"
+  currentProjectCat = PROJECT_CAT[id] || 'all';
+  const backLabel = document.getElementById('detail-back-label');
+  if (backLabel) backLabel.textContent = 'back to projects';
+  const backBtn = document.getElementById('detail-back');
+  if (backBtn) backBtn.style.display = '';
 
   document.getElementById('d-title').textContent = p.title;
+
+  // stage/fidelity pill (mirrors the projects-grid card) so visitors arriving
+  // straight from the menu can see what kind of project they've landed on
+  const stageEl = document.getElementById('d-stage');
+  const stage = PROJECT_STAGE[id];
+  if (stageEl) {
+    if (stage) {
+      stageEl.className = 'stage-tag detail-stage ' + stage.cls;
+      stageEl.textContent = stage.label;
+      stageEl.style.display = 'inline-flex';
+    } else {
+      stageEl.style.display = 'none';
+    }
+  }
 
   const headerEl = document.querySelector('.detail-header');
   // Tagline for sketch pages
@@ -2465,36 +4288,94 @@ function openProject(id) {
     document.getElementById('d-overview').textContent = p.overview;
   }
 
-  // Hero image(s)
-  const heroEl = document.getElementById('d-hero');
-  const dotsEl = document.getElementById('d-hero-dots');
-  const images = p.heroImages || (p.heroImage ? [p.heroImage] : []);
-
-  if (images.length > 0) {
-    heroEl.innerHTML = `<img src="${images[0]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
-    if (images.length > 1) {
-      let current = 0;
-      dotsEl.innerHTML = images.map((_, i) =>
-        `<div class="detail-dot${i === 0 ? ' on' : ''}" data-i="${i}"></div>`
+  // ── Prototype layout (select UI/UX projects): overview + takeaway move into the
+  //    left column under the meta, and the hero image is replaced by a large
+  //    interactive mobile prototype on the right. ──
+  const isProto = !p.sketchPage && p.prototypeLayout && !!p.demo;
+  const leftCol = document.querySelector('.detail-left');
+  headerEl.classList.toggle('proto-header', isProto);
+  let otBlock = document.getElementById('d-left-ot');
+  if (isProto) {
+    if (overviewRow) overviewRow.style.display = 'none';
+    if (!otBlock) { otBlock = document.createElement('div'); otBlock.id = 'd-left-ot'; }
+    // Live in the header as its own grid item (after the prototype in the DOM) so
+    // that on mobile the stack reads meta → prototype → overview/takeaway. On
+    // desktop grid-areas pull it back under the meta in column one.
+    if (otBlock.parentElement !== headerEl) headerEl.appendChild(otBlock);
+    otBlock.style.marginTop = '0';   // the meta-value's 28px gap already precedes it
+    otBlock.innerHTML = '';
+    const addOT = (label, text) => {
+      if (!text) return;
+      const l = document.createElement('p'); l.className = 'detail-section-label'; l.textContent = label;
+      const t = document.createElement('p'); t.className = 'detail-overview-text'; t.style.marginBottom = '32px'; t.textContent = text;
+      otBlock.append(l, t);
+    };
+    addOT('Overview', p.overview);
+    addOT('Takeaway', p.takeaway);
+    // In the prototype layout the links live left-aligned under the takeaway
+    // (rather than right-aligned at the very bottom of the page).
+    if (p.links && p.links.length) {
+      const linkWrap = document.createElement('div');
+      linkWrap.className = 'detail-links-row proto-links';
+      linkWrap.innerHTML = p.links.map(l =>
+        `<a class="detail-link" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`
       ).join('');
-      dotsEl.querySelectorAll('.detail-dot').forEach(dot => {
-        dot.addEventListener('click', () => {
-          current = parseInt(dot.dataset.i);
-          heroEl.innerHTML = `<img src="${images[current]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
-          dotsEl.querySelectorAll('.detail-dot').forEach((d, i) => d.classList.toggle('on', i === current));
-        });
-      });
-    } else {
-      dotsEl.innerHTML = '';
+      otBlock.appendChild(linkWrap);
     }
-  } else {
-    heroEl.innerHTML = '<div class="detail-hero-placeholder">Add project image here</div>';
-    dotsEl.innerHTML = '';
+  } else if (otBlock) {
+    otBlock.remove();
   }
 
-  // Links
+  // Hero: an interactive prototype (prototype layout) or the cover image(s)
+  const heroEl = document.getElementById('d-hero');
+  const dotsEl = document.getElementById('d-hero-dots');
+  heroEl.classList.toggle('compact', !isProto && !!p.heroCompact);
+  heroEl.classList.toggle('is-prototype', isProto);
+  dotsEl.innerHTML = '';
+
+  if (isProto) {
+    heroEl.innerHTML = renderPrototypeFrame(p.demo, p.title);
+    // only watch frames that auto-load an iframe; click-to-load frames are watched
+    // from launchProto instead (so the poster isn't flagged "failed" before launch)
+    heroEl.querySelectorAll('.live-demo-frame[id]').forEach(f => { if (f.querySelector('iframe')) liveDemoWatch(f.id); });
+  } else {
+    const images = p.heroImages || (p.heroImage ? [p.heroImage] : []);
+    if (images.length > 0) {
+      heroEl.innerHTML = `<img src="${images[0]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+      if (images.length > 1) {
+        let current = 0;
+        dotsEl.innerHTML = images.map((_, i) =>
+          `<div class="detail-dot${i === 0 ? ' on' : ''}" data-i="${i}"></div>`
+        ).join('');
+        dotsEl.querySelectorAll('.detail-dot').forEach(dot => {
+          dot.addEventListener('click', () => {
+            current = parseInt(dot.dataset.i);
+            heroEl.innerHTML = `<img src="${images[current]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+            dotsEl.querySelectorAll('.detail-dot').forEach((d, i) => d.classList.toggle('on', i === current));
+          });
+        });
+      }
+    } else {
+      heroEl.innerHTML = '<div class="detail-hero-placeholder">Add project image here</div>';
+    }
+  }
+
+  // Optional call-to-action pill directly beneath the hero image (e.g. FetchRide
+  // → live site), styled like the prototype "Open Full Website" button.
+  const rightCol = document.querySelector('.detail-right');
+  let heroCtaEl = document.getElementById('d-hero-cta');
+  if (p.heroCta && !isProto) {
+    if (!heroCtaEl) { heroCtaEl = document.createElement('div'); heroCtaEl.id = 'd-hero-cta'; heroCtaEl.className = 'detail-hero-cta'; }
+    if (heroCtaEl.parentElement !== rightCol) rightCol.appendChild(heroCtaEl);
+    heroCtaEl.innerHTML = `<a class="live-demo-btn primary" href="${p.heroCta.url}" target="_blank" rel="noopener">${p.heroCta.label}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a>`;
+  } else if (heroCtaEl) {
+    heroCtaEl.remove();
+  }
+
+  // Links — in the prototype layout these already render under the takeaway,
+  // so the bottom row stays empty to avoid duplicating them.
   const linksEl = document.getElementById('d-links');
-  linksEl.innerHTML = (p.links || []).map(l =>
+  linksEl.innerHTML = isProto ? '' : (p.links || []).map(l =>
     `<a class="detail-link" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`
   ).join('');
 
@@ -2543,7 +4424,16 @@ function openProject(id) {
     extraHTML = videoHTML + extraHTML;
   }
 
+  // Live Demo section leads the extra content when a project defines one — unless
+  // the prototype already sits in the header (prototype layout)
+  if (p.demo && !isProto) {
+    extraHTML = renderLiveDemo(p.demo, p.title) + extraHTML;
+  }
+
   extraEl.innerHTML = extraHTML;
+
+  // start the fallback watchers for any demo frames just injected
+  extraEl.querySelectorAll('.live-demo-frame[id]').forEach(f => { if (f.querySelector('iframe')) liveDemoWatch(f.id); });
 
   go('detail');
 }
@@ -2623,6 +4513,59 @@ document.querySelectorAll('.dot-row').forEach(row => {
     }
   }, { passive: true });
 });
+
+// Prewarm the Figma prototypes (ShopCampus + Trova) so they open faster. Once the
+// page is idle we prefetch each embed + load it once in a hidden, off-screen iframe
+// to prime the browser cache and Figma's app bundle, then drop the iframe. The
+// poster image already makes the detail page feel instant; this speeds the real load.
+(function prewarmFigma() {
+  if (typeof PROJECTS === 'undefined') return;
+  const urls = ['shopify-mobile', 'trova']
+    .map(id => (PROJECTS[id] || {}).demo && PROJECTS[id].demo.embedUrl)
+    .filter(Boolean);
+  if (!urls.length) return;
+  let done = false;
+  const warm = () => {
+    if (done) return; done = true;
+    urls.forEach((url, i) => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch'; link.as = 'document'; link.href = url;
+      document.head.appendChild(link);
+      // stagger the hidden iframes so they don't contend for bandwidth at once
+      setTimeout(() => {
+        const f = document.createElement('iframe');
+        f.src = url; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true');
+        f.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:402px;height:820px;border:0;opacity:0;pointer-events:none;';
+        f.addEventListener('load', () => setTimeout(() => f.remove(), 5000));
+        document.body.appendChild(f);
+      }, i * 2500);
+    });
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 2500 });
+  else window.addEventListener('load', () => setTimeout(warm, 1200));
+})();
+
+// Landing hero cursor glow: move a radial mask over the lighter copies of the name.
+// Both name copies share the stage's coordinate origin, so one stage-relative
+// (x,y) drives both the above-line and below-line glow masks.
+(function lpGlow() {
+  var stage = document.getElementById('lp-stage');
+  if (!stage) return;
+  var glows = stage.querySelectorAll('.lp-name--glow');
+  var off = 'radial-gradient(circle var(--lp-glow-r) at -999px -999px,#000 0%,transparent 70%)';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  stage.addEventListener('mousemove', function (e) {
+    var r = stage.getBoundingClientRect();
+    var x = e.clientX - r.left;
+    var y = e.clientY - r.top;
+    var mask = 'radial-gradient(circle var(--lp-glow-r) at ' + x + 'px ' + y +
+               'px,#000 0%,rgba(0,0,0,.55) 45%,transparent 72%)';
+    glows.forEach(function (g) { g.style.setProperty('--lp-mask', mask); });
+  });
+  stage.addEventListener('mouseleave', function () {
+    glows.forEach(function (g) { g.style.setProperty('--lp-mask', off); });
+  });
+})();
 </script>
 </body>
 </html>
