@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sarah Thornton — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
   <!-- Warm the connection to Figma up front so the ShopCampus/Trova prototype
        embeds start rendering the moment the detail page opens (saves the DNS +
        TLS handshake, which is otherwise paid only after the iframe is created). -->
@@ -38,7 +38,7 @@
          --display and --mono kept as aliases so every legacy reference resolves
          to Inter without hunting them all down. */
       --font: 'DM Sans', system-ui, sans-serif;              /* PRIMARY — nav, body, labels, metadata, buttons */
-      --display: 'Bricolage Grotesque', 'DM Sans', sans-serif; /* DISPLAY — name, section titles, project names, pull quotes */
+      --display: 'DM Sans', system-ui, sans-serif; /* DISPLAY — now DM Sans too (site-wide single font) */
       --mono: var(--font);                                    /* labels are primary font now */
       /* THREE SIZES — the whole site uses only these (plus the hero name) */
       --fs-lg: clamp(2.2rem, 4.6vw, 3.6rem);   /* headings: section titles, detail titles, about headline */
@@ -404,8 +404,7 @@
        HOME PAGE
     ===================== */
     #page-home {
-      background: var(--cream);
-      /* height is driven by .home-body (~74vh) so projects peek under the name */
+      background: var(--blue);   /* full-blue landing panel */
     }
 
     /* blob sizes/colours/drift (positions set by .reel-blobs rules above) */
@@ -558,8 +557,7 @@
        PROJECTS PAGE
     ===================== */
     #page-projects {
-      background: var(--cream);
-      padding-top: var(--nav-height);
+      background: var(--cream);   /* opaque so it covers the sticky hero as it rides up */
       padding-bottom: 100px;
     }
 
@@ -912,6 +910,20 @@
     /* in the floating shop, the .shop-visual already casts the drop-shadow,
        so the image itself doesn't need its own (avoids a double shadow) */
     .shop-visual .product-cutout img { filter: none; }
+
+    /* placeholder tile for a project whose photos aren't in the site yet */
+    .card-ph {
+      display: flex; align-items: center; justify-content: center;
+      box-sizing: border-box; text-align: center; padding: 22px;
+      border: 1.5px dashed rgba(23,24,28,.22);
+      border-radius: 18px;
+      background: rgba(23,24,28,.025);
+      color: var(--mid);
+      font-family: var(--font); font-size: var(--fs-sm); font-weight: 500;
+      letter-spacing: .04em; line-height: 1.4;
+    }
+    .pj .card-ph { width: 100%; max-width: 420px; aspect-ratio: 5 / 4; margin: 0 auto; }
+    .shop-item .card-ph { height: 84%; aspect-ratio: 1 / 1; }
 
     /* iPhone 17 — mobile products (ShopCampus, Trova) */
     .device--phone {
@@ -1968,8 +1980,10 @@
        column two. On mobile this collapses so the order reads
        meta → prototype → overview/takeaway (see the ≤820 reset). */
     .detail-header.proto-header {
-      grid-template-areas: "meta proto" "ot proto";
-      grid-template-rows: auto auto;
+      /* third row soaks up the tall prototype's overflow so it can't stretch the
+         meta/overview rows — keeps Timeline→Overview at the normal block gap */
+      grid-template-areas: "meta proto" "ot proto" ".    proto";
+      grid-template-rows: auto auto 1fr;
       column-gap: 52px;
       row-gap: 0;
       align-items: start;
@@ -2328,18 +2342,17 @@
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; z-index: 0;
     }
-    .proto-loadchip {
-      position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-      z-index: 1; display: flex; align-items: center; gap: 8px;
-      background: rgba(24,24,30,0.74); color: #fff;
-      font-size: var(--fs-sm); letter-spacing: 0.02em; white-space: nowrap;
-      padding: 7px 14px 7px 11px; border-radius: 999px;
-      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    /* clean centred vector spinner shown over the poster while the embed loads */
+    .proto-loader {
+      position: absolute; z-index: 1; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 62px; height: 62px; display: grid; place-items: center;
+      border-radius: 50%; background: rgba(24,24,30,0.40);
+      -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
     }
-    .proto-loadchip .live-demo-spinner {
-      width: 13px; height: 13px; border-width: 2px;
-      border-color: rgba(255,255,255,0.35); border-top-color: #fff;
-    }
+    .proto-loader svg { animation: live-demo-spin 0.9s linear infinite; }
+    .proto-loader .pl-track { stroke: rgba(255,255,255,0.28); }
+    .proto-loader .pl-arc { stroke: #fff; stroke-dasharray: 34 130; }
     /* click-to-load: launch button over the poster */
     .proto-launch {
       position: absolute; z-index: 2; left: 50%; top: 50%;
@@ -2358,6 +2371,8 @@
        it shows during the wait instead of a blank white frame */
     .live-demo-viewport iframe { opacity: 0; transition: opacity 0.5s ease; }
     .live-demo-frame.loaded .live-demo-viewport iframe { opacity: 1; }
+    /* once the embed is live, drop the loading spinner behind it */
+    .live-demo-frame.loaded .proto-loader { opacity: 0; visibility: hidden; transition: opacity 0.4s ease; }
 
     /* fallback shown if the embed cannot load (or the visitor prefers to leave) */
     .live-demo-fallback {
@@ -2713,6 +2728,15 @@
     }
     .nav-icon svg { width: 20px; height: 20px; display: block; }
     .nav-icon:hover { color: var(--blue); transform: translateY(-1px); }
+    /* over the blue landing hero → light nav (logo/links/icons + blue bar) */
+    nav.on-dark { background: var(--blue); border-bottom-color: rgba(255,255,255,.22); }
+    nav.on-dark .nav-logo { color: #fff; }
+    nav.on-dark .nav-link { color: rgba(255,255,255,.9); }
+    nav.on-dark .nav-link:hover,
+    nav.on-dark .nav-link.active,
+    nav.on-dark .nav-link.active:hover { color: #fff; }
+    nav.on-dark .nav-icon { color: #fff; }
+    nav.on-dark .nav-icon:hover { color: #fff; opacity: .8; transform: translateY(-1px); }
     .shop-head { letter-spacing: -0.01em; }
     .shop-title { letter-spacing: 0.005em; }
     .detail-title { letter-spacing: -0.015em; }
@@ -2735,85 +2759,47 @@
        cursor-follow glow on lighter copies. Reuses the site's Bricolage name font,
        DM Sans subheader, and indigo token. --lp-split / --lp-stage-h must stay
        fixed px because the two name copies are clipped exactly at that line. ═══ */
+    .reel-hero { background: var(--blue); }
     .lp-hero {
       position: relative; z-index: 2;
       min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: calc(var(--nav-height) + 20px) 0 44px;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: calc(var(--nav-height) + 24px) 40px 28px;
+      color: #fff;
       overflow: hidden;
     }
-    .lp-stage {
-      --lp-split: 221px;   /* cuts through the exact vertical middle of "thornton" */
-      --lp-stage-h: 452px;
-      --lp-name-size: 172px;
-      --lp-glow-r: 85px;
-      position: relative;
-      height: var(--lp-stage-h);
-      flex: none;
-    }
-    .lp-field { position: absolute; left: 0; right: 0; top: var(--lp-split); bottom: 0; background: var(--blue); }
-    .lp-clip-top { position: absolute; left: 0; right: 0; top: 0; height: var(--lp-split); overflow: hidden; }
-    .lp-clip-bottom { position: absolute; left: 0; right: 0; top: var(--lp-split); bottom: 0; overflow: hidden; }
-    .lp-name {
-      position: absolute; left: 0; right: 0; padding: 0 48px; margin: 0;
-      font-family: var(--display);        /* Bricolage Grotesque — the site's name font */
+    .lp-welcome {
       font-weight: 800;
-      font-size: var(--lp-name-size);
-      line-height: 0.86;
-      letter-spacing: -0.05em;
-      white-space: nowrap;
-      animation: lpRise 0.9s cubic-bezier(.22,1,.36,1) both;
+      font-size: clamp(26px, min(3.4vw, 5.4vh), 56px);
+      line-height: 1; letter-spacing: -0.03em;
+      color: #CFCAFA;
+      margin-bottom: 0.2em;
+      animation: lpLineUp 0.9s 0.15s cubic-bezier(.22,1,.36,1) both;
     }
-    .lp-clip-top .lp-name { top: 0; bottom: 0; }
-    .lp-clip-bottom .lp-name { top: calc(var(--lp-split) * -1); height: var(--lp-stage-h); }
-    .lp-l2 { display: flex; align-items: flex-start; gap: 0.12em; }
-    .lp-star { font-size: 0.34em; font-weight: 400; line-height: 1; margin-top: 0.18em; }
-    .lp-name--dark { color: var(--dark); }
-    .lp-name--dark .lp-star { color: var(--blue); }   /* indigo accent, like the current name */
-    .lp-name--cream { color: #EDEDF5; }
-    /* cursor glow: a lighter copy of the name revealed through a radial mask */
-    .lp-name--glow {
-      pointer-events: none;
-      -webkit-mask-image: var(--lp-mask); mask-image: var(--lp-mask);
-      --lp-mask: radial-gradient(circle var(--lp-glow-r) at -999px -999px, #000 0%, transparent 70%);
+    .lp-welcome .ornament { letter-spacing: 0; }   /* keep glyph spacing so the ornament doesn't collide */
+    /* one continuous statement — the browser wraps it (no manual breaks). the
+       min(vw,vh) inside the clamp keeps it filling the stage without overflowing
+       on short windows. keyed words go solid white. */
+    .lp-copy {
+      margin: 0; font-weight: 800;
+      font-size: clamp(34px, min(5.5vw, 9.4vh), 104px);
+      line-height: 0.99; letter-spacing: -0.035em;
+      color: #CFCAFA; text-wrap: pretty;
+      animation: lpLineUp 0.9s 0.3s cubic-bezier(.22,1,.36,1) both;
     }
-    .lp-glow-top { color: #6F66F0; }
-    .lp-glow-bottom { color: #BCB6FF; }
-    .lp-caption {
-      position: absolute; left: 48px; right: 48px; bottom: 30px; z-index: 2;
-      display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap;
-      animation: lpFadeUp 0.8s 0.35s cubic-bezier(.22,1,.36,1) both;
-    }
-    .lp-caption p { margin: 0; font-family: var(--font); font-size: var(--fs-md); font-weight: 500; letter-spacing: 0.01em; color: #DAD8FA; }
-    .lp-caption p span { color: #fff; }
-    .lp-caption a { font-family: var(--font); font-size: 13px; font-weight: 500; letter-spacing: 0.13em; text-transform: none; color: #BFBBF6; cursor: pointer; }
-    .lp-caption a:hover { color: #fff; }
-    @keyframes lpRise { from { transform: translateY(0.16em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes lpFadeUp { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @media (max-width: 900px) {
-      .lp-stage { --lp-name-size: 96px; --lp-stage-h: 290px; --lp-split: 123px; }
-      .lp-name { padding: 0 20px; }
-      .lp-caption { left: 20px; right: 20px; }
-    }
-    @media (max-width: 540px) {
-      .lp-stage { --lp-name-size: 74px; --lp-stage-h: 280px; --lp-split: 95px; }
-      /* push the name lockup toward the bottom so the name sits lower and the
-         "projects ↓" cue tucks near the bottom edge (was centered, riding high) */
-      .lp-hero { justify-content: flex-end; padding-bottom: 44px; }
+    .lp-copy strong { font-weight: inherit; color: #fff; }   /* psychology · what drives people · human-centered design */
+    @keyframes lpLineUp { from { transform: translateY(.5em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 680px) {
+      .lp-hero { padding: calc(var(--nav-height) + 16px) 20px 24px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .lp-name, .lp-caption { animation: none !important; }
+      .lp-welcome, .lp-copy { animation: none !important; }
     }
 
     /* ── Centered mobile layout: hero, section headers, and about copy all
        center at/below tablet so the whole reel reads consistently centered.
        (The project cards and the "find me" section are already centered.) ── */
     @media (max-width: 820px) {
-      /* landing hero — name lines + caption row */
-      .lp-name { text-align: center; }
-      .lp-l2 { justify-content: center; }
-      .lp-caption { flex-direction: column; align-items: center; text-align: center; gap: 14px; }
-
       /* "projects" / "about" section headers (title + meta stack, centered) */
       .section-head { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; }
 
@@ -2821,15 +2807,179 @@
       .about-copy, .about-copy p { text-align: center; }
       .about-links { justify-content: center; }
     }
+
+    /* ═══ GRAFT — projects scroll-into-view + new About grid ═══════════════
+       The hero is sticky; the Projects panel rides up over it with a rounded
+       lip, then the About panel rides over Projects. Original cream palette
+       kept, so a soft lip shadow keeps the overlap legible without a colour
+       change. About is re-laid as a two-column grid (photo · copy). ════════ */
+    @media (prefers-reduced-motion: no-preference) {
+      #reel.active .reel-hero {
+        position: sticky; top: 0;
+        height: 100vh; min-height: 100vh;
+        z-index: 1;
+      }
+    }
+    #reel .shop-band {
+      position: relative; z-index: 2;
+      border-radius: 44px 44px 0 0;
+      margin-top: -44px;
+      padding-top: clamp(56px, 7vh, 96px);       /* clear the 44px lip */
+      box-shadow: 0 -22px 44px -26px rgba(23,24,28,.30);
+    }
+    #reel .reel-about {
+      position: relative; z-index: 3;
+      border-radius: 44px 44px 0 0;
+      margin-top: -44px;
+      box-shadow: 0 -22px 44px -26px rgba(23,24,28,.30);
+    }
+
+    /* scroll motion: name splits into letters that scatter on scroll; cards rise
+       in. Letters are inline-block so each can be transformed; .lp-l2 drops its
+       flex layout (for an unused star) so split letters keep the name spacing. */
+    .lp-name .ltr { display: inline-block; will-change: transform, opacity; }
+    .lp-l2 { display: block; }
+    [data-card] { will-change: transform, opacity; }
+
+    /* About one-way reveal: each element rises in as it enters the viewport and
+       stays (no scroll-linked fall-back, so the bottom-of-page links reveal
+       reliably). Tagged + observed in reelMotion(). */
+    .about [data-reveal] {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+      will-change: transform, opacity;
+    }
+    .about [data-reveal].in { opacity: 1; transform: none; }
+
+    /* nudge specific product cutouts down within their card wells */
+    .product-cutout img[src="footwear-cover.png"]  { transform: translateY(15%); }
+    .product-cutout img[src="furniture-cover.png"] { transform: translateY(10%); }
+
+    /* About — two-column grid formatting, original light colours */
+    /* About — two-column grid formatting, original light colours */
+    .about { padding: clamp(72px,11vh,132px) clamp(18px,4vw,44px) clamp(64px,10vh,120px); }
+    .about-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: clamp(28px,5vw,72px); align-items: start;
+      max-width: 1180px; margin: 0 auto;
+    }
+    .about h2 {                                    /* match the "projects" section title */
+      margin: 0 0 20px;
+      font-family: var(--display); font-weight: 800;
+      font-size: clamp(40px, 4.4vw, 64px); letter-spacing: -0.04em;
+      line-height: 1; color: var(--dark);
+    }
+    .about p { margin: 0 0 16px; max-width: 52ch; font-size: 1.0625rem; line-height: 1.6; color: var(--body); text-wrap: pretty; }
+    .about .about-sign { margin-bottom: 28px; }     /* unbold — inherits the body paragraph style */
+    /* email / linkedin keep the original plain text-link style (.about-link) — no bubble */
+    /* circular photo frame (echoes the old avatar) */
+    .about-photo { width: clamp(220px,26vw,320px); aspect-ratio: 1; max-width: 100%; justify-self: center; border-radius: 50%; overflow: hidden; }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    @media (max-width: 640px) {
+      .about-photo { order: -1; }                 /* photo above copy on phones */
+      /* middle-align the About section on mobile only (desktop stays left) */
+      .about-text { text-align: center; }
+      .about-text p { margin-left: auto; margin-right: auto; }
+      .about .about-links { justify-content: center; }
+    }
+
+    /* ═══ Projects page — "shelves" layout (digital + physical departments,
+       filter chips, product cards) ═══════════════════════════════════════ */
+    .pj-shelf-wrap { max-width: 1180px; margin: 0 auto; padding: 40px clamp(20px,4vw,40px) 96px; }
+    .ps-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+    .ps-title { font-family: var(--display); font-size: clamp(40px,6vw,60px); font-weight: 800; letter-spacing: -.045em; line-height: .9; color: var(--dark); }
+    .ps-rule { height: 1px; background: rgba(23,24,28,.18); margin-top: 30px; }
+
+    .ps-chips { display: flex; gap: 10px; margin-top: 30px; flex-wrap: wrap; }
+    .ps-chip { font-family: var(--font); font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 999px;
+               border: 1px solid rgba(23,24,28,.22); background: transparent; color: var(--dark); cursor: pointer;
+               transition: background .25s, color .25s, border-color .25s; }
+    .ps-chip:hover { border-color: rgba(23,24,28,.45); }
+    .ps-chip[aria-pressed="true"] { background: var(--dark); color: var(--paper); border-color: var(--dark); }
+
+    .ps-shelves { display: flex; flex-direction: column; }
+    .ps-shelf { order: 2; }
+    .ps-shelf[hidden] { display: none; }
+    .ps-shelf-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-top: 80px; }
+    .ps-shelf:first-of-type .ps-shelf-head, .ps-shelves.solo .ps-shelf .ps-shelf-head { padding-top: 52px; }
+    .ps-shelf-head h2 { font-family: var(--display); font-size: clamp(24px,3.4vw,30px); font-weight: 800; letter-spacing: -.035em; line-height: 1; color: var(--dark); }
+    .ps-meta { font-family: var(--font); font-size: 12px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--mid); }
+    .ps-shelf-tools { display: flex; align-items: center; gap: 18px; }
+    .ps-arrows { display: flex; gap: 8px; }
+    .ps-arrow { width: 36px; height: 36px; border-radius: 999px; border: 2px solid rgba(75,65,232,.6);
+                background: transparent; color: var(--blue); cursor: pointer; line-height: 1;
+                display: flex; align-items: center; justify-content: center;
+                transition: background .2s, border-color .2s, opacity .2s; }
+    .ps-arrow svg { width: 18px; height: 18px; display: block; }
+    .ps-arrow:hover { background: rgba(75,65,232,.08); border-color: var(--blue); }
+    .ps-arrow[disabled] { opacity: .3; cursor: default; }
+    .ps-arrow[disabled]:hover { background: transparent; border-color: rgba(75,65,232,.6); }
+
+    /* the rail: fixed-width cards that snap and side-scroll, bleeding off the right page edge */
+    /* overflow-x:auto also clips vertical overflow, so the top/bottom padding must
+       leave room for the card's hover lift (-6px) + drop shadow — otherwise the
+       lifted card gets cut off by the rail edge. */
+    .ps-rail { display: flex; gap: 28px; padding: 28px clamp(20px,4vw,40px) 44px 0;
+               margin-right: calc(clamp(20px,4vw,40px) * -1);   /* cards run past the page margin */
+               overflow-x: auto; scroll-snap-type: x mandatory;
+               scrollbar-width: none; -ms-overflow-style: none; }
+    .ps-rail::-webkit-scrollbar { display: none; }
+    /* card width is a touch under a third of the rail so the next card is always
+       partially cut off at the right edge — an obvious "there's more, scroll" cue */
+    .ps-rail .ps-card { flex: none; width: var(--ps-card-w, 312px); scroll-snap-align: start; }
+
+    .ps-card { background: var(--paper); border-radius: 26px; padding: 36px 32px 32px;
+               display: flex; flex-direction: column; align-items: center; cursor: pointer; color: inherit; text-decoration: none;
+               transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease; }
+    .ps-card[hidden] { display: none; }
+    .ps-card:hover { transform: translateY(-6px); box-shadow: 0 24px 44px -20px rgba(23,24,28,.3); }
+    .ps-card:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; border-radius: 26px; }
+    .ps-well { height: 320px; width: 100%; display: flex; align-items: center; justify-content: center; }
+    .ps-well > img { max-height: 320px; max-width: 100%; width: auto; display: block; }  /* plain covers / cutouts */
+    /* product drop-shadow: hugs the physical cutouts and layers a softer cast over
+       the digital device mockups (which already carry their own subtle box-shadow),
+       so every product on the shelf sits with a bit of lift */
+    .ps-well > img,
+    .ps-well .device { filter: drop-shadow(0 20px 22px rgba(23,24,28,.32)); }
+    /* digital products sit in their device mockups (phone / laptop) within the wells */
+    .ps-well .device { width: auto; }
+    .ps-well .device--phone { height: 100%; width: auto; max-width: 100%; border-radius: 28px; padding: 7px; }
+    .ps-well .device--phone .device-screen { border-radius: 22px; }
+    .ps-well .device--phone::after { top: 13px; width: 50px; height: 14px; border-radius: 8px; }
+    .ps-well .device--laptop, .ps-well .device--browser { width: min(92%, 400px); height: auto; }
+    .ps-well .device--laptop .laptop-lid { border-radius: 12px; padding: 8px 8px 7px; }
+    .ps-well .device--laptop .device-screen { border-radius: 5px; }
+    .ps-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; padding: 20px;
+             border: 1.5px dashed rgba(23,24,28,.22); border-radius: 18px; background: rgba(23,24,28,.02);
+             color: var(--mid); font-family: var(--font); font-size: var(--fs-sm); font-weight: 500; letter-spacing: .04em; line-height: 1.4; }
+    /* reserve two lines for every title so one-line names (Footwear, Stow…) still
+       take the same vertical space as two-line names — keeps every card's pills
+       aligned on the same height across the shelf */
+    .ps-card h3 { font-family: var(--display); font-size: clamp(20px,2.4vw,24px); font-weight: 700; letter-spacing: -.02em; margin-top: 28px; text-align: center; color: var(--dark); line-height: 1.15; min-height: 2.3em; }
+    .ps-pills { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
+    .ps-pill { font-family: var(--font); font-size: 12px; font-weight: 500; padding: 7px 11px; border-radius: 999px; }
+    .ps-pill-discipline { background: var(--dark); color: var(--paper); }
+    .ps-pill-stage { color: var(--blue); border: 1px solid rgba(75,65,232,.5); }
+
+    @media (max-width:680px){
+      .ps-rail .ps-card { width: 280px; }
+      .ps-arrows { display: none; }          /* thumb-scroll on touch */
+      .ps-title { font-size: 40px; }
+      .pj-shelf-wrap { padding: 28px 20px 72px; }
+      .ps-well { height: 260px; }
+      .ps-well > img { max-height: 260px; }
+    }
+    @media (prefers-reduced-motion:reduce){ .ps-card { transition: none; } .ps-card:hover { transform: none; } }
   </style>
 </head>
 <body>
 
 <!-- ── NAV ── -->
-<nav id="main-nav" class="on-cream">
+<nav id="main-nav" class="on-dark">
   <div class="nav-left">
     <span class="nav-logo" onclick="go('home')" role="link" aria-label="Sarah Thornton — home">꩜</span>
-    <a id="nl-projects" class="nav-link" onclick="scrollToProjects(event)" role="link" tabindex="0">projects</a>
+    <a id="nl-projects" class="nav-link" onclick="goProjects('all')" role="link" tabindex="0">projects</a>
     <a id="nl-about" class="nav-link" onclick="go('about')" role="link" tabindex="0">about</a>
   </div>
   <div class="nav-right">
@@ -2850,188 +3000,150 @@
 <div id="reel" class="active">
   <!-- HOME (first panel of the scroll reel) -->
 <section id="page-home" class="reel-hero">
-  <!-- Split-line hero: the name is rendered twice and clipped at the indigo line —
-       dark above, cream below — with a cursor-follow glow on lighter copies. -->
+  <!-- Blue full-screen landing: "Welcome" ornament + a bold statement with keyed
+       words in white, and a scroll cue that rides down to the projects band. -->
   <div class="lp-hero">
-    <div class="lp-stage" id="lp-stage">
+    <div class="lp-welcome">Welcome <span class="ornament">⋆˚꩜｡ּ</span></div>
+    <p class="lp-copy">I'm Sarah Thornton, a designer grounded in <strong>psychology</strong>. I look beyond the surface to understand <strong>what drives people</strong>, then translate those insights into thoughtful, <strong>human-centered design</strong>.</p>
+  </div>
+</section>
 
-      <div class="lp-field"></div>
+  <!-- ══════════════════════════════════════════
+       PROJECTS — middle panel of the reel (home → projects → about)
+  ══════════════════════════════════════════ -->
+<section id="page-projects" class="reel-projects shop-band">
+  <div class="pj-shelf-wrap">
 
-      <!-- above the line: dark name + glow copy -->
-      <div class="lp-clip-top">
-        <h1 class="lp-name lp-name--dark">
-          <div class="lp-l1">sarah</div>
-          <div class="lp-l2">thornton</div>
-        </h1>
-        <div class="lp-name lp-name--glow lp-glow-top" aria-hidden="true">
-          <div class="lp-l1">sarah</div>
-          <div class="lp-l2">thornton</div>
+    <div class="ps-head">
+      <h1 class="ps-title">projects</h1>
+    </div>
+
+    <div class="ps-rule"></div>
+
+    <div class="ps-shelves" id="ps-shelves">
+
+      <!-- DIGITAL — UI/UX + Service -->
+      <section class="ps-shelf" data-shelf="digital">
+        <div class="ps-shelf-head">
+          <h2>digital</h2>
+          <div class="ps-shelf-tools">
+            <div class="ps-arrows">
+              <button class="ps-arrow" data-dir="-1" aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
+              <button class="ps-arrow" data-dir="1"  aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="ps-rail">
 
-      <!-- below the line: cream name + glow copy -->
-      <div class="lp-clip-bottom">
-        <div class="lp-name lp-name--cream" aria-hidden="true">
-          <div class="lp-l1">sarah</div>
-          <div class="lp-l2">thornton</div>
-        </div>
-        <div class="lp-name lp-name--glow lp-glow-bottom" aria-hidden="true">
-          <div class="lp-l1">sarah</div>
-          <div class="lp-l2">thornton</div>
-        </div>
-      </div>
+          <a class="ps-card" role="link" tabindex="0" data-cat="uiux" data-type="case"
+             aria-label="Open ShopCampus — UI/UX design case study" onclick="openProject('shopify-mobile')">
+            <div class="ps-well"><div class="device device--phone"><div class="device-screen"><img src="shopcampus-cover.png" alt="ShopCampus" style="object-position:50% 0;"></div></div></div>
+            <h3>ShopCampus</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">UI/UX Design</span><span class="ps-pill ps-pill-stage">Case Study</span></div>
+          </a>
 
-      <div class="lp-caption">
-        <p>Human-centered designer <span>·</span> Northwestern University</p>
-        <a onclick="scrollToProjects(event)" role="link" tabindex="0">projects ↓</a>
-      </div>
+          <a class="ps-card" role="link" tabindex="0" data-cat="uiux" data-type="proto"
+             aria-label="Open Andalusia Workshop — UI/UX design prototype" onclick="openProject('andalusia-workshop')">
+            <div class="ps-well"><div class="device device--laptop"><div class="laptop-lid"><span class="laptop-cam"></span><div class="device-screen"><img src="andalusia-cover.png" alt="Andalusia Workshop"></div></div><div class="laptop-base"></div></div></div>
+            <h3>Andalusia Workshop</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">UI/UX Design</span><span class="ps-pill ps-pill-stage">Prototype</span></div>
+          </a>
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="uiux" data-type="sprint"
+             aria-label="Open Trova — UI/UX design sprint" onclick="openProject('trova')">
+            <div class="ps-well"><div class="device device--phone"><div class="device-screen"><img src="trova-home.jpg" alt="Trova" style="object-position:50% 0;"></div></div></div>
+            <h3>Trova</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">UI/UX Design</span><span class="ps-pill ps-pill-stage">Sprint</span></div>
+          </a>
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="service" data-type="case"
+             aria-label="Open FetchRide — service design case study" onclick="openProject('fetchride')">
+            <div class="ps-well"><div class="device device--laptop"><div class="laptop-lid"><span class="laptop-cam"></span><div class="device-screen"><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide"></div></div><div class="laptop-base"></div></div></div>
+            <h3>FetchRide</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Service Design</span><span class="ps-pill ps-pill-stage">Case Study</span></div>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- PHYSICAL — Industrial Design -->
+      <section class="ps-shelf" data-shelf="physical">
+        <div class="ps-shelf-head">
+          <h2>physical</h2>
+          <div class="ps-shelf-tools">
+            <div class="ps-arrows">
+              <button class="ps-arrow" data-dir="-1" aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
+              <button class="ps-arrow" data-dir="1"  aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="ps-rail">
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="case"
+             aria-label="Open Andalusia Design x Four Hands — industrial design case study" onclick="openProject('andalusia-fourhands')">
+            <div class="ps-well"><img src="fourhands-cover.png" alt="Andalusia Design x Four Hands"></div>
+            <h3>Andalusia Design x<br>Four Hands</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Case Study</span></div>
+          </a>
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+             aria-label="Open Footwear — industrial design concept sketches" onclick="openProject('footwear')">
+            <div class="ps-well"><img src="footwear-cover.png" alt="Footwear" style="transform:translateY(20%);"></div>
+            <h3>Footwear</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Concept Sketch</span></div>
+          </a>
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+             aria-label="Open Northwestern Bus Stop — industrial design concept sketches" onclick="openProject('bus-stop')">
+            <div class="ps-well"><img src="busstop-cover.png" alt="Northwestern Bus Stop"></div>
+            <h3>Northwestern Bus Stop</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Concept Sketch</span></div>
+          </a>
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+             aria-label="Open Children's Furniture — industrial design concept sketches" onclick="openProject('furniture')">
+            <div class="ps-well"><img src="furniture-cover.png" alt="Children's Furniture"></div>
+            <h3>Children's Furniture</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Concept Sketch</span></div>
+          </a>
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="proto"
+             aria-label="Open Stow — industrial design prototype" onclick="openProject('stow')">
+            <div class="ps-well"><img src="stow-cover.png" alt="Stow"></div>
+            <h3>Stow</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Prototype</span></div>
+          </a>
+
+          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="case"
+             aria-label="Open CloudFlex Headrest — industrial design case study" onclick="openProject('cloudflex')">
+            <div class="ps-well"><img src="cloudflex-cover.png" alt="CloudFlex Headrest"></div>
+            <h3>CloudFlex Headrest</h3>
+            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Case Study</span></div>
+          </a>
+
+        </div>
+      </section>
 
     </div>
   </div>
 </section>
 
-  <!-- ABOUT section moved below the projects band — reel order is now
-       name → projects → about (see #page-about further down). -->
-
-<!-- projects, presented as a floating "shop": all 9 drift as small products on the
-     grey studio wall. Each is clickable → openProject(). Sits directly under the
-     name so recruiters see work immediately. -->
-<div class="shop-band" id="page-shop">
-  <div class="section-head">
-    <span class="section-head-title">projects</span>
-  </div>
-  <div class="shop-stage">
-
-    <!-- ROW 1 — ShopCampus · Andalusia Workshop · Trova -->
-    <!-- ShopCampus — mobile commerce app → iPhone -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open ShopCampus"
-       style="--w:146px"
-       onclick="openProject('shopify-mobile')">
-      <div class="shop-visual">
-        <div class="device device--phone">
-          <div class="device-screen"><img src="shopcampus-cover.png" alt="ShopCampus mobile onboarding" style="object-position:50% 0;"></div>
-        </div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">ShopCampus</span><span class="shop-pills"><span class="pill pill-uiux">UI/UX Design</span><span class="pill pill-case">Case Study</span></span></div>
-    </a>
-
-    <!-- Andalusia Workshop — desktop web product → MacBook -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open Andalusia Workshop"
-       style="--w:322px"
-       onclick="openProject('andalusia-workshop')">
-      <div class="shop-visual">
-        <div class="device device--laptop">
-          <div class="laptop-lid"><span class="laptop-cam"></span>
-            <div class="device-screen"><img src="andalusia-cover.png" alt="Andalusia Workshop customization tool"></div>
-          </div>
-          <div class="laptop-base"></div>
-        </div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">Andalusia Workshop</span><span class="shop-pills"><span class="pill pill-uiux">UI/UX Design</span><span class="pill pill-proto">Prototype</span></span></div>
-    </a>
-
-    <!-- Trova — mobile travel app → iPhone -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open Trova"
-       style="--w:146px"
-       onclick="openProject('trova')">
-      <div class="shop-visual">
-        <div class="device device--phone">
-          <div class="device-screen"><img src="trova-home.jpg" alt="Trova social travel app" style="object-position:50% 0;"></div>
-        </div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">Trova</span><span class="shop-pills"><span class="pill pill-uiux">UI/UX Design</span><span class="pill pill-sprint">Sprint</span></span></div>
-    </a>
-
-    <!-- ROW 2 — the three concept sketches: Footwear · Bus Stop · Furniture -->
-    <!-- Footwear — concept sketch → cutout -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open Footwear"
-       style="--w:268px"
-       onclick="openProject('footwear')">
-      <div class="shop-visual">
-        <div class="product-cutout"><img src="footwear-cover.png" alt="Cloud-quilted slip-on footwear concept"></div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">Footwear</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-sketch">Concept Sketch</span></span></div>
-    </a>
-
-    <!-- Northwestern Bus Stop — concept sketch → product plate -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open Northwestern Bus Stop"
-       style="--w:268px"
-       onclick="openProject('bus-stop')">
-      <div class="shop-visual">
-        <div class="product-cutout"><img src="busstop-cover.png" alt="Northwestern bus stop concept"></div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">Northwestern Bus Stop</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-sketch">Concept Sketch</span></span></div>
-    </a>
-
-    <!-- Children's Furniture — concept sketch → cutout -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open Children's Furniture"
-       style="--w:261px"
-       onclick="openProject('furniture')">
-      <div class="shop-visual">
-        <div class="product-cutout"><img src="furniture-cover.png" alt="Children's furniture concept"></div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">Children's Furniture</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-sketch">Concept Sketch</span></span></div>
-    </a>
-
-    <!-- ROW 3 — CloudFlex · Stow · FetchRide (last, bottom-right) -->
-    <!-- CloudFlex Headrest — physical product → product plate -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open The CloudFlex Headrest"
-       style="--w:246px"
-       onclick="openProject('cloudflex')">
-      <div class="shop-visual">
-        <div class="product-cutout"><img src="cloudflex-cover.png" alt="CloudFlex airline headrest concept"></div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">CloudFlex Headrest</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-case">Case Study</span></span></div>
-    </a>
-
-    <!-- Stow — physical product → cutout -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open Stow"
-       style="--w:258px"
-       onclick="openProject('stow')">
-      <div class="shop-visual">
-        <div class="product-cutout"><img src="stow-cover.png" alt="Stow modular furniture system"></div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">Stow</span><span class="shop-pills"><span class="pill pill-industrial">Industrial Design</span><span class="pill pill-proto">Prototype</span></span></div>
-    </a>
-
-    <!-- FetchRide — live service website → MacBook -->
-    <a class="shop-item" role="link" tabindex="0" aria-label="Open FetchRide"
-       style="--w:322px"
-       onclick="openProject('fetchride')">
-      <div class="shop-visual">
-        <div class="device device--laptop">
-          <div class="laptop-lid"><span class="laptop-cam"></span>
-            <div class="device-screen"><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide shuttle service website"></div>
-          </div>
-          <div class="laptop-base"></div>
-        </div>
-      </div>
-      <div class="shop-meta"><span class="shop-title">FetchRide</span><span class="shop-pills"><span class="pill pill-service">Service Design</span><span class="pill pill-case">Case Study</span></span></div>
-    </a>
-
-  </div>
-</div>
-
-  <!-- ABOUT — now the closing panel of the reel (name → projects → about) -->
-<section id="page-about" class="reel-about">
-  <div class="section-head">
-    <span class="section-head-title">about</span>
-  </div>
-  <div class="about-band">
-    <div class="about-photo-col">
-      <div class="about-avatar"><img src="IMG_4391.jpg" alt="Sarah Thornton"></div>
-      <p class="about-meta">Chicago, IL · B.A. Psychology + Segal Design Certificate</p>
-    </div>
-    <div class="about-copy">
-      <p><span class="hello-egg">Hi, I'm Sarah.</span></p>
+  <!-- ABOUT — closing panel of the reel (home → projects → about) -->
+<section id="page-about" class="reel-about about panel">
+  <div class="about-grid">
+    <div class="about-text">
+      <h2>hi, i'm sarah.</h2>
       <p>I'm a senior at Northwestern University pursuing a B.A. in Psychology and the Segal Design Certificate.</p>
       <p>My work sits at the intersection of human behavior and design, where I aim to create experiences that help people feel understood and genuinely comfortable in the spaces they move through.</p>
       <p>Outside of design, I can be found testing rice cooker recipes, hiking somewhere scenic, or cafe hopping in search of a new favorite spot. I'm naturally curious and happiest when exploring.</p>
-      <p>Thanks for stopping by!</p>
+      <p class="about-sign">Thanks for stopping by!</p>
       <div class="about-links">
-        <a class="about-link" href="mailto:sarahthornton2027@u.northwestern.edu">Email ↗</a>
-        <a class="about-link" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="about-link" href="mailto:sarahthornton2027@u.northwestern.edu">email ↗</a>
+        <a class="about-link" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener">linkedin ↗</a>
       </div>
+    </div>
+    <div class="about-photo">
+      <img src="IMG_4391.jpg" alt="Sarah Thornton">
     </div>
   </div>
 </section>
@@ -3045,183 +3157,6 @@
     <div class="blob home-blob-5"></div>
   </div>
 </div>
-
-
-<!-- ══════════════════════════════════════════
-     PROJECTS
-══════════════════════════════════════════ -->
-<section id="page-projects" class="page">
-  <div class="section-wrap">
-   <div class="pj-wrap">
-    <h2 class="pj-page-title" id="proj-heading">Projects</h2>
-    <p class="pj-intro" id="proj-desc">Work spanning <strong>digital experiences</strong>, <strong>physical products</strong>, and the desire to better understand people.</p>
-
-    <div class="pj-list">
-
-      <!-- Andalusia Workshop — desktop web product → MacBook -->
-      <a class="pj" role="link" tabindex="0" data-cat="uiux" data-type="proto"
-         aria-label="Open Andalusia Workshop — UI/UX design prototype"
-         onclick="openProject('andalusia-workshop')">
-        <div class="pj-visual">
-          <div class="device device--laptop">
-            <div class="laptop-lid">
-              <span class="laptop-cam"></span>
-              <div class="device-screen"><img src="andalusia-cover.png" alt="Andalusia Workshop customization tool"></div>
-            </div>
-            <div class="laptop-base"></div>
-          </div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">Andalusia Workshop</h3>
-          <div class="pj-pills">
-            <span class="pill pill-uiux">UI/UX Design</span>
-            <span class="pill pill-proto">Prototype</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- ShopCampus — mobile commerce app → iPhone 17 -->
-      <a class="pj" role="link" tabindex="0" data-cat="uiux" data-type="case"
-         aria-label="Open ShopCampus — UI/UX design case study"
-         onclick="openProject('shopify-mobile')">
-        <div class="pj-visual">
-          <div class="device device--phone">
-            <div class="device-screen"><img src="shopcampus-cover.png" alt="ShopCampus mobile onboarding" style="object-position: 50% 0;"></div>
-          </div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">ShopCampus</h3>
-          <div class="pj-pills">
-            <span class="pill pill-uiux">UI/UX Design</span>
-            <span class="pill pill-case">Case Study</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Trova — mobile travel app → iPhone 17 -->
-      <a class="pj" role="link" tabindex="0" data-cat="uiux" data-type="sprint"
-         aria-label="Open Trova — UI/UX design sprint"
-         onclick="openProject('trova')">
-        <div class="pj-visual">
-          <div class="device device--phone">
-            <div class="device-screen"><img src="trova-home.jpg" alt="Trova social travel app" style="object-position: 50% 0;"></div>
-          </div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">Trova</h3>
-          <div class="pj-pills">
-            <span class="pill pill-uiux">UI/UX Design</span>
-            <span class="pill pill-sprint">Sprint</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- FetchRide — live service website → browser window -->
-      <a class="pj" role="link" tabindex="0" data-cat="service" data-type="case"
-         aria-label="Open FetchRide — service design case study"
-         onclick="openProject('fetchride')">
-        <div class="pj-visual">
-          <div class="device device--browser">
-            <div class="browser-bar">
-              <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
-              <span class="browser-addr"></span>
-            </div>
-            <div class="device-screen"><img src="Screenshot%202026-06-02%20at%2010.03.34%20AM.jpg" alt="FetchRide shuttle service website"></div>
-          </div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">FetchRide</h3>
-          <div class="pj-pills">
-            <span class="pill pill-service">Service Design</span>
-            <span class="pill pill-case">Case Study</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Stow — physical product → cutout -->
-      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="proto"
-         aria-label="Open Stow — industrial design prototype"
-         onclick="openProject('stow')">
-        <div class="pj-visual">
-          <div class="product-cutout"><img src="stow-cover.png" alt="Stow modular furniture system"></div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">Stow</h3>
-          <div class="pj-pills">
-            <span class="pill pill-industrial">Industrial Design</span>
-            <span class="pill pill-proto">Prototype</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- CloudFlex Headrest — physical product → product plate -->
-      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="case"
-         aria-label="Open The CloudFlex Headrest — industrial design case study"
-         onclick="openProject('cloudflex')">
-        <div class="pj-visual">
-          <div class="product-cutout"><img src="cloudflex-cover.png" alt="CloudFlex airline headrest concept"></div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">The CloudFlex Headrest</h3>
-          <div class="pj-pills">
-            <span class="pill pill-industrial">Industrial Design</span>
-            <span class="pill pill-case">Case Study</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Footwear — concept sketches → product plate (contain) -->
-      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
-         aria-label="Open Footwear — industrial design concept sketches"
-         onclick="openProject('footwear')">
-        <div class="pj-visual">
-          <div class="product-cutout"><img src="footwear-cover.png" alt="Cloud-quilted slip-on footwear concept"></div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">Footwear</h3>
-          <div class="pj-pills">
-            <span class="pill pill-industrial">Industrial Design</span>
-            <span class="pill pill-sketch">Concept Sketch</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Northwestern Bus Stop — concept sketches → product plate (contain) -->
-      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
-         aria-label="Open Northwestern Bus Stop — industrial design concept sketches"
-         onclick="openProject('bus-stop')">
-        <div class="pj-visual">
-          <div class="product-cutout"><img src="busstop-cover.png" alt="Northwestern bus stop concept"></div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">Northwestern Bus Stop</h3>
-          <div class="pj-pills">
-            <span class="pill pill-industrial">Industrial Design</span>
-            <span class="pill pill-sketch">Concept Sketch</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- Children's Furniture — concept sketches → product plate (contain) -->
-      <a class="pj" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
-         aria-label="Open Children's Furniture — industrial design concept sketches"
-         onclick="openProject('furniture')">
-        <div class="pj-visual">
-          <div class="product-cutout"><img src="furniture-cover.png" alt="Children's furniture concept"></div>
-        </div>
-        <div class="pj-meta">
-          <h3 class="pj-title">Children's Furniture</h3>
-          <div class="pj-pills">
-            <span class="pill pill-industrial">Industrial Design</span>
-            <span class="pill pill-sketch">Concept Sketch</span>
-          </div>
-        </div>
-      </a>
-
-    </div>
-   </div>
-  </div>
-</section>
 
 
 <!-- ══════════════════════════════════════════
@@ -3297,7 +3232,7 @@
   <div class="detail-body">
     <button class="back-btn" id="detail-back" onclick="backToProjects()">
       <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M6 11L1 6M1 6L6 1M1 6H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span id="detail-back-label">back to projects</span>
+      <span id="detail-back-label">projects</span>
     </button>
 
     <span class="stage-tag detail-stage" id="d-stage" style="display:none"></span>
@@ -3337,7 +3272,7 @@
     <div class="detail-links-row" id="d-links"></div>
 
     <button class="back-btn back-btn--bottom" onclick="backToProjects()">
-      <span>back to projects</span>
+      <span>projects</span>
       <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M10 1L15 6M15 6L10 11M15 6H1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </div>
@@ -3374,31 +3309,15 @@
   el.addEventListener('touchcancel', clear, { passive: true });
 })();
 
-// ── Easter egg: hover the profile photo → "Hi, I'm Sarah." enlarges + shakes ──
-(function helloEgg() {
-  const avatar = document.querySelector('.about-avatar');
-  const hello = document.querySelector('.hello-egg');
-  if (!avatar || !hello) return;
-  const shake = () => {
-    hello.classList.remove('wiggle');
-    void hello.offsetWidth;              // restart the animation cleanly
-    hello.classList.add('wiggle');       // plays the ring shake once per trigger
-  };
-  avatar.addEventListener('mouseenter', shake);
-  // mobile: hover fires only on the first tap and then sticks, so re-trigger on
-  // every tap (touchstart is touch-only, so desktop behaviour is unchanged)
-  avatar.addEventListener('touchstart', shake, { passive: true });
-})();
-
 // ── Project data ──────────────────────────────
 const PROJECTS = {
   'andalusia-workshop': {
     title: 'Andalusia Workshop',
     desc: 'A client-facing customization tool that turns ideas into fabrication-ready concepts in real time.',
-    role: 'Product Designer & User Researcher',
+    role: 'Product Designer',
     timeline: '8 weeks',
     heroImages: ['andalusia-cover.png'],
-    overview: 'In Summer 2026, I worked with Andalusia Design, an Austin-based architectural fabrication company, to streamline its concept-development process. Creating custom renderings in Rhino could take days as designers and clients worked toward an agreed-upon direction. Andalusia Workshop enabled them to visualize and customize concepts together in real time, then transfer the final design directly into Rhino for refinement and fabrication.',
+    overview: 'In Summer 2026, I worked with Andalusia Design, an Austin-based architectural fabrication company, to streamline its concept-development process. Creating custom concepts in Rhino could take days as designers and clients worked toward an agreed-upon direction. I was tasked with designing Andalusia Workshop, a digital tool that allows clients and designers to visualize and customize concepts together in real time, then transfer the final design into Rhino for refinement and fabrication.\nThroughout the project, I conducted user research with around 10 designers, architects, and business professionals, using interviews and usability feedback to understand how different users navigated the tool. Their insights helped me continuously iterate on the website to improve its usability and overall user experience.',
     takeaway: 'Working on Andalusia Workshop let me follow projects from concept to rendering to fabrication while designing a digital experience around that process. I saw how real-time visualization could help designers and clients communicate more clearly, align faster, and move confidently from discussion to production.\nI also learned the importance of defining brand guidelines early. Without clear standards for color, typography, components, and voice, I made inconsistent decisions and had to revisit screens later. Now, I approach every project by establishing the visual foundation first.',
     prototypeLayout: true,
     demo: {
@@ -3413,6 +3332,48 @@ const PROJECTS = {
       aspect: '16 / 10'
     },
     links: []                                 // TODO: add { label: 'Visit the live tool', url: '...' } once you share the URL
+  },
+  'andalusia-fourhands': {
+    title: 'Andalusia Design x Four Hands',
+    desc: 'A large-scale easel and display system developed for Four Hands\' retail and showroom environments.',
+    role: 'Product Designer',
+    timeline: '3 weeks',
+    heroImages: ['fourhands-cover.png'],
+    heroCompact: true,          // portrait render → cap the frame so it doesn't stretch the row
+    heroFit: 'contain',         // show the whole panel (logo + etch), don't crop
+    overview: 'In Summer 2026, I worked with Andalusia Design, an Austin-based architectural design and fabrication studio, on a client project for Four Hands. I was tasked with developing a large-scale easel and display system for use across Four Hands\' retail and showroom environments.\nI explored a range of concepts, developed visual renderings, and presented my designs directly to the client in a formal review. Using their feedback, I iterated on the concepts and helped narrow the direction toward a few preferred solutions. While the project is still in development, several of my concepts were selected to move forward for further exploration.',
+    takeaway: 'I didn\'t have the full context at the beginning of the project. My initial understanding was that the easel would sit at the front of a Four Hands store, and the main constraint communicated to me was that it should be approximately 5–6 feet tall. After our first client meeting, I was able to ask more detailed questions and learned that the piece was intended for a luxury retail environment and should feel extremely minimal, refined, and exclusive.\nBefore that meeting, I had visited Four Hands\' store and website and interpreted their brand as being highly material-driven and focused on original, expressive design. I initially carried some of those assumptions into my concepts. The client, however, wanted something much more restrained. This taught me the importance of separating my own interpretation of a brand from the client\'s actual goals and using direct feedback to guide the design process.',
+    // Live Miro board embedded in a browser frame — visitors can pan & zoom the
+    // board in place. Requires the board's sharing to allow "anyone with the link
+    // can view"; if it can't render, the frame falls back to an "Open in Miro" button.
+    demo: {
+      type: 'website',
+      frame: 'browser',
+      heading: 'Explore the project board',
+      description: 'Pan and zoom around the live Miro board to explore the concept sketches, renderings, and design exploration behind the Four Hands easel.',
+      embedUrl: 'https://miro.com/app/live-embed/uXjVHCY-nAM=/?share_link_id=605838724381&embedMode=view_only_without_ui',
+      externalUrl: 'https://miro.com/app/board/uXjVHCY-nAM=/?share_link_id=605838724381',
+      buttonLabel: 'Open in Miro',
+      aspect: '16 / 10'
+    },
+    // Hand-drawn process pages: the design brief, feature ideation, and the two
+    // concept-development directions (wooden panel + metal easel).
+    sections: [
+      {
+        label: 'Concept sketches',
+        sublabel: 'Process pages from the Four Hands easel — the design brief and attributes, feature ideation, and early concept development.',
+        grid: true,
+        images: [
+          'IMG_6834.JPG',
+          'IMG_6832.JPG',
+          'IMG_6833.JPG',
+          'IMG_6835.JPG',
+          'IMG_6836.JPG'
+        ],
+        smallImages: []
+      }
+    ],
+    links: []
   },
   'shopify-mobile': {
     title: 'ShopCampus',
@@ -3430,7 +3391,7 @@ const PROJECTS = {
       heading: 'Try the Shop Campus Prototype',
       poster: 'shopcampus-cover.png',   // first screen shown instantly while Figma loads
       description: 'Click through the redesigned onboarding experience for new student users.',
-      hint: "Tap <strong>“Start selling on Shop Campus”</strong> to begin the flow.",
+      hint: "Tap <strong>“Start selling on Shop Campus”</strong><br>to begin the flow.",
       // Direct Figma embed player (used verbatim as the iframe src). Points at the
       // bare 402×874 screen flow (node 725-406) — no device mockup around it — so
       // scaling=contain fills the frame edge-to-edge with no letterboxing.
@@ -3702,10 +3663,10 @@ const PROJECTS = {
 let currentPage = 'home';
 
 // which pages have a dark background (need light nav text)
-const NAV_STATE = { home: 'on-cream', projects: 'on-cream', detail: 'on-cream', about: 'on-dark' };
+const NAV_STATE = { home: 'on-dark', projects: 'on-cream', detail: 'on-cream', about: 'on-cream' };
 
 function go(page) {
-  const REEL = ['home', 'about'];
+  const REEL = ['home', 'projects', 'about'];
   const wasReel = REEL.includes(currentPage);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('reel').classList.remove('active');
@@ -3765,7 +3726,7 @@ function closeNavMenus() {
 // (single source of truth) so the detail back-button can return to the right
 // filtered section rather than the catch-all "all projects" page.
 const PROJECT_CAT = {};
-document.querySelectorAll('#page-projects .pj').forEach(card => {
+document.querySelectorAll('#page-projects .ps-card').forEach(card => {
   const m = (card.getAttribute('onclick') || '').match(/openProject\('([^']+)'\)/);
   if (m) PROJECT_CAT[m[1]] = card.dataset.cat || 'all';
 });
@@ -3775,9 +3736,9 @@ document.querySelectorAll('#page-projects .pj').forEach(card => {
 // data-type maps to the detail page's existing tag-* pill styling.
 const STAGE_CLASS = { proto: 'tag-proto', case: 'tag-case', sprint: 'tag-sprint', sketch: 'tag-sketch' };
 const PROJECT_STAGE = {};
-document.querySelectorAll('#page-projects .pj').forEach(card => {
+document.querySelectorAll('#page-projects .ps-card').forEach(card => {
   const m = (card.getAttribute('onclick') || '').match(/openProject\('([^']+)'\)/);
-  const typePill = card.querySelector('.pj-pills .pill:last-child');
+  const typePill = card.querySelector('.ps-pills .ps-pill-stage');
   if (m && typePill) {
     PROJECT_STAGE[m[1]] = { label: typePill.textContent.trim(), cls: STAGE_CLASS[card.dataset.type] || '' };
   }
@@ -3801,7 +3762,7 @@ let currentProjectCat = 'all';
 // "Back to Projects" (detail page) + nav "projects" both land on the shop band
 // where every project now lives, in the home reel.
 function backToProjects() {
-  scrollToProjects();
+  goProjects(currentProjectCat || 'all');
 }
 
 // Bring the shop band into view — activating the reel first if we're on a
@@ -3837,11 +3798,11 @@ function scrollToProjects(e) {
   }
 }
 
-// Go to the projects page, filtered to a category ('all' | 'uiux' | 'industrial')
+// Scroll to the projects panel within the reel (all projects always shown — the
+// category tabs were removed, so there's no per-category filtering anymore).
 function goProjects(cat) {
   closeNavMenus();
   go('projects');
-  filterProjects(cat || 'all');
 }
 
 // Category row inside the mega-menu. Clicking a category expands its fly-out
@@ -3884,7 +3845,7 @@ document.addEventListener('click', (e) => {
 });
 
 // Featured cards + project rows are keyboard-operable (role="link" tiles)
-document.querySelectorAll('.feat-card, #page-projects .pj, .shop-item').forEach(card => {
+document.querySelectorAll('.feat-card, #page-projects .ps-card, .shop-item').forEach(card => {
   card.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
   });
@@ -3892,33 +3853,105 @@ document.querySelectorAll('.feat-card, #page-projects .pj, .shop-item').forEach(
 
 // Show/hide individual project rows by their data-cat (the mega-menu can jump
 // straight to a single discipline), and swap the page heading to match.
+// Drive the shelves-page filter (chips + shelf visibility) from the site's
+// category routing (e.g. the mega-menu → goProjects(cat)).
 function filterProjects(cat) {
-  document.querySelectorAll('#page-projects .pj').forEach(row => {
-    row.style.display = (cat === 'all' || row.dataset.cat === cat) ? '' : 'none';
-  });
-  // swap the page heading + intro line for the active category
-  const heading = document.getElementById('proj-heading');
-  const desc = document.getElementById('proj-desc');
-  const TITLES = { all: 'Projects', uiux: 'UI/UX Design', service: 'Service Design', industrial: 'Industrial Design' };
-  if (heading) heading.textContent = TITLES[cat] || TITLES.all;
-  if (desc) desc.style.display = cat === 'all' ? '' : 'none';
+  if (window.__psApply) window.__psApply(cat || 'all');
 }
+
+// ── Projects "shelves" page: filter chips → show matching cards, float the
+//    matching department to the top, hide empty ones, keep the counts live. ──
+(function projectsShelves() {
+  const shelves = document.getElementById('ps-shelves');
+  const chips = document.getElementById('ps-chips');
+  const count = document.getElementById('ps-count');
+  if (!shelves) return;   // chips + count were removed; arrows still run
+  const cards = [...shelves.querySelectorAll('.ps-card')];
+  const total = cards.length;
+
+  // Measure the real card pitch from the DOM rather than assuming card width +
+  // gap — with scroll-snap, a nudge that misses a snap point gets yanked back.
+  function pitchOf(rail) {
+    const shown = rail.querySelectorAll('.ps-card:not([hidden])');
+    if (shown.length > 1) return shown[1].offsetLeft - shown[0].offsetLeft;
+    return rail.clientWidth;
+  }
+
+  function syncArrows(shelf) {
+    const rail = shelf.querySelector('.ps-rail');
+    if (!rail) return;
+    const max = rail.scrollWidth - rail.clientWidth - 1;
+    shelf.querySelectorAll('.ps-arrow').forEach(btn => {
+      const dir = Number(btn.dataset.dir);
+      btn.disabled = max <= 0 ||
+        (dir < 0 && rail.scrollLeft <= 0) ||
+        (dir > 0 && rail.scrollLeft >= max);
+    });
+  }
+
+  shelves.querySelectorAll('.ps-shelf').forEach(shelf => {
+    const rail = shelf.querySelector('.ps-rail');
+    if (!rail) return;
+    shelf.querySelectorAll('.ps-arrow').forEach(btn => {
+      btn.addEventListener('click', () => {
+        rail.scrollBy({ left: Number(btn.dataset.dir) * pitchOf(rail), behavior: 'smooth' });
+      });
+    });
+    rail.addEventListener('scroll', () => syncArrows(shelf), { passive: true });
+  });
+
+  function apply(filter) {
+    cards.forEach(card => { card.hidden = !(filter === 'all' || card.dataset.cat === filter); });
+
+    let visibleShelves = 0;
+    shelves.querySelectorAll('.ps-shelf').forEach(shelf => {
+      const shown = shelf.querySelectorAll('.ps-card:not([hidden])').length;
+      shelf.hidden = shown === 0;
+      shelf.style.order = (shown && filter !== 'all') ? 0 : 2;
+      const c = shelf.querySelector('.ps-shelf-count');
+      if (c) c.textContent = shown;
+      if (shown) {
+        visibleShelves++;
+        const rail = shelf.querySelector('.ps-rail');
+        if (rail) rail.scrollLeft = 0;   // reset the rail so arrows re-enable
+        syncArrows(shelf);
+      }
+    });
+    shelves.classList.toggle('solo', visibleShelves === 1);
+
+    const shown = cards.filter(c => !c.hidden).length;
+    if (count) count.textContent = filter === 'all' ? total + ' projects' : shown + ' of ' + total + ' shown';
+    if (chips) chips.querySelectorAll('.ps-chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.filter === filter)));
+  }
+
+  if (chips) chips.addEventListener('click', e => {
+    const btn = e.target.closest('.ps-chip');
+    if (btn) apply(btn.dataset.filter);
+  });
+
+  window.__psApply = apply;   // let the site's category routing drive it too
+  apply('all');
+  window.addEventListener('resize', () => shelves.querySelectorAll('.ps-shelf').forEach(syncArrows));
+})();
 
 // Drive nav colour + blob parallax from the reel's scroll position
 function updateReel() {
   const reel = document.getElementById('reel');
   if (!reel.classList.contains('active')) return;
   const nav = document.getElementById('main-nav');
-  const ref = window.scrollY + window.innerHeight * 0.5;   // middle of the viewport
+  const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 64;
+  const shop = document.getElementById('page-projects');
+  const shopTop = shop ? shop.offsetTop : window.innerHeight;
   const aboutTop = document.getElementById('page-about').offsetTop;
-  const section = ref >= aboutTop ? 'about' : 'home';
-  // home, About (indigo card) and the projects band all sit on cream now, so the
-  // nav stays dark-on-cream throughout the reel
+  // The home hero is a full-blue panel → white nav. Once the grey projects band
+  // rises under the bar, switch to dark-on-cream for the rest of the reel.
+  const overHome = (window.scrollY + navH + 4) < shopTop;
   if (nav) {
     nav.classList.remove('on-cream', 'on-dark');
-    nav.classList.add('on-cream');
+    nav.classList.add(overHome ? 'on-dark' : 'on-cream');
   }
-  currentPage = section;
+  const ref = window.scrollY + window.innerHeight * 0.5;   // middle of the viewport
+  currentPage = ref >= aboutTop ? 'about' : (overHome ? 'home' : 'projects');
   const rb = document.querySelector('.reel-blobs');
   if (rb) rb.style.transform = `translateY(${window.scrollY * 0.18}px)`;
 }
@@ -4108,6 +4141,12 @@ function liveDemoLoaded(id) {
   const el = document.getElementById(id);
   if (el) { el.classList.add('loaded'); el.classList.remove('failed'); }
 }
+// like liveDemoLoaded, but waits a beat after the iframe's load event so the
+// embed has painted its first frame before we fade it in — the white loading
+// screen + spinner stays up until the prototype is actually there.
+function liveDemoLoadedDelayed(id) {
+  setTimeout(() => liveDemoLoaded(id), 900);
+}
 // restart: reload the iframe so a Figma prototype returns to its start frame
 function liveDemoRestart(id) {
   const el = document.getElementById(id);
@@ -4153,14 +4192,17 @@ function renderPrototypeFrame(demo, projectTitle) {
   if (!src) {
     viewportInner = `<div class="live-demo-loading"><span style="max-width:200px;text-align:center;line-height:1.5;">Interactive prototype coming soon.</span></div>`;
   } else if (demo.poster) {
-    // The live Figma embed auto-loads directly and fades in — no static thumbnail
-    // poster image, no launch button, no spinner.
-    viewportInner = `<div class="live-demo-fallback">
+    // Clean white loading state: the frame (white background) shows a centred
+    // vector spinner from the moment it renders. The Figma embed loads eagerly
+    // behind it and — after a short beat so it has actually painted its first
+    // frame — fades in on top and the spinner drops. No thumbnail, no white flash.
+    viewportInner = `<div class="proto-loader" role="status" aria-label="Loading prototype"><svg viewBox="0 0 50 50" width="46" height="46" aria-hidden="true"><circle class="pl-track" cx="25" cy="25" r="20" fill="none" stroke-width="5"/><circle class="pl-arc" cx="25" cy="25" r="20" fill="none" stroke-width="5" stroke-linecap="round"/></svg></div>
+       <div class="live-demo-fallback">
          <span>Prototype didn't load?</span>
          ${externalUrl ? `<a class="live-demo-btn primary" href="${externalUrl}" target="_blank" rel="noopener">${btnLabel}</a>` : ''}
        </div>
        <iframe title="${title} — interactive prototype" loading="eager" fetchpriority="high" allowfullscreen allow="fullscreen"
-               style="${zoomStyle}" src="${src}" onload="liveDemoLoaded('${id}')"></iframe>`;
+               style="${zoomStyle}" src="${src}" onload="liveDemoLoadedDelayed('${id}')"></iframe>`;
   } else {
     viewportInner = `<div class="live-demo-loading"><div class="live-demo-spinner"></div><span>Loading…</span></div>
        <div class="live-demo-fallback">
@@ -4236,7 +4278,7 @@ function openProject(id) {
   // returns to the full set and reads "Back to Projects"
   currentProjectCat = PROJECT_CAT[id] || 'all';
   const backLabel = document.getElementById('detail-back-label');
-  if (backLabel) backLabel.textContent = 'back to projects';
+  if (backLabel) backLabel.textContent = 'projects';
   const backBtn = document.getElementById('detail-back');
   if (backBtn) backBtn.style.display = '';
 
@@ -4341,8 +4383,11 @@ function openProject(id) {
     heroEl.querySelectorAll('.live-demo-frame[id]').forEach(f => { if (f.querySelector('iframe')) liveDemoWatch(f.id); });
   } else {
     const images = p.heroImages || (p.heroImage ? [p.heroImage] : []);
+    // heroFit: 'cover' (default) fills & crops; 'contain' shows the whole image
+    // (used for portrait product renders whose composition shouldn't be cropped).
+    const heroFit = p.heroFit || 'cover';
     if (images.length > 0) {
-      heroEl.innerHTML = `<img src="${images[0]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+      heroEl.innerHTML = `<img src="${images[0]}" alt="${p.title}" style="width:100%;height:100%;object-fit:${heroFit};display:block;">`;
       if (images.length > 1) {
         let current = 0;
         dotsEl.innerHTML = images.map((_, i) =>
@@ -4351,7 +4396,7 @@ function openProject(id) {
         dotsEl.querySelectorAll('.detail-dot').forEach(dot => {
           dot.addEventListener('click', () => {
             current = parseInt(dot.dataset.i);
-            heroEl.innerHTML = `<img src="${images[current]}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+            heroEl.innerHTML = `<img src="${images[current]}" alt="${p.title}" style="width:100%;height:100%;object-fit:${heroFit};display:block;">`;
             dotsEl.querySelectorAll('.detail-dot').forEach((d, i) => d.classList.toggle('on', i === current));
           });
         });
@@ -4566,6 +4611,92 @@ document.querySelectorAll('.dot-row').forEach(row => {
   stage.addEventListener('mouseleave', function () {
     glows.forEach(function (g) { g.style.setProperty('--lp-mask', off); });
   });
+})();
+</script>
+<script>
+// ── Scroll motion: hero name scatters on scroll (reassembles on scroll up);
+//    project cards + About content rise in as they enter, fall back as they leave.
+//    Letters are split here so every name copy stays in sync — each copy of a
+//    given letter position shares one scatter vector, keeping the two-tone split
+//    coherent as it breaks apart. ──
+(function reelMotion() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // one shared scatter vector per letter position (line-char) across all copies
+  const vec = {};
+  const vecFor = k => (vec[k] || (vec[k] = {
+    sx: (Math.random() - .5) * 900,   // sideways drift
+    sy: 320 + Math.random() * 620,    // fall distance
+    sr: (Math.random() - .5) * 160    // spin
+  }));
+
+  // split the settled name copies (not the intro drain) into per-letter spans
+  document.querySelectorAll('.lp-clip-top .lp-name, .lp-clip-bottom .lp-name').forEach(copy => {
+    copy.querySelectorAll('.lp-l1, .lp-l2').forEach((line, li) => {
+      const text = line.textContent;
+      line.textContent = '';
+      [...text].forEach((ch, ci) => {
+        const s = document.createElement('span');
+        s.className = 'ltr';
+        s.setAttribute('data-ltr', '');
+        s.dataset.key = li + '-' + ci;
+        s.textContent = ch;
+        line.appendChild(s);
+      });
+    });
+  });
+
+  // tag the rise-in targets: project cards only. (The About section sits at the
+  // very bottom of the page, so its elements never get enough scroll room to
+  // finish revealing with the scroll-linked system — they'd stay faded + offset.
+  // It gets a one-way reveal instead, below.)
+  document.querySelectorAll('#reel .shop-item').forEach(el => el.setAttribute('data-card', ''));
+
+  // 1) Name falls apart on scroll down, reassembles on scroll up.
+  const letters = [...document.querySelectorAll('[data-ltr]')].map(el => {
+    const v = vecFor(el.dataset.key);
+    return { el, sx: v.sx, sy: v.sy, sr: v.sr };
+  });
+
+  // 2) Text/cards rise in as they enter, fall back as they leave.
+  const cards = [...document.querySelectorAll('[data-card]')];
+
+  // 2b) About = one-way reveal (rise in on enter, then stay). Uses an observer
+  //     instead of scroll math so the bottom-of-page links reveal reliably.
+  const aboutTargets = document.querySelectorAll(
+    '#reel .about h2, #reel .about p, #reel .about .about-links, #reel .about-photo'
+  );
+  aboutTargets.forEach((el, i) => {
+    el.setAttribute('data-reveal', '');
+    el.style.transitionDelay = (i * 60) + 'ms';   // gentle cascade as the panel arrives
+  });
+  const aboutIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  aboutTargets.forEach(el => aboutIO.observe(el));
+
+  function frame() {
+    const vh = innerHeight;
+
+    const p = Math.min(1, Math.max(0, scrollY / (vh * 0.75))); // 0 at top, 1 once hero is gone
+    const e = p * p;                                            // ease-in so it holds, then goes
+    for (const l of letters) {
+      l.el.style.transform = `translate3d(${l.sx * e}px, ${l.sy * e}px, 0) rotate(${l.sr * e}deg)`;
+      l.el.style.opacity = Math.max(0, 1 - p * 1.5);
+    }
+
+    for (const el of cards) {
+      const t = Math.min(1, Math.max(0, (vh - el.getBoundingClientRect().top) / (vh * 0.42)));
+      const s = 1 - Math.pow(1 - t, 3);                          // ease-out
+      el.style.transform = `translateY(${(1 - s) * 90}px) scale(${0.96 + s * 0.04})`;
+      el.style.opacity = 0.15 + s * 0.85;
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
 })();
 </script>
 </body>
