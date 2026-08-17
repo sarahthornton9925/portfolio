@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sarah Thornton — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Warm the connection to Figma up front so the ShopCampus/Trova prototype
        embeds start rendering the moment the detail page opens (saves the DNS +
        TLS handshake, which is otherwise paid only after the iframe is created). -->
@@ -37,8 +37,8 @@
       /* ── ONE FONT, EVERYWHERE: Inter. Hierarchy comes from weight + size only ──
          --display and --mono kept as aliases so every legacy reference resolves
          to Inter without hunting them all down. */
-      --font: 'DM Sans', system-ui, sans-serif;              /* PRIMARY — nav, body, labels, metadata, buttons */
-      --display: 'DM Sans', system-ui, sans-serif; /* DISPLAY — now DM Sans too (site-wide single font) */
+      --font: 'Nunito', system-ui, sans-serif;               /* PRIMARY — nav, body, labels, metadata, buttons */
+      --display: 'Nunito', system-ui, sans-serif; /* DISPLAY — Nunito site-wide */
       --mono: var(--font);                                    /* labels are primary font now */
       /* THREE SIZES — the whole site uses only these (plus the hero name) */
       --fs-lg: clamp(2.2rem, 4.6vw, 3.6rem);   /* headings: section titles, detail titles, about headline */
@@ -2687,9 +2687,11 @@
     /* ── v2 nav: flush to the top edge, no pills. Logo + section links left,
        email + LinkedIn icons right. Logo is display (Bricolage); links are primary. */
     #main-nav { height: auto; padding: 16px 48px; border-bottom: 1px solid rgba(23,24,28,0.10); }
-    .nav-left, .nav-right { display: flex; align-items: center; }
-    .nav-left { gap: 30px; }
-    .nav-right { gap: 18px; }
+    /* logo left · projects/about/contact centered as a group · balanced right
+       spacer keeps the center group truly centered in the header */
+    .nav-left, .nav-right { display: flex; align-items: center; flex: 1 0 0; }
+    .nav-right { justify-content: flex-end; }
+    .nav-center { display: flex; align-items: center; justify-content: center; gap: 42px; flex: none; }
     /* reset the old pill-chip styling on logo + links */
     .nav-logo, .nav-link {
       background: none !important; border: none !important;
@@ -2708,9 +2710,9 @@
     .nav-logo:hover { opacity: 0.7; }
     .nav-link {
       font-family: var(--font);
-      font-size: var(--fs-sm);
+      font-size: 0.875rem;
       font-weight: 500;
-      letter-spacing: 0;
+      letter-spacing: 0.05em;
       color: var(--dark);
       cursor: pointer;
       text-decoration: none;
@@ -2737,6 +2739,33 @@
     nav.on-dark .nav-link.active:hover { color: #fff; }
     nav.on-dark .nav-icon { color: #fff; }
     nav.on-dark .nav-icon:hover { color: #fff; opacity: .8; transform: translateY(-1px); }
+
+    /* ── "contact" button + pop-up menu (replaces the standalone icons) ── */
+    .nav-contact-wrap { position: relative; display: flex; align-items: center; }
+    .nav-contact { cursor: pointer; }
+    .contact-pop {
+      position: absolute; top: calc(100% + 20px); left: 50%; z-index: 250;
+      min-width: 208px;
+      background: var(--paper);
+      border: 1px solid rgba(23,24,28,.12);
+      border-radius: 14px;
+      padding: 8px;
+      box-shadow: 0 20px 46px -20px rgba(23,24,28,.45);
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0; transform: translateX(-50%) translateY(-8px) scale(.98); transform-origin: top center;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s cubic-bezier(.22,1,.36,1);
+    }
+    .contact-pop.open { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
+    .contact-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; border-radius: 10px;
+      font-family: var(--font); font-size: var(--fs-md); font-weight: 500;
+      color: var(--dark); text-decoration: none; white-space: nowrap;
+      transition: background .16s ease, color .16s ease;
+    }
+    .contact-item:hover { background: rgba(75,65,232,.09); color: var(--blue); }
+    .contact-item svg { width: 20px; height: 20px; flex: none; }
     .shop-head { letter-spacing: -0.01em; }
     .shop-title { letter-spacing: 0.005em; }
     .detail-title { letter-spacing: -0.015em; }
@@ -2764,6 +2793,7 @@
       position: relative; z-index: 2;
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
+      align-items: center; text-align: center;
       padding: calc(var(--nav-height) + 24px) 40px 28px;
       color: #fff;
       overflow: hidden;
@@ -2787,13 +2817,29 @@
       color: #CFCAFA; text-wrap: pretty;
       animation: lpLineUp 0.9s 0.3s cubic-bezier(.22,1,.36,1) both;
     }
-    .lp-copy strong { font-weight: inherit; color: #fff; }   /* psychology · what drives people · human-centered design */
+    .lp-copy strong { font-weight: inherit; color: #fff; }   /* keyed: what · why */
+    /* on full width the two sentences sit one on top of the other. below full,
+       each is too wide, so break "what people do" and "why they do it" onto
+       their own lines rather than let them overflow/clip. */
+    .lp-copy .lp-wrap { display: none; }
+    @media (max-width: 1300px) {
+      .lp-copy .lp-wrap { display: inline; }
+    }
+    /* small attribution line under the statement */
+    .lp-sub {
+      margin-top: clamp(22px, 3.4vh, 40px);
+      font-weight: 500;
+      font-size: clamp(15px, 1.6vw, 21px);
+      letter-spacing: 0.01em;
+      color: #CFCAFA;
+      animation: lpLineUp 0.9s 0.45s cubic-bezier(.22,1,.36,1) both;
+    }
     @keyframes lpLineUp { from { transform: translateY(.5em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @media (max-width: 680px) {
       .lp-hero { padding: calc(var(--nav-height) + 16px) 20px 24px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .lp-welcome, .lp-copy { animation: none !important; }
+      .lp-welcome, .lp-copy, .lp-sub { animation: none !important; }
     }
 
     /* ── Centered mobile layout: hero, section headers, and about copy all
@@ -2858,31 +2904,30 @@
     /* About — two-column grid formatting, original light colours */
     /* About — two-column grid formatting, original light colours */
     .about { padding: clamp(72px,11vh,132px) clamp(18px,4vw,44px) clamp(64px,10vh,120px); }
+    /* single centered column sitewide (photo on top, centered copy) — matches
+       what used to be the mobile-only treatment. */
     .about-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
-      gap: clamp(28px,5vw,72px); align-items: start;
-      max-width: 1180px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr;
+      gap: clamp(28px,5vw,48px); justify-items: center;
+      max-width: 760px; margin: 0 auto;
     }
+    .about-text { text-align: center; }
+    .about-text p { margin-left: auto; margin-right: auto; }
+    .about .about-links { justify-content: center; }
+    .about-photo { order: -1; }                   /* photo above the copy */
     .about h2 {                                    /* match the "projects" section title */
       margin: 0 0 20px;
       font-family: var(--display); font-weight: 800;
       font-size: clamp(40px, 4.4vw, 64px); letter-spacing: -0.04em;
       line-height: 1; color: var(--dark);
     }
-    .about p { margin: 0 0 16px; max-width: 52ch; font-size: 1.0625rem; line-height: 1.6; color: var(--body); text-wrap: pretty; }
+    .about p { margin: 0 0 16px; max-width: 64ch; font-size: 1.0625rem; line-height: 1.6; color: var(--body); text-wrap: pretty; }
     .about .about-sign { margin-bottom: 28px; }     /* unbold — inherits the body paragraph style */
     /* email / linkedin keep the original plain text-link style (.about-link) — no bubble */
     /* circular photo frame (echoes the old avatar) */
     .about-photo { width: clamp(220px,26vw,320px); aspect-ratio: 1; max-width: 100%; justify-self: center; border-radius: 50%; overflow: hidden; }
     .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    @media (max-width: 640px) {
-      .about-photo { order: -1; }                 /* photo above copy on phones */
-      /* middle-align the About section on mobile only (desktop stays left) */
-      .about-text { text-align: center; }
-      .about-text p { margin-left: auto; margin-right: auto; }
-      .about .about-links { justify-content: center; }
-    }
 
     /* ═══ Projects page — "shelves" layout (digital + physical departments,
        filter chips, product cards) ═══════════════════════════════════════ */
@@ -2979,17 +3024,13 @@
 <nav id="main-nav" class="on-dark">
   <div class="nav-left">
     <span class="nav-logo" onclick="go('home')" role="link" aria-label="Sarah Thornton — home">꩜</span>
+  </div>
+  <div class="nav-center">
     <a id="nl-projects" class="nav-link" onclick="goProjects('all')" role="link" tabindex="0">projects</a>
     <a id="nl-about" class="nav-link" onclick="go('about')" role="link" tabindex="0">about</a>
+    <a id="nl-contact" class="nav-link" href="mailto:sarahthornton2027@u.northwestern.edu">contact</a>
   </div>
-  <div class="nav-right">
-    <a class="nav-icon" href="mailto:sarahthornton2027@u.northwestern.edu" aria-label="Email" title="Email">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 6.5L21 6"/></svg>
-    </a>
-    <a class="nav-icon" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-    </a>
-  </div>
+  <div class="nav-right"></div>
 </nav>
 
 
@@ -3003,8 +3044,8 @@
   <!-- Blue full-screen landing: "Welcome" ornament + a bold statement with keyed
        words in white, and a scroll cue that rides down to the projects band. -->
   <div class="lp-hero">
-    <div class="lp-welcome">Welcome!</div>
-    <p class="lp-copy">I'm Sarah Thornton, a designer grounded in <strong>psychology</strong>. I look beyond the surface to understand <strong>what drives people</strong>, then translate those insights into thoughtful, <strong>human-centered design</strong>.</p>
+    <p class="lp-copy">Curious about <br class="lp-wrap"><strong>what people do</strong>.<br>Even more curious about <br class="lp-wrap"><strong>why they do it</strong>.</p>
+    <div class="lp-sub">Sarah Thornton · Designer grounded in psychology</div>
   </div>
 </section>
 
@@ -3133,10 +3174,10 @@
   <div class="about-grid">
     <div class="about-text">
       <h2>hi, i'm sarah.</h2>
-      <p>I'm a senior at Northwestern University pursuing a B.A. in Psychology and the Segal Design Certificate.</p>
-      <p>My work sits at the intersection of human behavior and design, where I aim to create experiences that help people feel understood and genuinely comfortable in the spaces they move through.</p>
-      <p>Outside of design, I can be found testing rice cooker recipes, hiking somewhere scenic, or cafe hopping in search of a new favorite spot. I'm naturally curious and happiest when exploring.</p>
-      <p class="about-sign">Thanks for stopping by!</p>
+      <p>I'm a designer with a background in psychology, which means I'm endlessly curious about the weird little things people do and why they do them.</p>
+      <p>I'm especially interested in the habits, instincts, frustrations, and tiny decisions that shape how people interact with the world around them. I use those observations to design products and experiences around how people actually think and behave, not just how they’re supposed to.</p>
+      <p>Outside of design, I'm usually testing a new rice cooker recipe, finding somewhere scenic to hike, or cafe hopping in search of a new favorite spot.</p>
+      <p class="about-sign">Thanks for stopping by! If something here makes you curious, I’d love to hear from you.</p>
       <div class="about-links">
         <a class="about-link" href="mailto:sarahthornton2027@u.northwestern.edu">email ↗</a>
         <a class="about-link" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener">linkedin ↗</a>
@@ -3721,6 +3762,30 @@ function closeNavMenus() {
   document.querySelectorAll('.nav-cat.hover-open').forEach(c => c.classList.remove('hover-open'));
   document.activeElement?.blur();
 }
+
+// "contact" nav pop-up: toggle open, close on outside-click / Escape
+function toggleContact(e) {
+  if (e) e.stopPropagation();
+  const pop = document.getElementById('contact-pop');
+  const btn = document.getElementById('nav-contact-btn');
+  if (!pop) return;
+  const open = pop.classList.toggle('open');
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function closeContact() {
+  const pop = document.getElementById('contact-pop');
+  const btn = document.getElementById('nav-contact-btn');
+  if (pop) pop.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('click', function (e) {
+  const pop = document.getElementById('contact-pop');
+  const btn = document.getElementById('nav-contact-btn');
+  if (pop && pop.classList.contains('open') && !pop.contains(e.target) && (!btn || !btn.contains(e.target))) {
+    closeContact();
+  }
+});
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeContact(); });
 
 // Map each project id → its category, read straight from the project cards
 // (single source of truth) so the detail back-button can return to the right
