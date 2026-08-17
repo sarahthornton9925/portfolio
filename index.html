@@ -2720,9 +2720,12 @@
     }
     /* active/visited link rests black... */
     .nav-link.active { color: var(--dark); }
-    /* ...but hover ALWAYS wins → indigo (listed last so it beats .active) */
-    .nav-link:hover,
-    .nav-link.active:hover { color: var(--blue); }
+    /* ...but hover wins → indigo. Gated to hover-capable devices so a tap on
+       touch screens doesn't leave the link stuck indigo after returning. */
+    @media (hover: hover) and (pointer: fine) {
+      .nav-link:hover,
+      .nav-link.active:hover { color: var(--blue); }
+    }
     .nav-icon {
       display: inline-flex; align-items: center; justify-content: center;
       width: 22px; height: 22px; color: var(--dark);
@@ -2734,9 +2737,11 @@
     nav.on-dark { background: var(--blue); border-bottom-color: rgba(255,255,255,.22); }
     nav.on-dark .nav-logo { color: #fff; }
     nav.on-dark .nav-link { color: rgba(255,255,255,.9); }
-    nav.on-dark .nav-link:hover,
-    nav.on-dark .nav-link.active,
-    nav.on-dark .nav-link.active:hover { color: #fff; }
+    nav.on-dark .nav-link.active { color: #fff; }
+    @media (hover: hover) and (pointer: fine) {
+      nav.on-dark .nav-link:hover,
+      nav.on-dark .nav-link.active:hover { color: #fff; }
+    }
     nav.on-dark .nav-icon { color: #fff; }
     nav.on-dark .nav-icon:hover { color: #fff; opacity: .8; transform: translateY(-1px); }
 
@@ -2791,7 +2796,7 @@
     .reel-hero { background: var(--blue); }
     .lp-hero {
       position: relative; z-index: 2;
-      min-height: 100vh; min-height: 100dvh;   /* dvh = visible viewport, so the hero isn't hidden behind mobile browser chrome */
+      min-height: 100vh; min-height: 100svh;   /* svh = small (toolbar-shown) viewport, so the hero never exceeds the visible area on mobile */
       display: flex; flex-direction: column; justify-content: center;
       align-items: center; text-align: center;
       padding: calc(var(--nav-height) + 24px) 40px 28px;
@@ -2840,11 +2845,10 @@
       #main-nav { padding: 14px 20px; }
       .nav-center { gap: 20px; }
 
-      /* landing: keep it to two lines like desktop — drop the extra breaks and
-         shrink the type so each sentence fits on one line on a phone */
+      /* landing: break each phrase onto its own line (.lp-wrap stays active
+         below 1300px) so the header can be larger than the sub-line */
       .lp-hero { padding: calc(var(--nav-height) + 16px) 16px 24px; }
-      .lp-copy .lp-wrap { display: none; }
-      .lp-copy { font-size: clamp(15px, 4.2vw, 30px); }
+      .lp-copy { font-size: clamp(16px, 4.6vw, 33px); }
     }
     @media (prefers-reduced-motion: reduce) {
       .lp-welcome, .lp-copy, .lp-sub { animation: none !important; }
@@ -2871,7 +2875,7 @@
       #reel.active .reel-hero {
         position: sticky; top: 0;
         height: 100vh; min-height: 100vh;
-        height: 100dvh; min-height: 100dvh;   /* visible viewport → no gap behind mobile browser bar */
+        height: 100svh; min-height: 100svh;   /* small viewport → projects lip sits flush at the bottom, no blue strip */
         z-index: 1;
       }
     }
