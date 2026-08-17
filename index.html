@@ -407,7 +407,7 @@
        HOME PAGE
     ===================== */
     #page-home {
-      background: var(--blue);   /* full-blue landing panel */
+      background: var(--paper);   /* grey container; blue is painted on the inner .lp-hero so strips behind the mobile toolbar show grey, not blue */
     }
 
     /* blob sizes/colours/drift (positions set by .reel-blobs rules above) */
@@ -2796,10 +2796,14 @@
        cursor-follow glow on lighter copies. Reuses the site's Bricolage name font,
        DM Sans subheader, and indigo token. --lp-split / --lp-stage-h must stay
        fixed px because the two name copies are clipped exactly at that line. ═══ */
-    .reel-hero { background: var(--blue); }
+    /* sticky container is PAPER (grey) so any strip the foreground panels don't
+       cover — e.g. behind iOS Safari's translucent bottom toolbar — shows grey,
+       not blue. The blue is painted on the inner .lp-hero only. */
+    .reel-hero { background: var(--paper); }
     .lp-hero {
       position: relative; z-index: 2;
-      min-height: 100vh; min-height: 100svh;   /* svh = small (toolbar-shown) viewport, so the hero never exceeds the visible area on mobile */
+      background: var(--blue);
+      min-height: 100vh; min-height: 100svh;   /* blue confined to the small (toolbar-shown) viewport */
       display: flex; flex-direction: column; justify-content: center;
       align-items: center; text-align: center;
       padding: calc(var(--nav-height) + 24px) 40px 28px;
@@ -2879,8 +2883,7 @@
     @media (prefers-reduced-motion: no-preference) {
       #reel.active .reel-hero {
         position: sticky; top: 0;
-        height: 100vh; min-height: 100vh;
-        height: 100svh; min-height: 100svh;   /* small viewport → projects lip sits flush at the bottom, no blue strip */
+        height: 100vh; min-height: 100vh;   /* grey container fills the LARGE viewport so it covers behind the mobile toolbar */
         z-index: 1;
       }
     }
