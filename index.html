@@ -3035,6 +3035,10 @@
       .pj-shelf-wrap { padding: 28px 20px 72px; }
       .ps-well { height: 260px; }
       .ps-well > img { max-height: 260px; }
+      /* keep both pills on one row (e.g. Industrial Design + Concept Sketch) —
+         trim size so the wider pair fits the 280px card without wrapping */
+      .ps-pills { flex-wrap: nowrap; }
+      .ps-pill { font-size: 11px; padding: 6px 9px; white-space: nowrap; }
     }
     @media (prefers-reduced-motion:reduce){ .ps-card { transition: none; } .ps-card:hover { transform: none; } }
   </style>
