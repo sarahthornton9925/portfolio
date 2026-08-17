@@ -4173,17 +4173,23 @@ function renderPrototypeFrame(demo, projectTitle) {
   const id = 'live-demo-' + (++_liveDemoSeq);
   const title = demo.title || projectTitle || 'Interactive demo';
   const btnLabel = demo.buttonLabel || (demo.type === 'figma' ? 'Open in Figma' : 'Open full website');
-  const src = figmaEmbedSrc(demo);
   const externalUrl = demo.externalUrl || demo.embedUrl || '';
   // desktop/browser products (e.g. Andalusia Workshop) render in a wide landscape
   // browser frame instead of the tall mobile one
   const isBrowser = demo.frame === 'browser' || demo.frame === 'desktop';
+  // On phones the fixed-size Figma prototype is bigger than the narrow frame, so
+  // it overflows (loose pan) and clips the device. Scale it responsively there so
+  // the whole prototype + frame fit — smaller, but fully visible like desktop.
+  const mobileProto = !isBrowser && typeof window !== 'undefined'
+    && window.matchMedia('(max-width: 680px)').matches;
+  let src = figmaEmbedSrc(demo);
+  if (mobileProto && src) src = src.replace('content-scaling=fixed', 'content-scaling=responsive');
   const aspect = demo.aspect || (isBrowser ? '16 / 10' : '390 / 800');
   // demo.zoom crops the embed down to just the phone screen, hiding Figma's
   // device frame + black canvas. We enlarge the iframe's LAYOUT box (rather than
   // CSS-transforming it) so Figma re-renders at the bigger size and stays sharp;
   // the frame's overflow:hidden clips the overhang. 1 = no crop.
-  const z = demo.zoom || 1;
+  const z = mobileProto ? 1 : (demo.zoom || 1);
   const zoomStyle = z !== 1
     ? `inset:auto;left:50%;top:50%;width:${(z * 100).toFixed(2)}%;height:${(z * 100).toFixed(2)}%;transform:translate(-50%,-50%);`
     : '';
@@ -4234,8 +4240,8 @@ function renderPrototypeFrame(demo, projectTitle) {
   // viewport keeps the full device aspect and overflows, shifted so exactly
   // cropTop is removed up top — letting a tall device sit snug without cutting
   // its status bar / notch.
-  const cropTop = demo.cropTop != null ? demo.cropTop : (demo.cropY || 0);
-  const cropBottom = demo.cropBottom != null ? demo.cropBottom : (demo.cropY || 0);
+  const cropTop = mobileProto ? 0 : (demo.cropTop != null ? demo.cropTop : (demo.cropY || 0));
+  const cropBottom = mobileProto ? 0 : (demo.cropBottom != null ? demo.cropBottom : (demo.cropY || 0));
   let frameExtra = '';
   let viewportStyle = `aspect-ratio:${aspect};`;
   if (cropTop > 0 || cropBottom > 0) {
