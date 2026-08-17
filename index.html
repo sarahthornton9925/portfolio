@@ -404,7 +404,7 @@
        HOME PAGE
     ===================== */
     #page-home {
-      background: var(--cream);   /* warm-grey landing panel (indigo now an accent, not a flood) */
+      background: var(--blue);   /* full-blue landing panel */
     }
 
     /* blob sizes/colours/drift (positions set by .reel-blobs rules above) */
@@ -2260,7 +2260,7 @@
     /* mobile product: slim, tall, softly rounded — room to breathe, no notch/bezel */
     .live-demo-frame.is-mobile {
       max-width: 100%;
-      border-radius: 16px;
+      border-radius: 26px;
     }
     /* website product: wide browser-style container with a minimal top bar */
     .live-demo-frame.is-browser {
@@ -2759,20 +2759,20 @@
        cursor-follow glow on lighter copies. Reuses the site's Bricolage name font,
        DM Sans subheader, and indigo token. --lp-split / --lp-stage-h must stay
        fixed px because the two name copies are clipped exactly at that line. ═══ */
-    .reel-hero { background: var(--cream); }
+    .reel-hero { background: var(--blue); }
     .lp-hero {
       position: relative; z-index: 2;
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
       padding: calc(var(--nav-height) + 24px) 40px 28px;
-      color: var(--dark);
+      color: #fff;
       overflow: hidden;
     }
     .lp-welcome {
       font-weight: 800;
       font-size: clamp(26px, min(3.4vw, 5.4vh), 56px);
       line-height: 1; letter-spacing: -0.03em;
-      color: var(--mid);
+      color: #CFCAFA;
       margin-bottom: 0.2em;
       animation: lpLineUp 0.9s 0.15s cubic-bezier(.22,1,.36,1) both;
     }
@@ -2784,10 +2784,10 @@
       margin: 0; font-weight: 800;
       font-size: clamp(34px, min(5.5vw, 9.4vh), 104px);
       line-height: 0.99; letter-spacing: -0.035em;
-      color: var(--dark); text-wrap: pretty;
+      color: #CFCAFA; text-wrap: pretty;
       animation: lpLineUp 0.9s 0.3s cubic-bezier(.22,1,.36,1) both;
     }
-    .lp-copy strong { font-weight: inherit; color: var(--blue); }   /* psychology · what drives people · human-centered design */
+    .lp-copy strong { font-weight: inherit; color: #fff; }   /* psychology · what drives people · human-centered design */
     @keyframes lpLineUp { from { transform: translateY(.5em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @media (max-width: 680px) {
       .lp-hero { padding: calc(var(--nav-height) + 16px) 20px 24px; }
@@ -2822,15 +2822,15 @@
     }
     #reel .shop-band {
       position: relative; z-index: 2;
-      border-radius: 20px 20px 0 0;
-      margin-top: -20px;
-      padding-top: clamp(56px, 7vh, 96px);       /* clear the lip */
+      border-radius: 44px 44px 0 0;
+      margin-top: -44px;
+      padding-top: clamp(56px, 7vh, 96px);       /* clear the 44px lip */
       box-shadow: 0 -22px 44px -26px rgba(23,24,28,.30);
     }
     #reel .reel-about {
       position: relative; z-index: 3;
-      border-radius: 20px 20px 0 0;
-      margin-top: -20px;
+      border-radius: 44px 44px 0 0;
+      margin-top: -44px;
       box-shadow: 0 -22px 44px -26px rgba(23,24,28,.30);
     }
 
@@ -2929,7 +2929,7 @@
        partially cut off at the right edge — an obvious "there's more, scroll" cue */
     .ps-rail .ps-card { flex: none; width: var(--ps-card-w, 312px); scroll-snap-align: start; }
 
-    .ps-card { background: var(--paper); border-radius: 16px; padding: 36px 32px 32px;
+    .ps-card { background: var(--paper); border-radius: 26px; padding: 36px 32px 32px;
                display: flex; flex-direction: column; align-items: center; cursor: pointer; color: inherit; text-decoration: none;
                transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease; }
     .ps-card[hidden] { display: none; }
@@ -2976,7 +2976,7 @@
 <body>
 
 <!-- ── NAV ── -->
-<nav id="main-nav" class="on-cream">
+<nav id="main-nav" class="on-dark">
   <div class="nav-left">
     <span class="nav-logo" onclick="go('home')" role="link" aria-label="Sarah Thornton — home">꩜</span>
     <a id="nl-projects" class="nav-link" onclick="goProjects('all')" role="link" tabindex="0">projects</a>
@@ -2984,7 +2984,7 @@
   </div>
   <div class="nav-right">
     <a class="nav-icon" href="mailto:sarahthornton2027@u.northwestern.edu" aria-label="Email" title="Email">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="M3 6l9 6.5L21 6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 6.5L21 6"/></svg>
     </a>
     <a class="nav-icon" href="https://www.linkedin.com/in/sarah-thornton-4428612a5" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
@@ -3663,7 +3663,7 @@ const PROJECTS = {
 let currentPage = 'home';
 
 // which pages have a dark background (need light nav text)
-const NAV_STATE = { home: 'on-cream', projects: 'on-cream', detail: 'on-cream', about: 'on-cream' };
+const NAV_STATE = { home: 'on-dark', projects: 'on-cream', detail: 'on-cream', about: 'on-cream' };
 
 function go(page) {
   const REEL = ['home', 'projects', 'about'];
@@ -3939,14 +3939,19 @@ function updateReel() {
   const reel = document.getElementById('reel');
   if (!reel.classList.contains('active')) return;
   const nav = document.getElementById('main-nav');
+  const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 64;
+  const shop = document.getElementById('page-projects');
+  const shopTop = shop ? shop.offsetTop : window.innerHeight;
   const aboutTop = document.getElementById('page-about').offsetTop;
-  // whole reel sits on the warm-grey wall now → nav stays dark-on-cream throughout
+  // The home hero is a full-blue panel → white nav. Once the grey projects band
+  // rises under the bar, switch to dark-on-cream for the rest of the reel.
+  const overHome = (window.scrollY + navH + 4) < shopTop;
   if (nav) {
     nav.classList.remove('on-cream', 'on-dark');
-    nav.classList.add('on-cream');
+    nav.classList.add(overHome ? 'on-dark' : 'on-cream');
   }
   const ref = window.scrollY + window.innerHeight * 0.5;   // middle of the viewport
-  currentPage = ref >= aboutTop ? 'about' : 'home';
+  currentPage = ref >= aboutTop ? 'about' : (overHome ? 'home' : 'projects');
   const rb = document.querySelector('.reel-blobs');
   if (rb) rb.style.transform = `translateY(${window.scrollY * 0.18}px)`;
 }
