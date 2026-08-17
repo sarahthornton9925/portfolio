@@ -2848,7 +2848,9 @@
       /* landing: break each phrase onto its own line (.lp-wrap stays active
          below 1300px) so the header can be larger than the sub-line */
       .lp-hero { padding: calc(var(--nav-height) + 16px) 16px 24px; }
-      .lp-copy { font-size: clamp(16px, 4.6vw, 33px); }
+      /* nowrap keeps each <br> segment (e.g. "Even more curious about") on one
+         line — measured to fit every common phone width with margin to spare */
+      .lp-copy { font-size: clamp(16px, 4.6vw, 33px); white-space: nowrap; }
     }
     @media (prefers-reduced-motion: reduce) {
       .lp-welcome, .lp-copy, .lp-sub { animation: none !important; }
@@ -3187,8 +3189,7 @@
   <div class="about-grid">
     <div class="about-text">
       <h2>hi, i'm sarah.</h2>
-      <p>I'm a designer with a background in psychology, which means I'm endlessly curious about the weird little things people do and why they do them.</p>
-      <p>I'm especially interested in the habits, instincts, frustrations, and tiny decisions that shape how people interact with the world around them. I use those observations to design products and experiences around how people actually think and behave, not just how they’re supposed to.</p>
+      <p>I'm a designer with a background in psychology, which means I'm drawn to the habits, frustrations, and tiny decisions that shape how people interact with the world around them. I use those observations to design products and experiences around how people actually think and behave, not just how they’re supposed to.</p>
       <p>Outside of design, I'm usually testing a new rice cooker recipe, finding somewhere scenic to hike, or cafe hopping in search of a new favorite spot.</p>
       <p class="about-sign">Thanks for stopping by! If something here makes you curious, I’d love to hear from you.</p>
       <div class="about-links">
