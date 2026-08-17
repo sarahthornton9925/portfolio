@@ -2791,7 +2791,7 @@
     .reel-hero { background: var(--blue); }
     .lp-hero {
       position: relative; z-index: 2;
-      min-height: 100vh;
+      min-height: 100vh; min-height: 100dvh;   /* dvh = visible viewport, so the hero isn't hidden behind mobile browser chrome */
       display: flex; flex-direction: column; justify-content: center;
       align-items: center; text-align: center;
       padding: calc(var(--nav-height) + 24px) 40px 28px;
@@ -2836,7 +2836,15 @@
     }
     @keyframes lpLineUp { from { transform: translateY(.5em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @media (max-width: 680px) {
-      .lp-hero { padding: calc(var(--nav-height) + 16px) 20px 24px; }
+      /* nav: tighten the three links so they don't crowd the logo / run off-screen */
+      #main-nav { padding: 14px 20px; }
+      .nav-center { gap: 20px; }
+
+      /* landing: keep it to two lines like desktop — drop the extra breaks and
+         shrink the type so each sentence fits on one line on a phone */
+      .lp-hero { padding: calc(var(--nav-height) + 16px) 16px 24px; }
+      .lp-copy .lp-wrap { display: none; }
+      .lp-copy { font-size: clamp(15px, 4.2vw, 30px); }
     }
     @media (prefers-reduced-motion: reduce) {
       .lp-welcome, .lp-copy, .lp-sub { animation: none !important; }
@@ -2863,6 +2871,7 @@
       #reel.active .reel-hero {
         position: sticky; top: 0;
         height: 100vh; min-height: 100vh;
+        height: 100dvh; min-height: 100dvh;   /* visible viewport → no gap behind mobile browser bar */
         z-index: 1;
       }
     }
