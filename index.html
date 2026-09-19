@@ -2865,31 +2865,33 @@
 
     /* ═══ Landing: rotating word-ring + name ═══════════════════════════════
        Replaces the old .lp-copy statement inside .lp-hero (the blue field).
+       LOCKED PROPORTIONS: one variable (--lp-d) sizes the whole composition, so
+       the name is always the same fraction of the ring — the "name cradled inside
+       the loop" look is identical at every screen size, phone to desktop. The ring
+       text lives in the SVG's 400-unit viewBox, so it scales with the ring too.
        Hierarchy is size + tracking only — never opacity — so contrast holds. */
+    .lp-hero { --lp-d: min(46vh, 76vw); }   /* ring diameter = single source of truth */
     .lp-ring {
       position: absolute; z-index: 1;
-      width: min(46vh, 44vw); height: min(46vh, 44vw);
+      width: var(--lp-d); height: var(--lp-d);
       animation: lpSpinRing 44s linear infinite;
     }
     .lp-ring svg { width: 100%; height: 100%; overflow: visible; }
-    /* tracking is tuned to Urbanist's narrow caps at this size — retune if resized */
+    /* sized in the 400-unit viewBox, so it scales 1:1 with --lp-d at any width */
     .lp-ring text {
       fill: #DCD9FB;                 /* solid tint — alpha on this indigo fails contrast */
       font-family: var(--font);
-      font-size: 21px; font-weight: 500; letter-spacing: 22.6px;
+      font-size: 16px; font-weight: 500; letter-spacing: 14px;
     }
     .lp-bigname {
       position: relative; z-index: 2; margin: 0;
       text-align: center; color: #fff; font-weight: 500;
-      font-size: min(13.6vh, 16.2vw); line-height: .84; letter-spacing: -.05em;
+      font-size: calc(var(--lp-d) * 0.213);   /* locked ratio → name stays cradled in the ring */
+      line-height: .84; letter-spacing: -.05em;
       animation: lpNameRise 1s .28s cubic-bezier(.22,1,.36,1) both;
     }
     @keyframes lpSpinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes lpNameRise { from { transform: translateY(.4em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @media (max-width: 680px) {
-      .lp-ring { width: min(40vh, 76vw); height: min(40vh, 76vw); }
-      .lp-ring text { font-size: 16px; letter-spacing: 14px; }
-    }
     @media (prefers-reduced-motion: reduce) {
       .lp-ring, .lp-bigname { animation: none !important; }
     }
