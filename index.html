@@ -2923,8 +2923,8 @@
     #reel .shop-band {
       position: relative; z-index: 2;
       border-radius: 44px 44px 0 0;
-      margin-top: -44px;
-      padding-top: clamp(56px, 7vh, 96px);       /* clear the 44px lip */
+      margin-top: 0;                              /* was -44px: don't peek into the landing — keep the hero clean at rest */
+      padding-top: clamp(56px, 7vh, 96px);
       box-shadow: 0 -22px 44px -26px rgba(23,24,28,.30);
     }
     #reel .reel-about {
