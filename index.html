@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#ffffff">
   <title>Sarah Thornton — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Warm the connection to Figma up front so the ShopCampus/Trova prototype
        embeds start rendering the moment the detail page opens (saves the DNS +
        TLS handshake, which is otherwise paid only after the iframe is created). -->
@@ -40,8 +40,8 @@
       /* ── ONE FONT, EVERYWHERE: Inter. Hierarchy comes from weight + size only ──
          --display and --mono kept as aliases so every legacy reference resolves
          to Inter without hunting them all down. */
-      --font: 'Nunito', system-ui, sans-serif;               /* PRIMARY — nav, body, labels, metadata, buttons */
-      --display: 'Nunito', system-ui, sans-serif; /* DISPLAY — Nunito site-wide */
+      --font: 'Urbanist', system-ui, sans-serif;               /* PRIMARY — nav, body, labels, metadata, buttons */
+      --display: 'Urbanist', system-ui, sans-serif; /* DISPLAY — Urbanist site-wide */
       --mono: var(--font);                                    /* labels are primary font now */
       /* THREE SIZES — the whole site uses only these (plus the hero name) */
       --fs-lg: clamp(2.2rem, 4.6vw, 3.6rem);   /* headings: section titles, detail titles, about headline */
@@ -2863,6 +2863,37 @@
       .lp-welcome, .lp-copy, .lp-sub { animation: none !important; }
     }
 
+    /* ═══ Landing: rotating word-ring + name ═══════════════════════════════
+       Replaces the old .lp-copy statement inside .lp-hero (the blue field).
+       Hierarchy is size + tracking only — never opacity — so contrast holds. */
+    .lp-ring {
+      position: absolute; z-index: 1;
+      width: min(46vh, 44vw); height: min(46vh, 44vw);
+      animation: lpSpinRing 44s linear infinite;
+    }
+    .lp-ring svg { width: 100%; height: 100%; overflow: visible; }
+    /* tracking is tuned to Urbanist's narrow caps at this size — retune if resized */
+    .lp-ring text {
+      fill: #DCD9FB;                 /* solid tint — alpha on this indigo fails contrast */
+      font-family: var(--font);
+      font-size: 21px; font-weight: 500; letter-spacing: 22.6px;
+    }
+    .lp-bigname {
+      position: relative; z-index: 2; margin: 0;
+      text-align: center; color: #fff; font-weight: 500;
+      font-size: min(13.6vh, 16.2vw); line-height: .84; letter-spacing: -.05em;
+      animation: lpNameRise 1s .28s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes lpSpinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes lpNameRise { from { transform: translateY(.4em); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 680px) {
+      .lp-ring { width: min(40vh, 76vw); height: min(40vh, 76vw); }
+      .lp-ring text { font-size: 16px; letter-spacing: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lp-ring, .lp-bigname { animation: none !important; }
+    }
+
     /* ── Centered mobile layout: hero, section headers, and about copy all
        center at/below tablet so the whole reel reads consistently centered.
        (The project cards and the "find me" section are already centered.) ── */
@@ -3069,8 +3100,18 @@
   <!-- Blue full-screen landing: "Welcome" ornament + a bold statement with keyed
        words in white, and a scroll cue that rides down to the projects band. -->
   <div class="lp-hero">
-    <p class="lp-copy">Curious about <br class="lp-wrap"><strong>what people do</strong>.<br>Even more curious about <br class="lp-wrap"><strong>why they do it</strong>.</p>
-    <div class="lp-sub">Sarah Thornton · Designer grounded in psychology</div>
+    <!-- Rotating word-ring around the name. Each word is tracked wide so it spans
+         its own half of the circle: OBSERVING at 0.5%, CREATING at 50.5%. -->
+    <div class="lp-ring" aria-hidden="true">
+      <svg viewBox="0 0 400 400">
+        <defs>
+          <path id="lp-ring-path" d="M 200 200 m -184 0 a 184 184 0 1 1 368 0 a 184 184 0 1 1 -368 0"></path>
+        </defs>
+        <text><textPath href="#lp-ring-path" startOffset="0.5%">OBSERVING</textPath></text>
+        <text><textPath href="#lp-ring-path" startOffset="50.5%">CREATING</textPath></text>
+      </svg>
+    </div>
+    <h1 class="lp-bigname">sarah<br>thornton</h1>
   </div>
 </section>
 
@@ -3199,8 +3240,8 @@
   <div class="about-grid">
     <div class="about-text">
       <h2>hi, i'm sarah.</h2>
-      <p>I'm a designer with a background in psychology, which means I'm drawn to the habits, frustrations, and tiny decisions that shape how people interact with the world around them. I use those observations to design products and experiences around how people actually think and behave, not just how they’re supposed to.</p>
-      <p>Outside of design, I'm usually testing a new rice cooker recipe, finding somewhere scenic to hike, or cafe hopping in search of a new favorite spot.</p>
+      <p>I'm a senior at Northwestern studying psychology and design, drawn to the habits, instincts, and frustrations that shape how people think and behave. I use those observations to design products and experiences that reflect how people actually interact with the world, not just how they’re supposed to.</p>
+      <p>Outside of design, I'm usually testing a new rice cooker recipe, finding a scenic place to hike, or cafe hopping in search of a new favorite spot.</p>
       <p class="about-sign">Thanks for stopping by! If something here makes you curious, I’d love to hear from you.</p>
       <div class="about-links">
         <a class="about-link" href="mailto:sarahthornton2027@u.northwestern.edu">email ↗</a>
