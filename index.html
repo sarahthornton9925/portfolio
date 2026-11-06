@@ -3014,6 +3014,7 @@
     .ps-arrow:hover { background: rgba(75,65,232,.08); border-color: var(--blue); }
     .ps-arrow[disabled] { opacity: .3; cursor: default; }
     .ps-arrow[disabled]:hover { background: transparent; border-color: rgba(75,65,232,.6); }
+    .ps-arrows.is-idle { display: none !important; }   /* row fits: no scrolling, no arrows */
 
     /* the rail: fixed-width cards that snap and side-scroll, bleeding off the right page edge */
     /* overflow-x:auto also clips vertical overflow, so the top/bottom padding must
@@ -3900,6 +3901,10 @@ function filterProjects(cat) {
     const rail = shelf.querySelector('.ps-rail');
     if (!rail) return;
     const max = rail.scrollWidth - rail.clientWidth - 1;
+    // Hide the arrows entirely when every card already fits (e.g. a two-card row
+    // on desktop); they come back automatically when the row overflows (phones).
+    const arrows = shelf.querySelector('.ps-arrows');
+    if (arrows) arrows.classList.toggle('is-idle', max <= 0);
     shelf.querySelectorAll('.ps-arrow').forEach(btn => {
       const dir = Number(btn.dataset.dir);
       btn.disabled = max <= 0 ||
