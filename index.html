@@ -2983,98 +2983,57 @@
     .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 
-    /* ═══ Projects page — "shelves" layout (digital + physical departments,
-       filter chips, product cards) ═══════════════════════════════════════ */
-    .pj-shelf-wrap { max-width: 1180px; margin: 0 auto; padding: 40px clamp(20px,4vw,40px) 96px; }
-    .ps-head { display: flex; align-items: flex-end; justify-content: center; gap: 40px; text-align: center; }
-    .ps-title { font-family: var(--display); font-size: clamp(40px,6vw,60px); font-weight: 800; letter-spacing: -.045em; line-height: .9; color: var(--dark); }
-    .ps-rule { height: 1px; background: rgba(23,24,28,.18); margin-top: 30px; }
+    /* ═══ Projects page — index list + sticky preview ═══════════════════════
+       Rows on the left (name · discipline · stage); hovering a row turns it
+       indigo and swaps the large preview image on the right. Phones drop the
+       preview and show a plain, tappable list. */
+    .projects { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0,1fr) 420px; gap: 56px;
+                max-width: 1200px; margin: 0 auto; padding: 72px clamp(20px,5vw,64px); box-sizing: border-box; }
+    .projects-list { display: flex; flex-direction: column; gap: 40px; }
+    .projects-title { font-family: var(--display); font-size: 44px; font-weight: 400; letter-spacing: -.02em;
+                      line-height: 1; color: var(--dark); margin: 0; }
+    .projects-group { display: flex; flex-direction: column; }
+    .projects-label { font-family: var(--font); font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+                      color: var(--mid); padding-bottom: 10px; }
+    .project-row { display: grid; grid-template-columns: minmax(0,1fr) 180px 120px; gap: 16px; align-items: baseline;
+                   border-top: 1px solid rgba(23,24,28,.16); padding: 16px 0; cursor: pointer;
+                   font-family: var(--font); font-size: 22px; font-weight: 400; letter-spacing: -.01em;
+                   color: var(--mid); text-decoration: none; transition: color .2s; }
+    .projects-group .project-row:last-child { border-bottom: 1px solid rgba(23,24,28,.16); }
+    .project-meta { font-size: 14px; color: var(--mid); transition: color .2s; }
+    .project-meta.right { text-align: right; }
+    /* hover / current preview → indigo (same weight, no bolding) */
+    .project-row.active, .project-row:hover, .project-row:focus-visible,
+    .project-row.active .project-meta, .project-row:hover .project-meta, .project-row:focus-visible .project-meta { color: var(--blue); }
+    .project-row:focus-visible { outline: none; }
 
-    .ps-chips { display: flex; gap: 10px; margin-top: 30px; flex-wrap: wrap; }
-    .ps-chip { font-family: var(--font); font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 999px;
-               border: 1px solid rgba(23,24,28,.22); background: transparent; color: var(--dark); cursor: pointer;
-               transition: background .25s, color .25s, border-color .25s; }
-    .ps-chip:hover { border-color: rgba(23,24,28,.45); }
-    .ps-chip[aria-pressed="true"] { background: var(--dark); color: var(--paper); border-color: var(--dark); }
+    .projects-preview { position: sticky; top: calc(var(--nav-height) + 16px); align-self: start;
+                        display: flex; flex-direction: column; gap: 10px; padding-top: 84px; }
+    /* every project's visual is stacked here and cross-fades on hover. No frame:
+       phones, laptops and transparent cutouts float right on the grey wall with a
+       soft drop shadow, the same way the old project cards showed them. */
+    .preview-stage { position: relative; height: 460px; }
+    .pv { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+          opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+    .pv.is-on { opacity: 1; }
+    .pv > img, .pv .device { filter: drop-shadow(0 20px 22px rgba(23,24,28,.32)); }
+    .pv > img { max-width: 100%; max-height: 100%; width: auto; height: auto; display: block; }
+    .pv .device--phone { height: 100%; width: auto; max-width: 100%; border-radius: 36px; padding: 9px; box-shadow: none; }
+    .pv .device--phone .device-screen { border-radius: 28px; }
+    .pv .device--phone::after { top: 17px; width: 70px; height: 20px; border-radius: 10px; }
+    .pv .device--laptop { width: 100%; }
+    .pv .device--laptop .laptop-lid { box-shadow: none; }
+    .preview-caption { font-family: var(--font); font-size: 14px; color: var(--mid); text-align: center; }
 
-    .ps-shelves { display: flex; flex-direction: column; }
-    .ps-shelf { order: 2; }
-    .ps-shelf[hidden] { display: none; }
-    .ps-shelf-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-top: 80px; }
-    .ps-shelf:first-of-type .ps-shelf-head, .ps-shelves.solo .ps-shelf .ps-shelf-head { padding-top: 52px; }
-    .ps-shelf-head h2 { font-family: var(--display); font-size: clamp(24px,3.4vw,30px); font-weight: 800; letter-spacing: -.035em; line-height: 1; color: var(--dark); }
-    .ps-meta { font-family: var(--font); font-size: 12px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--mid); }
-    .ps-shelf-tools { display: flex; align-items: center; gap: 18px; }
-    .ps-arrows { display: flex; gap: 8px; }
-    .ps-arrow { width: 36px; height: 36px; border-radius: 999px; border: 2px solid rgba(75,65,232,.6);
-                background: transparent; color: var(--blue); cursor: pointer; line-height: 1;
-                display: flex; align-items: center; justify-content: center;
-                transition: background .2s, border-color .2s, opacity .2s; }
-    .ps-arrow svg { width: 18px; height: 18px; display: block; }
-    .ps-arrow:hover { background: rgba(75,65,232,.08); border-color: var(--blue); }
-    .ps-arrow[disabled] { opacity: .3; cursor: default; }
-    .ps-arrow[disabled]:hover { background: transparent; border-color: rgba(75,65,232,.6); }
-    .ps-arrows.is-idle { display: none !important; }   /* row fits: no scrolling, no arrows */
-
-    /* the rail: fixed-width cards that snap and side-scroll, bleeding off the right page edge */
-    /* overflow-x:auto also clips vertical overflow, so the top/bottom padding must
-       leave room for the card's hover lift (-6px) + drop shadow — otherwise the
-       lifted card gets cut off by the rail edge. */
-    .ps-rail { display: flex; gap: 28px; padding: 28px clamp(20px,4vw,40px) 44px 0;
-               margin-right: calc(clamp(20px,4vw,40px) * -1);   /* cards run past the page margin */
-               overflow-x: auto; scroll-snap-type: x mandatory;
-               scrollbar-width: none; -ms-overflow-style: none; }
-    .ps-rail::-webkit-scrollbar { display: none; }
-    /* card width is a touch under a third of the rail so the next card is always
-       partially cut off at the right edge — an obvious "there's more, scroll" cue */
-    .ps-rail .ps-card { flex: none; width: var(--ps-card-w, 312px); scroll-snap-align: start; }
-
-    .ps-card { background: var(--paper); border-radius: 26px; padding: 36px 32px 32px;
-               display: flex; flex-direction: column; align-items: center; cursor: pointer; color: inherit; text-decoration: none;
-               transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease; }
-    .ps-card[hidden] { display: none; }
-    .ps-card:hover { transform: translateY(-6px); box-shadow: 0 24px 44px -20px rgba(23,24,28,.3); }
-    .ps-card:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; border-radius: 26px; }
-    .ps-well { height: 320px; width: 100%; display: flex; align-items: center; justify-content: center; }
-    .ps-well > img { max-height: 320px; max-width: 100%; width: auto; display: block; }  /* plain covers / cutouts */
-    /* product drop-shadow: hugs the physical cutouts and layers a softer cast over
-       the digital device mockups (which already carry their own subtle box-shadow),
-       so every product on the shelf sits with a bit of lift */
-    .ps-well > img,
-    .ps-well .device { filter: drop-shadow(0 20px 22px rgba(23,24,28,.32)); }
-    /* digital products sit in their device mockups (phone / laptop) within the wells */
-    .ps-well .device { width: auto; }
-    .ps-well .device--phone { height: 100%; width: auto; max-width: 100%; border-radius: 28px; padding: 7px; }
-    .ps-well .device--phone .device-screen { border-radius: 22px; }
-    .ps-well .device--phone::after { top: 13px; width: 50px; height: 14px; border-radius: 8px; }
-    .ps-well .device--laptop, .ps-well .device--browser { width: min(92%, 400px); height: auto; }
-    .ps-well .device--laptop .laptop-lid { border-radius: 12px; padding: 8px 8px 7px; }
-    .ps-well .device--laptop .device-screen { border-radius: 5px; }
-    .ps-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; padding: 20px;
-             border: 1.5px dashed rgba(23,24,28,.22); border-radius: 18px; background: rgba(23,24,28,.02);
-             color: var(--mid); font-family: var(--font); font-size: var(--fs-sm); font-weight: 500; letter-spacing: .04em; line-height: 1.4; }
-    /* reserve two lines for every title so one-line names (Footwear, Stow…) still
-       take the same vertical space as two-line names — keeps every card's pills
-       aligned on the same height across the shelf */
-    .ps-card h3 { font-family: var(--display); font-size: clamp(20px,2.4vw,24px); font-weight: 700; letter-spacing: -.02em; margin-top: 28px; text-align: center; color: var(--dark); line-height: 1.15; min-height: 2.3em; }
-    .ps-pills { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
-    .ps-pill { font-family: var(--font); font-size: 12px; font-weight: 500; padding: 7px 11px; border-radius: 999px; }
-    .ps-pill-discipline { background: var(--dark); color: var(--paper); }
-    .ps-pill-stage { color: var(--blue); border: 1px solid rgba(75,65,232,.5); }
-
-    @media (max-width:680px){
-      .ps-rail .ps-card { width: 280px; }
-      .ps-arrows { display: flex; }          /* same scroll arrows as desktop */
-      .ps-title { font-size: 40px; }
-      .pj-shelf-wrap { padding: 28px 20px 72px; }
-      .ps-well { height: 260px; }
-      .ps-well > img { max-height: 260px; }
-      /* keep both pills on one row (e.g. Industrial Design + Concept Sketch) —
-         trim size so the wider pair fits the 280px card without wrapping */
-      .ps-pills { flex-wrap: nowrap; }
-      .ps-pill { font-size: 11px; padding: 6px 9px; white-space: nowrap; }
+    @media (max-width: 800px) {
+      .projects { grid-template-columns: 1fr; padding: 48px 20px; }
+      .projects-preview { display: none; }
+      .project-row { grid-template-columns: 1fr auto; font-size: 18px; color: var(--dark); }
+      .project-row .project-meta:not(.right) { display: none; }
+      /* no preview on phones, so don't keep the first row lit */
+      .project-row.active:not(:hover) { color: var(--dark); }
+      .project-row.active:not(:hover) .project-meta { color: var(--mid); }
     }
-    @media (prefers-reduced-motion:reduce){ .ps-card { transition: none; } .ps-card:hover { transform: none; } }
   </style>
 </head>
 <body>
@@ -3122,90 +3081,65 @@
        PROJECTS — middle panel of the reel (home → projects → about)
   ══════════════════════════════════════════ -->
 <section id="page-projects" class="reel-projects shop-band">
-  <div class="pj-shelf-wrap">
+  <div class="projects">
+    <div class="projects-list">
+      <h2 class="projects-title">projects</h2>
 
-    <div class="ps-head">
-      <h1 class="ps-title">projects</h1>
+      <div class="projects-group">
+        <div class="projects-label">digital</div>
+        <a class="project-row" role="link" tabindex="0" data-cat="uiux" data-type="case"
+           data-pv="shopify-mobile" onclick="openProject('shopify-mobile')">
+          <span class="project-name">ShopCampus</span>
+          <span class="project-meta">UI/UX Design</span>
+          <span class="project-meta right">Case Study</span>
+        </a>
+        <a class="project-row" role="link" tabindex="0" data-cat="uiux" data-type="proto"
+           data-pv="andalusia-workshop" onclick="openProject('andalusia-workshop')">
+          <span class="project-name">Andalusia Workshop</span>
+          <span class="project-meta">UI/UX Design</span>
+          <span class="project-meta right">Prototype</span>
+        </a>
+      </div>
+
+      <div class="projects-group">
+        <div class="projects-label">physical</div>
+        <a class="project-row" role="link" tabindex="0" data-cat="industrial" data-type="case"
+           data-pv="andalusia-fourhands" onclick="openProject('andalusia-fourhands')">
+          <span class="project-name">Andalusia x Four Hands</span>
+          <span class="project-meta">Industrial Design</span>
+          <span class="project-meta right">Case Study</span>
+        </a>
+        <a class="project-row" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+           data-pv="footwear" onclick="openProject('footwear')">
+          <span class="project-name">Footwear</span>
+          <span class="project-meta">Industrial Design</span>
+          <span class="project-meta right">Concept Sketch</span>
+        </a>
+        <a class="project-row" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+           data-pv="bus-stop" onclick="openProject('bus-stop')">
+          <span class="project-name">Northwestern Bus Stop</span>
+          <span class="project-meta">Industrial Design</span>
+          <span class="project-meta right">Concept Sketch</span>
+        </a>
+        <a class="project-row" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
+           data-pv="furniture" onclick="openProject('furniture')">
+          <span class="project-name">Children's Furniture</span>
+          <span class="project-meta">Industrial Design</span>
+          <span class="project-meta right">Concept Sketch</span>
+        </a>
+      </div>
     </div>
 
-    <div class="ps-rule"></div>
-
-    <div class="ps-shelves" id="ps-shelves">
-
-      <!-- DIGITAL — UI/UX + Service -->
-      <section class="ps-shelf" data-shelf="digital">
-        <div class="ps-shelf-head">
-          <h2>digital</h2>
-          <div class="ps-shelf-tools">
-            <div class="ps-arrows">
-              <button class="ps-arrow" data-dir="-1" aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
-              <button class="ps-arrow" data-dir="1"  aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-            </div>
-          </div>
-        </div>
-        <div class="ps-rail">
-
-          <a class="ps-card" role="link" tabindex="0" data-cat="uiux" data-type="case"
-             aria-label="Open ShopCampus — UI/UX design case study" onclick="openProject('shopify-mobile')">
-            <div class="ps-well"><div class="device device--phone"><div class="device-screen"><img src="shopcampus-cover.png" alt="ShopCampus" style="object-position:50% 0;"></div></div></div>
-            <h3>ShopCampus</h3>
-            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">UI/UX Design</span><span class="ps-pill ps-pill-stage">Case Study</span></div>
-          </a>
-
-          <a class="ps-card" role="link" tabindex="0" data-cat="uiux" data-type="proto"
-             aria-label="Open Andalusia Workshop — UI/UX design prototype" onclick="openProject('andalusia-workshop')">
-            <div class="ps-well"><div class="device device--laptop"><div class="laptop-lid"><span class="laptop-cam"></span><div class="device-screen"><img src="andalusia-cover.png" alt="Andalusia Workshop"></div></div><div class="laptop-base"></div></div></div>
-            <h3>Andalusia Workshop</h3>
-            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">UI/UX Design</span><span class="ps-pill ps-pill-stage">Prototype</span></div>
-          </a>
-
-        </div>
-      </section>
-
-      <!-- PHYSICAL — Industrial Design -->
-      <section class="ps-shelf" data-shelf="physical">
-        <div class="ps-shelf-head">
-          <h2>physical</h2>
-          <div class="ps-shelf-tools">
-            <div class="ps-arrows">
-              <button class="ps-arrow" data-dir="-1" aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
-              <button class="ps-arrow" data-dir="1"  aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></button>
-            </div>
-          </div>
-        </div>
-        <div class="ps-rail">
-
-          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="case"
-             aria-label="Open Andalusia Design x Four Hands — industrial design case study" onclick="openProject('andalusia-fourhands')">
-            <div class="ps-well"><img src="fourhands-cover.png" alt="Andalusia Design x Four Hands"></div>
-            <h3>Andalusia Design x<br>Four Hands</h3>
-            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Case Study</span></div>
-          </a>
-
-          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
-             aria-label="Open Footwear — industrial design concept sketches" onclick="openProject('footwear')">
-            <div class="ps-well"><img src="footwear-cover.png" alt="Footwear" style="transform:translateY(20%);"></div>
-            <h3>Footwear</h3>
-            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Concept Sketch</span></div>
-          </a>
-
-          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
-             aria-label="Open Northwestern Bus Stop — industrial design concept sketches" onclick="openProject('bus-stop')">
-            <div class="ps-well"><img src="busstop-cover.png" alt="Northwestern Bus Stop"></div>
-            <h3>Northwestern Bus Stop</h3>
-            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Concept Sketch</span></div>
-          </a>
-
-          <a class="ps-card" role="link" tabindex="0" data-cat="industrial" data-type="sketch"
-             aria-label="Open Children's Furniture — industrial design concept sketches" onclick="openProject('furniture')">
-            <div class="ps-well"><img src="furniture-cover.png" alt="Children's Furniture"></div>
-            <h3>Children's Furniture</h3>
-            <div class="ps-pills"><span class="ps-pill ps-pill-discipline">Industrial Design</span><span class="ps-pill ps-pill-stage">Concept Sketch</span></div>
-          </a>
-
-        </div>
-      </section>
-
+    <div class="projects-preview" aria-hidden="true">
+      <div class="preview-stage">
+        <div class="pv is-on" data-pv="shopify-mobile"><div class="device device--phone"><div class="device-screen"><img src="shopcampus-cover.png" alt="" style="object-position:50% 0;"></div></div></div>
+        <div class="pv" data-pv="andalusia-workshop"><div class="device device--laptop"><div class="laptop-lid"><span class="laptop-cam"></span><div class="device-screen"><img src="andalusia-cover.png" alt="" loading="lazy"></div></div><div class="laptop-base"></div></div></div>
+        <div class="pv" data-pv="andalusia-fourhands"><img src="previews/fourhands.png" alt="" loading="lazy"></div>
+        <div class="pv" data-pv="footwear"><img src="previews/footwear.png" alt="" loading="lazy"></div>
+        <div class="pv" data-pv="bus-stop"><img src="previews/busstop.png" alt="" loading="lazy"></div>
+        <div class="pv" data-pv="furniture"><img src="previews/furniture.png" alt="" loading="lazy"></div>
+      </div>
+      <div class="preview-caption" id="previewCaption">ShopCampus</div>
     </div>
   </div>
 </section>
@@ -3746,7 +3680,7 @@ document.addEventListener('keydown', function (e) { if (e.key === 'Escape') clos
 // (single source of truth) so the detail back-button can return to the right
 // filtered section rather than the catch-all "all projects" page.
 const PROJECT_CAT = {};
-document.querySelectorAll('#page-projects .ps-card').forEach(card => {
+document.querySelectorAll('#page-projects .project-row').forEach(card => {
   const m = (card.getAttribute('onclick') || '').match(/openProject\('([^']+)'\)/);
   if (m) PROJECT_CAT[m[1]] = card.dataset.cat || 'all';
 });
@@ -3756,9 +3690,9 @@ document.querySelectorAll('#page-projects .ps-card').forEach(card => {
 // data-type maps to the detail page's existing tag-* pill styling.
 const STAGE_CLASS = { proto: 'tag-proto', case: 'tag-case', sprint: 'tag-sprint', sketch: 'tag-sketch' };
 const PROJECT_STAGE = {};
-document.querySelectorAll('#page-projects .ps-card').forEach(card => {
+document.querySelectorAll('#page-projects .project-row').forEach(card => {
   const m = (card.getAttribute('onclick') || '').match(/openProject\('([^']+)'\)/);
-  const typePill = card.querySelector('.ps-pills .ps-pill-stage');
+  const typePill = card.querySelector('.project-meta.right');
   if (m && typePill) {
     PROJECT_STAGE[m[1]] = { label: typePill.textContent.trim(), cls: STAGE_CLASS[card.dataset.type] || '' };
   }
@@ -3865,97 +3799,39 @@ document.addEventListener('click', (e) => {
 });
 
 // Featured cards + project rows are keyboard-operable (role="link" tiles)
-document.querySelectorAll('.feat-card, #page-projects .ps-card, .shop-item').forEach(card => {
+document.querySelectorAll('.feat-card, #page-projects .project-row, .shop-item').forEach(card => {
   card.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
   });
 });
 
-// Show/hide individual project rows by their data-cat (the mega-menu can jump
-// straight to a single discipline), and swap the page heading to match.
-// Drive the shelves-page filter (chips + shelf visibility) from the site's
-// category routing (e.g. the mega-menu → goProjects(cat)).
-function filterProjects(cat) {
-  if (window.__psApply) window.__psApply(cat || 'all');
-}
+// The site's category routing (e.g. the mega-menu → goProjects(cat)) used to
+// filter the old card shelves. The list shows every project at once, so there
+// is nothing to filter; kept as a no-op so existing callers stay safe.
+function filterProjects() {}
 
-// ── Projects "shelves" page: filter chips → show matching cards, float the
-//    matching department to the top, hide empty ones, keep the counts live. ──
-(function projectsShelves() {
-  const shelves = document.getElementById('ps-shelves');
-  const chips = document.getElementById('ps-chips');
-  const count = document.getElementById('ps-count');
-  if (!shelves) return;   // chips + count were removed; arrows still run
-  const cards = [...shelves.querySelectorAll('.ps-card')];
-  const total = cards.length;
-
-  // Measure the real card pitch from the DOM rather than assuming card width +
-  // gap — with scroll-snap, a nudge that misses a snap point gets yanked back.
-  function pitchOf(rail) {
-    const shown = rail.querySelectorAll('.ps-card:not([hidden])');
-    if (shown.length > 1) return shown[1].offsetLeft - shown[0].offsetLeft;
-    return rail.clientWidth;
-  }
-
-  function syncArrows(shelf) {
-    const rail = shelf.querySelector('.ps-rail');
-    if (!rail) return;
-    const max = rail.scrollWidth - rail.clientWidth - 1;
-    // Hide the arrows entirely when every card already fits (e.g. a two-card row
-    // on desktop); they come back automatically when the row overflows (phones).
-    const arrows = shelf.querySelector('.ps-arrows');
-    if (arrows) arrows.classList.toggle('is-idle', max <= 0);
-    shelf.querySelectorAll('.ps-arrow').forEach(btn => {
-      const dir = Number(btn.dataset.dir);
-      btn.disabled = max <= 0 ||
-        (dir < 0 && rail.scrollLeft <= 0) ||
-        (dir > 0 && rail.scrollLeft >= max);
-    });
-  }
-
-  shelves.querySelectorAll('.ps-shelf').forEach(shelf => {
-    const rail = shelf.querySelector('.ps-rail');
-    if (!rail) return;
-    shelf.querySelectorAll('.ps-arrow').forEach(btn => {
-      btn.addEventListener('click', () => {
-        rail.scrollBy({ left: Number(btn.dataset.dir) * pitchOf(rail), behavior: 'smooth' });
-      });
-    });
-    rail.addEventListener('scroll', () => syncArrows(shelf), { passive: true });
+// ── Projects list: hovering (or focusing) a row turns it indigo and swaps the
+//    large preview image on the right. ──
+(function projectsPreview() {
+  const rows = document.querySelectorAll('#page-projects .project-row');
+  const pvs = document.querySelectorAll('#page-projects .pv');
+  const cap = document.getElementById('previewCaption');
+  if (!rows.length || !cap) return;
+  const activate = row => {
+    if (row.classList.contains('active')) return;
+    rows.forEach(r => r.classList.remove('active'));
+    row.classList.add('active');
+    pvs.forEach(pv => pv.classList.toggle('is-on', pv.dataset.pv === row.dataset.pv));
+    cap.textContent = row.querySelector('.project-name').textContent;
+  };
+  rows.forEach(r => {
+    r.addEventListener('mouseenter', () => activate(r));
+    r.addEventListener('focus', () => activate(r));
   });
-
-  function apply(filter) {
-    cards.forEach(card => { card.hidden = !(filter === 'all' || card.dataset.cat === filter); });
-
-    let visibleShelves = 0;
-    shelves.querySelectorAll('.ps-shelf').forEach(shelf => {
-      const shown = shelf.querySelectorAll('.ps-card:not([hidden])').length;
-      shelf.hidden = shown === 0;
-      shelf.style.order = (shown && filter !== 'all') ? 0 : 2;
-      const c = shelf.querySelector('.ps-shelf-count');
-      if (c) c.textContent = shown;
-      if (shown) {
-        visibleShelves++;
-        const rail = shelf.querySelector('.ps-rail');
-        if (rail) rail.scrollLeft = 0;   // reset the rail so arrows re-enable
-        syncArrows(shelf);
-      }
-    });
-    shelves.classList.toggle('solo', visibleShelves === 1);
-
-    const shown = cards.filter(c => !c.hidden).length;
-    if (count) count.textContent = filter === 'all' ? total + ' projects' : shown + ' of ' + total + ' shown';
-    if (chips) chips.querySelectorAll('.ps-chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.filter === filter)));
-  }
-
-  if (chips) chips.addEventListener('click', e => {
-    const btn = e.target.closest('.ps-chip');
-    if (btn) apply(btn.dataset.filter);
-  });
-
-  window.__psApply = apply;   // let the site's category routing drive it too
-  apply('all');
-  window.addEventListener('resize', () => shelves.querySelectorAll('.ps-shelf').forEach(syncArrows));
+  // load the hidden visuals once the page is idle so hover swaps are instant
+  const preload = () => matchMedia('(min-width: 801px)').matches && pvs.forEach(pv => pv.querySelectorAll('img').forEach(i => { i.loading = 'eager'; }));
+  ('requestIdleCallback' in window) ? requestIdleCallback(preload) : setTimeout(preload, 1500);
+  rows[0].classList.add('active');
 })();
 
 // Drive nav colour + blob parallax from the reel's scroll position
